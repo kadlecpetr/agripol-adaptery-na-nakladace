@@ -211,6 +211,11 @@ body.no-scroll{overflow:hidden;}
   padding-bottom:clamp(48px,7vw,92px);
   background:linear-gradient(180deg,#F7FAF7 0%,#FFFFFF 100%);
   overflow:hidden;
+  /* hero vyplní celé okno, tmavý pás pod ním se objeví až po odrolování;
+     svh místo vh kvůli mobilům, kde se adresní řádek schovává a vh poskakuje */
+  display:flex;align-items:center;
+  min-height:100vh;
+  min-height:100svh;
 }
 .hero::before{
   content:"";position:absolute;top:-180px;right:-140px;width:620px;height:620px;
