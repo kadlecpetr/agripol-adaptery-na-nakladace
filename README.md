@@ -135,9 +135,28 @@ fetch('/odeslat.php', { method: 'POST', body: new FormData(form) })
   .catch(() => status.classList.add('is-err'));
 ```
 
+## Kde web běží
+
+**Náhled pro klienta:** https://kadlecpetr.github.io/agripol-adaptery-na-nakladace/
+
+Běží z větve `main` přes GitHub Pages. Po každém `git push` se do minuty
+přegeneruje sám — není potřeba nic nasazovat ručně.
+
+```bash
+git add -A && git commit -m "popis změny" && git push
+```
+
+Repozitář je veřejný, protože GitHub Pages na bezplatném účtu jinak
+stránku nezveřejní. Obsah je stejně určený k publikaci.
+
+Kanonické adresy v HTML a `sitemap.xml` míří na `www.adapterypronakladace.cz`
+— to je záměr, aby si Google náhled na github.io nezaindexoval místo
+ostrého webu. Po přesunu na doménu není potřeba nic měnit.
+
 ## Lokální náhled
 
 ```bash
 python3 -m http.server 8080
-# otevřít http://localhost:8080
+# http://localhost:8080
 ```
+
