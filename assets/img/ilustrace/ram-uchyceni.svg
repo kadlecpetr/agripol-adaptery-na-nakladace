@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none" role="img" aria-label="Adaptérová deska a uchycení">
+  <path d="M150 62h26v176h-26zM224 62h26v176h-26z" fill="#242A2F"/>
+  <path d="M150 88h100v22H150zM150 194h100v22H150z" fill="#3A4249"/>
+  <path d="M118 82h38c8 0 8 12 0 12h-24v22h-14z" fill="#2E7D32"/>
+  <path d="M118 178h38c8 0 8 12 0 12h-24v22h-14z" fill="#2E7D32"/>
+  <path d="M262 100h48v22h-48zM262 172h48v22h-48z" fill="#3A4249" opacity=".55"/>
+  <circle cx="188" cy="150" r="16" fill="#2E7D32"/>
+  <circle cx="188" cy="150" r="6" fill="#fff"/>
+  <ellipse cx="212" cy="262" rx="110" ry="10" fill="#242A2F" opacity=".08"/>
+</svg>

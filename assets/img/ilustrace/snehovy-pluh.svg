@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none" role="img" aria-label="Sněhová radlice">
+  <path d="M104 92h26v112h-26z" fill="#242A2F"/>
+  <path d="M148 84c58 0 106 40 118 96l-40 12c-10-42-40-68-78-68z" fill="#3A4249"/>
+  <path d="M226 192h44l6 26h-44z" fill="#2E7D32"/>
+  <path d="M130 96h30v112h-30z" fill="#242A2F"/>
+  <path d="m178 108 44 44M162 128l36 46" stroke="#242A2F" stroke-width="5" opacity=".3"/>
+  <path d="M84 92h28v28H84zM84 172h28v28H84z" fill="#2E7D32"/>
+  <ellipse cx="204" cy="248" rx="112" ry="10" fill="#242A2F" opacity=".08"/>
+</svg>

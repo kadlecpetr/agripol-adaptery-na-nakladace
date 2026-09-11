@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none" role="img" aria-label="Míchač betonu">
+  <path d="M104 84h26v128h-26z" fill="#242A2F"/>
+  <path d="M130 104h44v22h-44z" fill="#3A4249"/>
+  <path d="M174 82h116c14 0 24 10 24 24v78c0 14-10 24-24 24H174c-14 0-24-10-24-24v-78c0-14 10-24 24-24Z" fill="#3A4249"/>
+  <path d="M150 196h164v22H150z" fill="#242A2F"/>
+  <path d="M204 218h56v26h-56z" fill="#2E7D32"/>
+  <path d="M186 106h92v14h-92zM186 140h92v14h-92z" fill="#242A2F" opacity=".3"/>
+  <circle cx="314" cy="120" r="18" fill="#2E7D32"/>
+  <path d="M84 88h28v28H84zM84 172h28v28H84z" fill="#2E7D32"/>
+  <ellipse cx="212" cy="266" rx="118" ry="10" fill="#242A2F" opacity=".08"/>
+</svg>

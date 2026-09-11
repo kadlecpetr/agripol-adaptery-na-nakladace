@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none" role="img" aria-label="Přepravník Big Bagů">
+  <ellipse cx="212" cy="272" rx="122" ry="10" fill="#242A2F" opacity=".08"/>
+  <path d="M116 56h26v180h-26z" fill="#242A2F"/>
+  <path d="M142 62h130v22H142z" fill="#242A2F"/>
+  <path d="M142 84h24l6 60h-26z" fill="#3A4249" opacity=".6"/>
+  <path d="M251 84h12v22h-12z" fill="#3A4249"/>
+  <path d="M248 106c0 16 18 16 18 0" stroke="#2E7D32" stroke-width="9" fill="none" stroke-linecap="round"/>
+  <!-- vak -->
+  <path d="m226 150 31-32 31 32z" fill="#C8CFC8"/>
+  <path d="M212 150h90l12 96h-114z" fill="#C8CFC8"/>
+  <path d="M206 186h102v12H206z" fill="#B4BEB4"/>
+  <path d="M240 150h34v96h-34z" fill="#B4BEB4" opacity=".45"/>
+  <path d="M82 74h34v30H82zM82 180h34v30H82z" fill="#2E7D32"/>
+</svg>

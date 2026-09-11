@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 72" fill="none" role="img" aria-label="ADAPTÉRY PRO NAKLADAČE">
+  <rect x="4" y="4" width="64" height="64" rx="16" fill="#2E7D32"/>
+  <g transform="translate(4,4)">
+    <path d="M17 17h6v22.5c0 4.2 3.4 7.5 7.5 7.5H47v6H30.5C23 53 17 47 17 39.5V17Z" fill="#fff"/>
+    <path d="M28 17h6v13h13v6H28V17Z" fill="#fff" opacity=".55"/>
+  </g>
+  <text x="86" y="38" font-family="'Barlow Condensed','Arial Narrow',Arial,sans-serif" font-size="34" font-weight="700" letter-spacing="0.6" fill="#1B1F23">ADAPTÉRY</text>
+  <text x="87" y="56" font-family="'Barlow Condensed','Arial Narrow',Arial,sans-serif" font-size="15" font-weight="700" letter-spacing="3.2" fill="#2E7D32">PRO NAKLADAČE</text>
+</svg>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none" role="img" aria-label="Fotografii připravujeme">
+  <rect width="400" height="300" fill="#fff"/>
+  <rect x="118" y="98" width="164" height="112" rx="12" stroke="#DDE4DD" stroke-width="3"/>
+  <circle cx="160" cy="134" r="13" fill="#E7EFE7"/>
+  <path d="M130 192l38-42 30 30 24-20 46 32z" fill="#E7EFE7"/>
+  <text x="200" y="242" font-family="Inter,system-ui,sans-serif" font-size="17" font-weight="600" fill="#9AA59A" text-anchor="middle">Fotografii připravujeme</text>
+</svg>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none" role="img" aria-label="Lesnický drapák na kulatinu">
+  <g fill="#C8CFC8">
+    <circle cx="186" cy="180" r="34"/><circle cx="248" cy="180" r="34"/><circle cx="216" cy="126" r="34"/>
+  </g>
+  <g stroke="#9BA79B" stroke-width="3" fill="none">
+    <circle cx="186" cy="180" r="16"/><circle cx="248" cy="180" r="16"/><circle cx="216" cy="126" r="16"/>
+  </g>
+  <path d="M136 74c-26 42-24 108 22 142l16-22c-34-26-36-78-16-112z" fill="#242A2F"/>
+  <path d="M298 74c26 42 24 108-22 142l-16-22c34-26 36-78 16-112z" fill="#242A2F"/>
+  <path d="M132 60h44v26h-44zM258 60h44v26h-44z" fill="#3A4249"/>
+  <path d="M176 58h82v20h-82z" fill="#242A2F"/>
+  <path d="M204 26h26v34h-26z" fill="#3A4249"/>
+  <path d="M186 84 148 62M248 84l38-22" stroke="#2E7D32" stroke-width="12" stroke-linecap="round"/>
+  <path d="M92 96h44v26H92zM92 156h44v26H92z" fill="#2E7D32"/>
+  <path d="M136 90h14v100h-14z" fill="#242A2F" opacity=".35"/>
+  <ellipse cx="216" cy="248" rx="118" ry="11" fill="#242A2F" opacity=".08"/>
+</svg>

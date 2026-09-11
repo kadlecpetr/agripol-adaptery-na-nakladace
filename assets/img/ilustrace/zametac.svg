@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none" role="img" aria-label="Zametací kartáč">
+  <ellipse cx="214" cy="274" rx="120" ry="10" fill="#242A2F" opacity=".08"/>
+  <path d="M120 92h164c13 0 22 9 22 22v46H120z" fill="#242A2F"/>
+  <path d="M112 160h202v18H112z" fill="#3A4249"/>
+  <circle cx="214" cy="202" r="60" fill="#C8CFC8"/>
+  <g stroke="#93A093" stroke-width="7" stroke-linecap="round">
+    <path d="M240 202L274 202"/>
+    <path d="M238 211L270 223"/>
+    <path d="M234 219L260 241"/>
+    <path d="M227 225L244 254"/>
+    <path d="M219 228L224 261"/>
+    <path d="M209 228L204 261"/>
+    <path d="M201 225L184 254"/>
+    <path d="M194 219L168 241"/>
+    <path d="M190 211L158 223"/>
+    <path d="M188 202L154 202"/>
+    <path d="M190 193L158 181"/>
+    <path d="M194 185L168 163"/>
+    <path d="M201 179L184 150"/>
+    <path d="M209 176L204 143"/>
+    <path d="M219 176L224 143"/>
+    <path d="M227 179L244 150"/>
+    <path d="M234 185L260 163"/>
+    <path d="M238 193L270 181"/>
+  </g>
+  <circle cx="214" cy="202" r="26" fill="#242A2F"/>
+  <circle cx="214" cy="202" r="9" fill="#3A4249"/>
+  <path d="M300 178h16v42h-16z" fill="#3A4249"/>
+  <circle cx="308" cy="234" r="17" fill="#242A2F"/><circle cx="308" cy="234" r="6" fill="#F5F7F5"/>
+  <path d="M86 100h32v28H86zM86 150h32v28H86z" fill="#2E7D32"/>
+</svg>

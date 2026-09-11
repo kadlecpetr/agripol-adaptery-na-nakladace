@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none" role="img" aria-label="Kleště na kulaté balíky">
+  <circle cx="224" cy="164" r="76" fill="#C8CFC8"/>
+  <circle cx="224" cy="164" r="30" fill="#B4BEB4"/>
+  <path d="M148 82c-38 46-34 116 14 154l22-24c-34-28-38-80-12-114z" fill="#242A2F"/>
+  <path d="M300 82c38 46 34 116-14 154l-22-24c34-28 38-80 12-114z" fill="#242A2F"/>
+  <path d="M140 74h48v26h-48zM262 74h48v26h-48z" fill="#3A4249"/>
+  <path d="M184 66h82v22h-82z" fill="#242A2F"/>
+  <path d="M212 32h26v34h-26z" fill="#3A4249"/>
+  <path d="m172 96-24-16M278 96l24-16" stroke="#2E7D32" stroke-width="12" stroke-linecap="round"/>
+  <path d="M96 100h44v26H96zM96 160h44v26H96z" fill="#2E7D32"/>
+  <ellipse cx="224" cy="258" rx="112" ry="10" fill="#242A2F" opacity=".08"/>
+</svg>

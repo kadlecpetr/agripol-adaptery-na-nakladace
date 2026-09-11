@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none" role="img" aria-label="Paletizační vidle">
+  <ellipse cx="212" cy="268" rx="128" ry="10" fill="#242A2F" opacity=".08"/>
+  <!-- zadní vidlice (perspektiva) -->
+  <g fill="#3A4249" opacity=".5">
+    <path d="M158 128h18v76h-18z"/>
+    <path d="M158 190h132l26 8-26 8H158z"/>
+  </g>
+  <!-- závěsná deska -->
+  <path d="M116 50h28v198h-28z" fill="#242A2F"/>
+  <path d="M144 92h22v12h-22zM144 196h22v12h-22z" fill="#3A4249"/>
+  <!-- přední vidlice -->
+  <g fill="#242A2F">
+    <path d="M144 148h22v96h-22z"/>
+    <path d="M144 222h164l32 11-32 11H144z"/>
+  </g>
+  <!-- uchycení EURO -->
+  <path d="M82 68h36v30H82zM82 194h36v30H82z" fill="#2E7D32"/>
+  <path d="M118 76h10v14h-10zM118 202h10v14h-10z" fill="#1C5220"/>
+</svg>

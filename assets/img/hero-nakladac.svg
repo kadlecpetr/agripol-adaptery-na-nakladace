@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 480" fill="none" role="img" aria-label="Traktor s čelním nakladačem a lopatou">
+  <defs>
+    <pattern id="g" width="36" height="36" patternUnits="userSpaceOnUse">
+      <path d="M36 0H0v36" stroke="#E3E8E3" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F4F8F4"/><stop offset="1" stop-color="#FFFFFF"/>
+    </linearGradient>
+  </defs>
+  <rect width="720" height="480" fill="url(#sky)"/>
+  <rect width="720" height="480" fill="url(#g)" opacity=".85"/>
+  <circle cx="566" cy="126" r="88" fill="#2E7D32" opacity=".10"/>
+
+  <!-- kóty -->
+  <g stroke="#2E7D32" stroke-width="1.6" opacity=".5">
+    <path d="M92 84h146M92 78v12M238 78v12"/>
+    <path d="M666 196v148M660 196h12M660 344h12"/>
+  </g>
+  <text x="165" y="72" font-family="Inter,sans-serif" font-size="15" font-weight="600" fill="#2E7D32" text-anchor="middle">EURO / SMS</text>
+  <text x="652" y="270" font-family="Inter,sans-serif" font-size="15" font-weight="600" fill="#2E7D32" text-anchor="middle" transform="rotate(-90 652 270)">až 2 500 kg</text>
+
+  <ellipse cx="386" cy="446" rx="292" ry="16" fill="#242A2F" opacity=".07"/>
+
+  <!-- traktor -->
+  <path d="M318 292h288v62H318z" fill="#242A2F"/>
+  <rect x="466" y="242" width="146" height="56" rx="10" fill="#2F363C"/>
+  <rect x="450" y="156" width="138" height="94" rx="12" fill="#242A2F"/>
+  <rect x="466" y="172" width="106" height="58" rx="7" fill="#F5F7F5"/>
+  <rect x="600" y="196" width="14" height="58" rx="6" fill="#2F363C"/>
+
+  <!-- sloup a rameno nakladače -->
+  <rect x="422" y="184" width="28" height="120" rx="8" fill="#2F363C"/>
+  <path d="M436 200 268 296" stroke="#242A2F" stroke-width="28" stroke-linecap="round"/>
+  <!-- hydraulický válec -->
+  <path d="M418 252 316 312" stroke="#2E7D32" stroke-width="17" stroke-linecap="round"/>
+  <path d="M352 292 292 326" stroke="#4CAF50" stroke-width="9" stroke-linecap="round"/>
+  <circle cx="436" cy="200" r="11" fill="#F5F7F5" stroke="#242A2F" stroke-width="6"/>
+  <circle cx="270" cy="296" r="10" fill="#F5F7F5" stroke="#242A2F" stroke-width="6"/>
+
+  <!-- lopata (zrcadlený profil) -->
+  <g transform="translate(346,240) scale(-0.78,0.78)">
+    <path d="M104 70h26v122c0 24 20 44 44 44h146l-22-44H174c-2 0-4-2-4-4V70h-66Z" fill="#242A2F"/>
+    <path d="M174 236h146l-22-44H174v44Z" fill="#3A4249"/>
+    <path d="M298 192h34l16 44h-34z" fill="#2E7D32"/>
+  </g>
+
+  <!-- kola -->
+  <circle cx="546" cy="368" r="70" fill="#242A2F"/><circle cx="546" cy="368" r="36" fill="#F5F7F5"/><circle cx="546" cy="368" r="15" fill="#242A2F"/>
+  <circle cx="356" cy="386" r="50" fill="#242A2F"/><circle cx="356" cy="386" r="25" fill="#F5F7F5"/><circle cx="356" cy="386" r="10" fill="#242A2F"/>
+</svg>

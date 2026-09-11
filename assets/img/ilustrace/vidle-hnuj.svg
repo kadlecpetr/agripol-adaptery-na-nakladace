@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none" role="img" aria-label="Vidle na hnůj s přidržovačem">
+  <ellipse cx="212" cy="268" rx="126" ry="10" fill="#242A2F" opacity=".08"/>
+  <!-- vidlice v perspektivě -->
+  <g fill="#3A4249" opacity=".45"><path d="M176 158h112l22 7-22 7H176z"/><path d="M176 140h16v32h-16z"/></g>
+  <g fill="#3A4249" opacity=".7"><path d="M160 182h126l24 8-24 8H160z"/><path d="M160 160h17v38h-17z"/></g>
+  <!-- deska -->
+  <path d="M116 54h28v192h-28z" fill="#242A2F"/>
+  <!-- přední vidlice -->
+  <g fill="#242A2F"><path d="M144 208h146l30 9-30 9H144z"/><path d="M144 180h20v46h-20z"/></g>
+  <!-- rameno přidržovače -->
+  <path d="M148 104 300 76l5 26-152 28z" fill="#3A4249"/>
+  <g fill="#3A4249">
+    <rect x="192" y="98" width="13" height="44" rx="6" transform="rotate(8 198 120)"/>
+    <rect x="234" y="90" width="13" height="44" rx="6" transform="rotate(8 240 112)"/>
+    <rect x="276" y="82" width="13" height="44" rx="6" transform="rotate(8 282 104)"/>
+  </g>
+  <!-- hydraulický válec -->
+  <path d="M146 148 180 118" stroke="#2E7D32" stroke-width="14" stroke-linecap="round"/>
+  <circle cx="150" cy="112" r="9" fill="#F5F7F5" stroke="#242A2F" stroke-width="5"/>
+  <!-- uchycení -->
+  <path d="M82 72h36v30H82zM82 190h36v30H82z" fill="#2E7D32"/>
+</svg>

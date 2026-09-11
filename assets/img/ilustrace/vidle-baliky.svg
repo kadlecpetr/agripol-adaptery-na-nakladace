@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none" role="img" aria-label="Napichovací vidle na balíky">
+  <circle cx="252" cy="156" r="80" fill="#C8CFC8"/>
+  <circle cx="252" cy="156" r="32" fill="#B4BEB4"/>
+  <path d="M108 62h26v176h-26z" fill="#242A2F"/>
+  <path d="M134 100h34v14h-34zM134 200h34v14h-34z" fill="#3A4249"/>
+  <path d="M150 104h150l34 6-34 6H150z" fill="#242A2F"/>
+  <path d="M150 190h150l34 6-34 6H150z" fill="#242A2F"/>
+  <path d="M134 92h20v112h-20z" fill="#3A4249"/>
+  <path d="M84 76h28v28H84zM84 190h28v28H84z" fill="#2E7D32"/>
+  <ellipse cx="220" cy="262" rx="126" ry="10" fill="#242A2F" opacity=".08"/>
+</svg>

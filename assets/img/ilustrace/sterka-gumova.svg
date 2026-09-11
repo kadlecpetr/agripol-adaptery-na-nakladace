@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none" role="img" aria-label="Gumová stěrka">
+  <path d="M104 96h26v104h-26z" fill="#242A2F"/>
+  <path d="M130 118h132c14 0 26 12 26 26v52H130z" fill="#3A4249"/>
+  <path d="M130 196h158v18H130z" fill="#242A2F"/>
+  <path d="M136 214h146v26H136z" fill="#2E7D32"/>
+  <path d="M164 132h8v58h-8zM206 132h8v58h-8zM248 132h8v58h-8z" fill="#242A2F" opacity=".3"/>
+  <path d="M130 140 96 116" stroke="#2E7D32" stroke-width="12" stroke-linecap="round"/>
+  <path d="M84 90h28v28H84zM84 168h28v28H84z" fill="#2E7D32"/>
+  <ellipse cx="212" cy="262" rx="118" ry="10" fill="#242A2F" opacity=".08"/>
+</svg>

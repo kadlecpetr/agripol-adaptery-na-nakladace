@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none" role="img" aria-label="Univerzální lopata">
+  <path d="M104 70h26v122c0 24 20 44 44 44h146l-22-44H174c-2 0-4-2-4-4V70h-66Z" fill="#242A2F"/>
+  <path d="M130 70h44v118h-44z" fill="#3A4249"/>
+  <path d="M174 236h146l-22-44H174v44Z" fill="#3A4249"/>
+  <path d="M298 192h34l16 44h-34z" fill="#2E7D32"/>
+  <path d="M84 82h30v30H84zM84 168h30v30H84z" fill="#2E7D32"/>
+  <path d="M196 108h8v80h-8zM236 108h8v80h-8z" fill="#242A2F" opacity=".3"/>
+  <ellipse cx="220" cy="258" rx="130" ry="11" fill="#242A2F" opacity=".08"/>
+</svg>
