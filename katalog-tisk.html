@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Katalog adaptérů pro nakladače — ke stažení a tisku</title>
+<meta name="description" content="Listovací katalog adaptérů pro čelní nakladače, manipulátory a mininakladače. Fotky, varianty šířek s cenami, výbava v ceně i příplatková výbava. PDF ke stažení.">
+<meta name="theme-color" content="#C8191F">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.adapterypronakladace.cz/katalog-tisk.html">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Tištěný katalog: každá .page je jedna strana A4. Na obrazovce leží pod sebou jako listy,
+   při tisku (a v PDF) se tisknou bez okrajů. Obsah se skládá z assets/js/data.js. */
+:root{
+  --accent:#C8191F; --accent-dark:#8C1015; --ink:#1E1F22; --ink-soft:#3B3D42; --muted:#6B6E75;
+  --line:#DCDDE1; --soft:#F4F4F6; --dark:#1F2023; --steel:#A3A3A3;
+  --head:"Barlow Condensed","Arial Narrow",sans-serif; --body:"Inter",Arial,sans-serif;
+}
+@page{size:A4;margin:0;}
+*{box-sizing:border-box;}
+html,body{margin:0;}
+body{background:#E7E8EB;font-family:var(--body);color:var(--ink-soft);-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+img{display:block;max-width:100%;}
+
+/* lišta jen na obrazovce */
+.bar{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);}
+.bar__in{max-width:1100px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.bar__logo img{height:40px;width:auto;}
+.bar__title{font-family:var(--head);font-weight:700;font-size:1.2rem;text-transform:uppercase;color:var(--ink);margin-right:auto;}
+.bar a.btn,.bar button.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:100px;border:1.5px solid var(--accent);background:var(--accent);color:#fff;font:600 .86rem var(--body);cursor:pointer;text-decoration:none;}
+.bar .btn--ghost{background:#fff;color:var(--ink);border-color:var(--line);}
+.bar .btn svg{width:16px;height:16px;}
+
+.sheets{padding:28px 12px 60px;display:grid;justify-content:center;gap:28px;}
+.page{
+  width:210mm;height:297mm;position:relative;overflow:hidden;background:#fff;
+  box-shadow:0 4px 18px rgba(0,0,0,.12);
+  display:flex;flex-direction:column;
+}
+@media screen and (max-width:840px){
+  /* na mobilu se list zmenší, aby nebyl potřeba vodorovný posun */
+  .sheets{padding:16px 0 40px;gap:16px;}
+  .page{zoom:calc((100vw - 16px) / 794px);}
+}
+@media print{
+  body{background:#fff;}
+  .bar{display:none;}
+  .sheets{padding:0;gap:0;display:block;}
+  .page{box-shadow:none;break-after:page;}
+  .page:last-child{break-after:auto;}
+}
+
+/* --- titulní strana --- */
+.cover{background:var(--dark);color:#fff;}
+.cover::before{content:"";position:absolute;right:-62mm;bottom:-40mm;width:120mm;height:200mm;background:var(--accent);transform:skewX(-22deg);}
+.cover__logo{position:relative;margin:18mm 0 0 16mm;width:92mm;}
+.cover__burn{position:absolute;left:66mm;top:44mm;width:128mm;}
+.cover__product{position:absolute;left:42mm;top:72mm;width:156mm;filter:drop-shadow(0 8mm 7mm rgba(0,0,0,.4));}
+.cover__title{position:absolute;left:16mm;right:16mm;bottom:40mm;}
+.cover__title h1{font-family:var(--head);font-weight:700;font-size:21mm;line-height:.92;text-transform:uppercase;margin:0;letter-spacing:-.01em;}
+.cover__title h1 em{font-style:normal;color:#F0484D;}
+.cover__title p{font-size:4.2mm;color:rgba(255,255,255,.78);margin:4mm 0 0;max-width:120mm;}
+.cover__foot{position:absolute;left:16mm;right:16mm;bottom:14mm;display:flex;justify-content:space-between;align-items:flex-end;font-size:3.4mm;color:rgba(255,255,255,.85);}
+.cover__foot b{display:block;font-family:var(--head);font-size:6mm;color:#fff;letter-spacing:.02em;}
+.cover__ed{font-family:var(--head);font-size:4.4mm;text-transform:uppercase;letter-spacing:.12em;}
+
+/* --- záhlaví a zápatí stránek --- */
+.ph{height:17mm;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 12mm;position:relative;}
+.ph::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1.2mm;background:linear-gradient(90deg,var(--accent) 0 32%,var(--dark) 32% 100%);}
+.ph img{height:10.5mm;width:auto;}
+.ph__cat{font-family:var(--head);font-weight:700;font-size:6mm;text-transform:uppercase;color:var(--ink);letter-spacing:.02em;}
+.pf{height:11mm;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 12mm;font-size:2.9mm;color:var(--muted);border-top:.3mm solid var(--line);}
+.pf b{font-family:var(--head);font-size:5mm;color:var(--ink);}
+.body{flex:1;display:grid;grid-template-rows:1fr 1fr;padding:5mm 12mm 4mm;gap:5mm;min-height:0;}
+
+/* --- produkt (dva na stranu) --- */
+.prod{display:grid;grid-template-rows:auto auto 1fr;gap:2.6mm;min-height:0;}
+.prod + .prod{border-top:.3mm dashed var(--line);padding-top:4mm;}
+.prod__media{display:grid;grid-template-columns:1.25fr 1fr;gap:4mm;height:62mm;}
+.prod__media.is-single{grid-template-columns:1fr;}
+.prod__img{border-radius:2mm;background:#fff;overflow:hidden;position:relative;min-height:0;}
+/* absolutně, jinak se procentní výška v gridu neopře a fotka přeteče přes tabulku */
+.prod__img img{position:absolute;inset:1.5mm;width:calc(100% - 3mm);height:calc(100% - 3mm);object-fit:contain;}
+.prod__img--side{background:var(--soft);}
+.prod__img--side.is-drawing{background:#fff;border:.3mm solid var(--line);}
+.prod__stock{position:absolute;z-index:1;left:0;top:0;background:#1E7A2A;color:#fff;font:700 2.6mm var(--body);letter-spacing:.06em;text-transform:uppercase;padding:1.1mm 2.4mm;border-radius:0 0 1.6mm 0;}
+.prod__titlebar{display:flex;align-items:stretch;}
+.prod__name{background:var(--dark);color:#fff;font-family:var(--head);font-weight:700;font-size:5.6mm;line-height:1;text-transform:uppercase;padding:2.2mm 4mm 2mm;clip-path:polygon(0 0,100% 0,calc(100% - 3mm) 100%,0 100%);padding-right:7mm;}
+.prod__tag{background:var(--accent);color:#fff;font-family:var(--head);font-weight:700;font-size:4.4mm;text-transform:uppercase;padding:2.6mm 5mm 2mm 6mm;margin-left:-3mm;clip-path:polygon(3mm 0,100% 0,calc(100% - 3mm) 100%,0 100%);white-space:nowrap;}
+.prod__row{display:grid;grid-template-columns:1fr 50mm;gap:5mm;min-height:0;}
+table.vt{width:100%;border-collapse:collapse;font-size:2.75mm;font-variant-numeric:tabular-nums;}
+table.vt th{background:var(--dark);color:#fff;font-weight:600;text-align:left;padding:1.2mm 1.6mm;font-size:2.45mm;letter-spacing:.02em;white-space:nowrap;}
+table.vt th.price{background:var(--accent);}
+table.vt td{padding:1.05mm 1.6mm;border-bottom:.25mm solid var(--line);white-space:nowrap;color:var(--ink);}
+table.vt td.price{font-weight:700;}
+table.vt tr:nth-child(even) td{background:var(--soft);}
+.vt-note{font-size:2.35mm;color:var(--muted);margin-top:1.2mm;}
+.prod__side{font-size:2.65mm;line-height:1.38;color:var(--ink-soft);}
+.prod__side h4{margin:0 0 .8mm;font:700 2.7mm var(--body);color:var(--accent);text-transform:uppercase;letter-spacing:.05em;display:flex;align-items:center;gap:1.4mm;}
+.prod__side h4::before{content:"";width:3mm;height:.7mm;background:var(--accent);}
+.prod__side ul{margin:0 0 2.2mm;padding:0 0 0 3mm;}
+.prod__side li{margin:0 0 .4mm;}
+
+/* volná půlka strany */
+.promo{border-radius:3mm;background:var(--soft);display:grid;grid-template-columns:1fr 58mm;align-items:center;gap:6mm;padding:8mm 10mm;position:relative;overflow:hidden;}
+.promo::before{content:"";position:absolute;right:-22mm;top:-10mm;width:70mm;height:140%;background:var(--accent);transform:skewX(-20deg);}
+.promo h3{font-family:var(--head);font-weight:700;font-size:9mm;line-height:.95;text-transform:uppercase;color:var(--ink);margin:0 0 3mm;}
+.promo p{font-size:3.3mm;line-height:1.5;margin:0 0 2mm;}
+.promo b{color:var(--ink);}
+.promo img{position:relative;width:58mm;}
+
+/* obsah */
+.toc{padding:10mm 16mm;flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10mm;}
+.toc h2{font-family:var(--head);font-weight:700;font-size:11mm;text-transform:uppercase;color:var(--ink);margin:0 0 6mm;line-height:1;}
+.toc ol{list-style:none;margin:0;padding:0;}
+.toc ol li{display:flex;align-items:baseline;gap:2mm;padding:2.6mm 0;border-bottom:.3mm solid var(--line);font-size:3.6mm;}
+.toc ol li b{font-family:var(--head);font-size:5.2mm;color:var(--ink);text-transform:uppercase;}
+.toc ol li span{color:var(--muted);font-size:3mm;}
+.toc ol li i{margin-left:auto;font-style:normal;font-family:var(--head);font-weight:700;font-size:5.2mm;color:var(--accent);}
+.toc ol li.sub{padding:1.3mm 0 1.3mm 4mm;font-size:3mm;border-bottom:0;color:var(--ink-soft);}
+.toc ol li.sub i{font-size:3.6mm;color:var(--muted);}
+.info h3{font-family:var(--head);font-weight:700;font-size:6.4mm;text-transform:uppercase;color:var(--ink);margin:0 0 2mm;}
+.info p,.info li{font-size:3.25mm;line-height:1.55;}
+.info ul{padding-left:4mm;margin:0 0 5mm;}
+.info .box{background:var(--dark);color:rgba(255,255,255,.8);border-radius:3mm;padding:6mm;margin-top:6mm;}
+.info .box b{color:#fff;font-family:var(--head);font-size:6mm;display:block;}
+.info img.mount{width:58mm;margin:2mm 0 4mm;}
+
+/* zadní strana */
+.back{background:var(--dark);color:#fff;justify-content:center;align-items:center;text-align:center;}
+.back::before{content:"";position:absolute;left:-70mm;top:-30mm;width:110mm;height:150mm;background:var(--accent);transform:skewX(-22deg);}
+.back > *{position:relative;}
+.back img{width:110mm;margin:0 auto 12mm;}
+.back h2{font-family:var(--head);font-weight:700;font-size:12mm;text-transform:uppercase;margin:0 0 6mm;}
+.back p{font-size:4.2mm;line-height:1.7;margin:0;color:rgba(255,255,255,.85);}
+.back b{color:#fff;}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="bar__in">
+    <a class="bar__logo" href="index.html"><img src="assets/img/logo-full.svg" alt="Adaptéry pro nakladače — zpět na web" width="114" height="40"></a>
+    <span class="bar__title">Katalog adaptérů</span>
+    <a class="btn" href="assets/katalog-adaptery-pro-nakladace.pdf" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12M6 11l6 6 6-6M5 20h14"/></svg>Stáhnout PDF</a>
+    <button class="btn btn--ghost" type="button" onclick="window.print()">Vytisknout</button>
+    <a class="btn btn--ghost" href="katalog.html">Katalog na webu</a>
+  </div>
+</div>
+
+<main class="sheets" data-sheets></main>
+
+<script src="assets/js/data.js"></script>
+<script>
+(function () {
+  'use strict';
+  const esc = s => String(s).replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
+  const czk = n => new Intl.NumberFormat('cs-CZ').format(n) + ' Kč';
+  // ?jpg=1 — při výrobě PDF se berou JPEG kopie fotek, PDF je pak výrazně menší
+  const JPG = new URLSearchParams(location.search).get('jpg') === '1';
+  const photo = f => JPG ? 'assets/img/tisk/' + f.replace(/\.webp$/, '.jpg') : 'assets/img/produkty/' + f;
+  const now = new Date();
+  const edition = String(now.getMonth() + 1).padStart(2, '0') + '/' + now.getFullYear();
+
+  const cats = CATEGORIES.map(c => ({ c, items: PRODUCTS.filter(p => p.cat === c.id) })).filter(x => x.items.length);
+
+  function mountText(p) {
+    const m = p.mount;
+    if (p.cat === 'ramy') return 'Redukční rám — přechod mezi systémy uchycení';
+    if (!m) return 'Uchycení podle vašeho stroje (upřesníme)';
+    if (m === 'EURO') return 'Uchycení EURO';
+    if (m === 'pro manipulátory') return 'Uchycení pro váš manipulátor (Manitou, Merlo, JCB, Kramer…)';
+    if (m === 'mininakladač') return 'Uchycení pro mininakladač';
+    if (m === 'na paletizační vidle') return 'Nasazení na paletizační vidle';
+    return 'Uchycení ' + m;
+  }
+
+  function table(p) {
+    const vs = p.variants && p.variants.length ? p.variants : [{ code: '', label: '', price: p.price, specs: p.specs }];
+    const keys = [...new Set(vs.flatMap(v => Object.keys(v.specs || {})))].slice(0, 5);
+    const hasCode = vs.some(v => v.code);
+    const showLabel = !keys.length && vs.some(v => v.label);
+    const head = (hasCode ? '<th>Kód</th>' : '') + (showLabel ? `<th>${esc(p.variantLabel || 'Varianta')}</th>` : '') +
+      keys.map(k => `<th>${esc(k)}</th>`).join('') + '<th class="price">Cena*</th>';
+    const rows = vs.map(v => '<tr>' + (hasCode ? `<td>${esc(v.code || '—')}</td>` : '') + (showLabel ? `<td>${esc(v.label)}</td>` : '') +
+      keys.map(k => `<td>${esc((v.specs || {})[k] || '—')}</td>`).join('') +
+      `<td class="price">${(p.priceFrom && vs.length < 2 ? 'od ' : '') + czk(v.price)}</td></tr>`).join('');
+    return `<table class="vt"><thead><tr>${head}</tr></thead><tbody>${rows}</tbody></table>
+      <p class="vt-note">*Ceny bez DPH, platí s výbavou v ceně. Orientační, přesnou cenu potvrdíme v nabídce.</p>`;
+  }
+
+  function side(p) {
+    const extra = (p.extras || []).map(e => `<li>${esc(e.name)} — ${czk(e.price)}${e.note && /kus/.test(e.note) ? ' / ks' : ''}</li>`);
+    if (p.cat !== 'ramy' && p.mount && p.mount !== 'na paletizační vidle')
+      extra.push(`<li>Jiné uchycení — ${p.mountExtra ? czk(p.mountExtra) : 'na dotaz'}</li>`);
+    const notes = p.desc.map(l => l.replace(/^[-–.\s]+/, '').trim())
+      .filter(l => l && l.length <= 80 && !/cena|kč/i.test(l)).slice(0, 4);
+    return `<div class="prod__side">
+      <h4>Výbava v ceně</h4><ul><li>${esc(mountText(p))}</li></ul>
+      ${extra.length ? `<h4>Doplňková výbava</h4><ul>${extra.join('')}</ul>` : ''}
+      ${notes.length ? `<h4>Parametry</h4><ul>${notes.map(n => `<li>${esc(n)}</li>`).join('')}</ul>` : ''}
+    </div>`;
+  }
+
+  function tag(p) {
+    const vs = p.variants || [];
+    if (vs.length > 1 && vs[0].code && vs[vs.length - 1].code) return vs[0].code + '–' + vs[vs.length - 1].code;
+    if (vs.length > 1) return vs.length + (p.variantLabel === 'Šířka' ? (vs.length < 5 ? ' šířky' : ' šířek') : ' varianty');
+    return '';
+  }
+
+  function product(p) {
+    const drawing = (p.drawings || [])[0];
+    const second = drawing ? 'assets/img/nakresy/' + drawing : (p.imgs[1] ? photo(p.imgs[1]) : '');
+    const t = tag(p);
+    return `<article class="prod">
+      <div class="prod__media${second ? '' : ' is-single'}">
+        <div class="prod__img">${p.stock ? '<span class="prod__stock">Skladem</span>' : ''}<img src="${photo(p.imgs[0])}" alt=""></div>
+        ${second ? `<div class="prod__img prod__img--side${drawing ? ' is-drawing' : ''}"><img src="${second}" alt=""></div>` : ''}
+      </div>
+      <div class="prod__titlebar"><span class="prod__name">${esc(p.name)}</span>${t ? `<span class="prod__tag">${esc(t)}</span>` : ''}</div>
+      <div class="prod__row"><div>${table(p)}</div>${side(p)}</div>
+    </article>`;
+  }
+
+  const promo = `<div class="promo">
+      <div>
+        <h3>Jiná šířka nebo uchycení?</h3>
+        <p>Většinu adaptérů dodáme <b>v jiné šířce, zesílené nebo s uchycením pro váš stroj</b>. Pošlete nám typ stroje nebo fotku úchytu.</p>
+        <p><b>${esc(SITE.phone)}</b> · <b>${esc(SITE.email)}</b><br>adapterypronakladace.cz</p>
+      </div>
+      <img src="assets/img/uchyceni-euro.svg" alt="">
+    </div>`;
+
+  // rozvržení: každá kategorie od nové strany, dva produkty na stranu
+  const pages = []; // { cat, items: [p|null] }
+  const tocRows = [];
+  let pageNo = 3; // 1 titulka, 2 obsah
+  cats.forEach(({ c, items }) => {
+    tocRows.push({ c, page: pageNo, count: items.length });
+    for (let i = 0; i < items.length; i += 2) {
+      pages.push({ cat: c, items: [items[i], items[i + 1] || null], no: pageNo++ });
+    }
+  });
+  const total = pageNo; // včetně zadní strany
+
+  const head = c => `<header class="ph"><img src="assets/img/logo-full.svg" alt=""><span class="ph__cat">${esc(c ? c.name : 'Obsah')}</span></header>`;
+  const foot = no => `<footer class="pf"><span>Katalog adaptérů pro nakladače · vydání ${edition} · ceny bez DPH</span><span>adapterypronakladace.cz · ${esc(SITE.phone)}</span><b>${no}</b></footer>`;
+
+  const cover = `<section class="page cover">
+      <img class="cover__logo" src="assets/img/logo-full-white.svg" alt="Adaptéry pro nakladače — Luboš Ehrenberger">
+      <img class="cover__burn" src="assets/img/logo-silhouette.svg" alt="">
+      <img class="cover__product" src="assets/img/hero-drapak.webp" alt="">
+      <div class="cover__title">
+        <h1>Katalog<br><em>adaptérů</em><br>pro nakladače</h1>
+        <p>Lopaty, manipulace s balíky, siláž, stavební a lesní nářadí, redukční rámy a zvedací zařízení pro čelní nakladače, manipulátory a mininakladače.</p>
+      </div>
+      <div class="cover__foot">
+        <div><b>adapterypronakladace.cz</b>${esc(SITE.phone)} · ${esc(SITE.email)}</div>
+        <span class="cover__ed">Vydání ${edition}</span>
+      </div>
+    </section>`;
+
+  const toc = `<section class="page">
+      ${head(null)}
+      <div class="toc">
+        <div>
+          <h2>Obsah</h2>
+          <ol>${tocRows.map(r => `<li><b>${esc(r.c.name)}</b><span>${r.count} ${r.count === 1 ? 'produkt' : r.count < 5 ? 'produkty' : 'produktů'}</span><i>${r.page}</i></li>`).join('')}</ol>
+        </div>
+        <div class="info">
+          <h3>Jak číst katalog</h3>
+          <ul>
+            <li>Ceny jsou uvedené <b>bez DPH</b> a jsou orientační — přesnou cenu, termín a dopravu potvrdíme v nabídce.</li>
+            <li>U každého adaptéru je <b>výbava v ceně</b> — nejčastěji uchycení EURO. Jiné uchycení dodáme na příplatek.</li>
+            <li>Varianty jsou seřazené od nejmenší šířky, produkty v kategorii <b>od největšího po nejmenší</b>.</li>
+          </ul>
+          <h3>Příklad uchycení EURO</h3>
+          <img class="mount" src="assets/img/uchyceni-euro.svg" alt="">
+          <p>Nevíte, jaké uchycení máte? Pošlete nám fotku úchytu na stroji a do druhého dne poradíme.</p>
+          <div class="box"><b>Poptávka</b>${esc(SITE.phone)} · ${esc(SITE.email)}<br>${esc(SITE.owner)} · ${esc(SITE.street)}, ${esc(SITE.city)}</div>
+        </div>
+      </div>
+      ${foot(2)}
+    </section>`;
+
+  const body = pages.map(pg => `<section class="page">
+      ${head(pg.cat)}
+      <div class="body">${pg.items.map(p => p ? product(p) : promo).join('')}</div>
+      ${foot(pg.no)}
+    </section>`).join('');
+
+  const back = `<section class="page back">
+      <img src="assets/img/logo-full-white.svg" alt="">
+      <h2>Poradíme s výběrem</h2>
+      <p><b>${esc(SITE.phone)}</b> · <b>${esc(SITE.email)}</b><br>
+      ${esc(SITE.owner)} · IČO ${esc(SITE.ico)}<br>${esc(SITE.street)}, ${esc(SITE.city)} · ${esc(SITE.hours)}<br><br>
+      <b>www.adapterypronakladace.cz</b></p>
+    </section>`;
+
+  document.querySelector('[data-sheets]').innerHTML = cover + toc + body + back;
+  document.documentElement.dataset.pages = total;
+})();
+</script>
+</body>
+</html>

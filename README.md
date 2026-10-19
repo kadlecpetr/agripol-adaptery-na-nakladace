@@ -7,42 +7,51 @@ Nahraje se na jakýkoli hosting přes FTP — stačí zkopírovat obsah složky.
 
 ```
 index.html        úvodní stránka
-katalog.html      katalog s filtrováním (kategorie, uchycení, skladem, hledání, řazení)
-produkt.html      detail produktu, načítá se podle ?id=
+katalog.html      katalog s filtrováním (kategorie, typ stroje, skladem, hledání, řazení)
+produkt.html      detail produktu s konfigurátorem (šířka, uchycení, výbava), načítá se podle ?id=
+poptavka.html     poptávkový košík — vybrané adaptéry + formulář
+katalog-tisk.html listovací / tištěný katalog A4, skládá se z data.js
 na-miru.html      zakázková výroba — postup, typické úpravy
 o-nas.html        o firmě, značky v nabídce, FAQ
 kontakt.html      poptávkový formulář, kontakty, mapa
 assets/css/       styly
 assets/js/data.js OBSAH KATALOGU — tady se edituje
-assets/js/main.js logika (navigace, filtry, formulář)
-assets/img/       vlastní SVG ilustrace produktů
+assets/js/main.js logika (navigace, filtry, konfigurátor, košík, formuláře)
+assets/img/       loga, ilustrace, fotky produktů
+assets/katalog-adaptery-pro-nakladace.pdf   katalog ke stažení (vyrobený z katalog-tisk.html)
 robots.txt, sitemap.xml
 ```
 
 ## Logo a značka
 
-Název: **ADAPTÉRY PRO NAKLADAČE**. Značka je hranatá závorka ve tvaru rámu
-uchycení — odkaz na to, co adaptér se strojem spojuje.
+Logo je logo **Agripol**, jen místo nápisu AGRIPOL je v šedém pruhu
+**ADAPTÉRY** a pod ním **PRO NAKLADAČE** (domluveno na schůzce s klientem).
+Tvar drápu, stín a pruh jsou obkreslené z originálního loga z agripol.cz,
+texty jsou převedené na křivky (písmo Saira Semi Condensed / Saira Condensed),
+takže se všude vysází stejně — i v tiskárně.
 
 | soubor | k čemu |
 |---|---|
-| `assets/img/logo.svg` | značka v zeleném poli (hlavička, patička, apple-touch-icon) |
-| `assets/img/favicon.svg` | totéž jako favicon |
-| `assets/img/logo-mark-mono.svg` | jen symbol, dědí barvu přes `currentColor` — funguje **jen vložený přímo do HTML**, ne přes `<img>`; do razítka a na výrobní štítek |
-| `assets/img/logo-mark-white.svg` | jen symbol, napevno bílý — na tmavé pozadí i přes `<img>` |
-| `assets/img/logo-full.svg` | vodorovná verze se jménem — pro dokumenty, podpis v e-mailu, tisk |
+| `assets/img/logo-full.svg` | celé logo na světlé pozadí (hlavička, katalog) |
+| `assets/img/logo-full-white.svg` | celé logo na tmavé pozadí (patička, titulka katalogu) |
+| `assets/img/logo.svg` | jen dráp s pruhem, barevně |
+| `assets/img/logo-silhouette.svg` | bílý „výpalek“ drápu — velký tvar za fotkou na úvodu (jako na adapro.cz) |
+| `assets/img/logo-mark-white.svg` | totéž jako silueta, napevno bílá — na tmavé pozadí i přes `<img>` |
+| `assets/img/logo-mark-mono.svg` | silueta, dědí barvu přes `currentColor` — funguje **jen vložená přímo do HTML**; do razítka a na výrobní štítek |
+| `assets/img/favicon.svg`, `apple-touch-icon.png` | ikona: bílý dráp na červeném čtverci |
 | `assets/img/og-image.png` | 1200×630, náhled při sdílení na Facebooku a v Messengeru |
 
-Barvy: zelená `#2E7D32`, na tmavém podkladu světlejší `#7BC47F`, text `#1B1F23`.
-Písmo Barlow Condensed 700 (nadpisy a logo), Inter (běžný text).
+Barvy podle Agripolu: červená `#C8191F` (na tmavém podkladu světlejší `#F0484D`),
+grafit `#1F2023`, šedá z pruhu `#A3A3A3`, text `#1E1F22`.
+Písmo Barlow Condensed 700 (nadpisy), Inter (běžný text).
 
-**Pozor:** `logo-full.svg` má název jako živý text, ne křivky. Pro tiskárnu
-je potřeba text převést na křivky (v Illustratoru či Inkscape: Text → Vytvořit obrysy),
-jinak se na cizím počítači vysází náhradním písmem.
+Úvodní fotka je vyříznutý render drapáku InterTech (`assets/img/hero-drapak.webp`,
+průhledné pozadí) na bílém výpalku loga. Až bude fotka adaptéru se skutečně
+vypáleným logem Agripol, stačí ji vyříznout a nahradit tenhle soubor.
 
 Sdílecí obrázek se nepřegeneruje sám — když se změní texty, je potřeba ho
-vyrobit znovu (viz historie: HTML předloha se vyrenderuje headless Chromem
-do `assets/img/og-image.png` v rozměru 1200×630).
+vyrobit znovu (HTML předloha 1200×630 vyrenderovaná headless Chromem
+do `assets/img/og-image.png`).
 
 ## Firemní údaje
 
@@ -73,8 +82,16 @@ až budete chtít přesný bod, stačí v odkazu vyměnit `marker=49.6875%2C16.3
 
 ## Obsah katalogu
 
-Katalog má 75 produktů v sedmi kategoriích. Podklady (názvy, ceny, parametry,
-popisy, fotky) pocházejí z **agripol.cz/adaptery** — viz „Původ podkladů" níže.
+Katalog má 75 produktů v deseti kategoriích (pořadí ze schůzky): lopaty,
+manipulace s balíky, siláž/senáž/mrva, stavební adaptéry, krmné lopaty, lesní
+nářadí, redukční rámy, komunální adaptéry, zvedací zařízení, ostatní.
+Krmné lopaty a komunální adaptéry jsou zatím prázdné — na webu se ukážou jako
+„připravujeme“ s odkazem na poptávku. Podklady (názvy, ceny, parametry, popisy,
+fotky) pocházejí z **agripol.cz/adaptery** — viz „Původ podkladů" níže.
+
+**Pořadí:** pořadí produktů v `data.js` = pořadí v katalogu i v tištěném katalogu.
+V každé kategorii jsou seřazené od největšího po nejmenší (např. kleště na klády
+INTER-TECH → Spaw-met). Nový produkt vložte na správné místo v poli.
 
 Vše se edituje v `assets/js/data.js`. Produkt vypadá takhle:
 
@@ -84,14 +101,31 @@ Vše se edituje v `assets/js/data.js`. Produkt vypadá takhle:
   name: "Lopata univerzální Waw-Pol",
   cat: "lopaty", price: 9000, priceFrom: true,   // priceFrom → zobrazí „od 9 000 Kč"
   stock: true, sale: false, avail: "Skladem",    // avail: Skladem / Na objednávku / Na cestě / Akční cena
-  machines: ["nakladac","traktor"],              // id z pole MACHINES
-  mounts: ["euro"],                              // id z pole MOUNTS
-  specs: {"Šířka":"1,2m","Hmotnost":"182 kg"},   // tabulka parametrů, může být prázdná
-  perex: "Jedna věta do detailu.",
-  desc: ["-euro úchyt", "Varianty šířek:", "-1,2m....9 000kč"],   // odrážky pod perexem
+  machines: ["nakladac","manipulator"],          // id z pole MACHINES (nakladac, manipulator, mininakladac)
+  mounts: ["euro"],                              // uchycení, se kterými se dodává (id z MOUNTS)
+  mount: "EURO", mountExtra: 6000,               // s jakým uchycením platí cena, příplatek za jiné (null = na dotaz)
+  specs: {"Hmotnost":"182 kg"},                  // tabulka parametrů, může být prázdná
+  perex: "Úvodní věta do detailu.",              // prázdná = nezobrazí se
+  desc: ["-hardox břit"],                        // odrážky „Popis“
+  variantLabel: "Šířka",                         // nadpis výběru v konfigurátoru
+  variants: [                                     // klikací varianty; první = výchozí, jeho cena = price
+    {"code":"SL00","label":"1,2 m","price":9000,"specs":{"Šířka":"1,2 m","Hmotnost":"130 kg"}},
+    {"code":"SL01","label":"1,5 m","price":11000,"specs":{"Šířka":"1,5 m","Hmotnost":"149 kg"}}
+  ],
+  extras: [{"name":"Omezovač tlaku","price":1500,"note":"redukuje tlak na 200 barů"}],  // zaškrtávací příplatky
+  drawings: ["lopata-univerzalni-waw-pol.png"],  // technické nákresy z assets/img/nakresy/
   imgs: ["lopata-univerzalni-waw-pol-1.webp", "...-2.webp"]        // první je hlavní
 }
 ```
+
+**Konfigurátor** v detailu produktu skládá cenu: varianta (šířka) + příplatek
+za jiné uchycení + zaškrtnutá výbava, krát počet kusů. Dole u každého produktu
+je vždy blok **Uchycení**: s čím platí cena, kolik stojí jiné uchycení
+a obrázek příkladu uchycení EURO (`assets/img/uchyceni-euro.svg`).
+
+**Technické nákresy:** zatím žádné nejsou. Stačí nahrát obrázek (PNG/SVG/JPG)
+do `assets/img/nakresy/` a jméno souboru zapsat do `drawings` — nákres se ukáže
+v detailu produktu a v tištěném katalogu vpravo od fotky (místo druhé fotky).
 
 Obrázky se hledají ve dvou složkách se stejným názvem souboru:
 
@@ -103,7 +137,8 @@ Obrázky se hledají ve dvou složkách se stejným názvem souboru:
 Když produkt nemá fotku, nastav `imgs: ["_bez-foto.svg"]` — vykreslí se
 šedý placeholder „Fotografii připravujeme".
 
-Katalog, filtry, počty u filtrů, sitemap i související produkty se dopočítají samy.
+Katalog, filtry, počty u filtrů, konfigurátor, sitemap i související produkty
+se dopočítají samy.
 
 ## Původ podkladů
 
@@ -117,15 +152,41 @@ u „Lopat" a „Siláže a mrvy" část produktů chybí.
 Na fotkách je logo **AGRIPOL SERVIS** a u některých strojů logo výrobce
 **InterTech** — obojí je v pořádku a zůstává.
 
-## Fotky místo ilustrací
+## Tištěný katalog (PDF)
 
-V `assets/img/` jsou vlastní SVG ilustrace. Až budou k dispozici fotky,
-stačí je nahrát do stejné složky a v `data.js` přepsat pole `img`
-(např. `img: 'lopata-univerzalni.jpg'`). Poměr stran obrázků je 4:3.
+`katalog-tisk.html` je katalog po stránkách A4 jako papírový katalog Adapra:
+titulka, obsah, dva produkty na stranu (fotka, nákres nebo druhá fotka,
+tabulka variant s cenami, výbava v ceně, doplňková výbava), každá kategorie
+od nové strany. Na webu se dá listovat, vytisknout, nebo stáhnout jako PDF
+(`assets/katalog-adaptery-pro-nakladace.pdf`).
+
+PDF se **nepřegeneruje samo** — po změně `data.js` ho vyrobte znovu:
+
+```bash
+# 1) JPEG kopie fotek (PDF je pak ~7 MB místo desítek MB); složka tisk/ se necommituje
+mkdir -p assets/img/tisk && for f in assets/img/produkty/*.webp; do
+  magick "$f" -background white -alpha remove -resize '720x720>' -quality 74 "assets/img/tisk/$(basename "${f%.webp}").jpg"; done
+# 2) lokální server a tisk do PDF
+python3 -m http.server 8765 &
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --no-pdf-header-footer \
+  --virtual-time-budget=15000 --run-all-compositor-stages-before-draw \
+  --print-to-pdf=assets/katalog-adaptery-pro-nakladace.pdf "http://localhost:8765/katalog-tisk.html?jpg=1"
+```
+
+Náhled titulky na úvodu je `assets/img/katalog-titulka.webp` (první strana PDF, 600 px).
+
+## Poptávkový košík
+
+V detailu produktu „Přidat do poptávky“ uloží vybranou šířku, uchycení,
+výbavu a počet kusů do košíku (jen v prohlížeči návštěvníka, `localStorage`).
+Počet je vidět v hlavičce u tlačítka **Poptávka**. Na `poptavka.html` se dají
+kusy upravit a odeslat — stejně jako kontaktní formulář otevře e-mail
+s rozepsanými položkami a orientační cenou (viz níže, jak přepnout na odesílání
+přes server).
 
 ## Poptávkový formulář
 
-Bez serveru formulář otevírá e-mailového klienta s předvyplněnou zprávou.
+Bez serveru formulář (kontakt i poptávka) otevírá e-mailového klienta s předvyplněnou zprávou.
 Pro odesílání přes server stačí v `assets/js/main.js` ve funkci `initForm()`
 nahradit blok `window.location.href = 'mailto:...'` voláním vlastního endpointu:
 

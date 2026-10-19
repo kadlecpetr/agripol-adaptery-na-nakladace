@@ -1,5 +1,6 @@
 /* =========================================================
-   MAIN — navigace, animace, katalog, detail, formulář
+   MAIN — navigace, animace, katalog, detail s konfigurátorem,
+   poptávkový košík, formuláře
    ========================================================= */
 (function () {
   'use strict';
@@ -12,11 +13,49 @@
   const mountName   = id => (MOUNTS.find(m => m.id === id)   || {}).name || id;
   const machineName = id => (MACHINES.find(m => m.id === id) || {}).name || id;
   const priceLabel  = p => (p.priceFrom ? 'od ' : '') + czk(p.price);
+  const plural = (n, one, few, many) => n === 1 ? one : (n > 1 && n < 5 ? few : many);
+  const catImg = c => c.img ? 'assets/img/nahledy/' + c.img : 'assets/img/kategorie-pripravujeme.svg';
 
   const ICON = {
     arrow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
-    check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'
+    check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+    cart:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>',
+    plus:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+    minus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14"/></svg>',
+    trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>',
+    close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+    doc:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>'
   };
+
+  /* ---------- 0. Poptávkový košík ----------
+     Drží se v localStorage jen v prohlížeči návštěvníka. Když úložiště nejde
+     (anonymní okno, zakázané cookies), košík funguje do zavření stránky. */
+  const Cart = (function () {
+    const KEY = 'adaptery-poptavka-v1';
+    let memory = [];
+    function read() {
+      try { const v = JSON.parse(localStorage.getItem(KEY) || '[]'); return Array.isArray(v) ? v : []; }
+      catch (e) { return memory.slice(); }
+    }
+    function write(items) {
+      memory = items.slice();
+      try { localStorage.setItem(KEY, JSON.stringify(items)); } catch (e) { /* zůstane v paměti */ }
+      badge();
+    }
+    function add(item) {
+      const items = read();
+      const same = items.find(i => i.key === item.key);
+      if (same) same.qty += item.qty; else items.push(item);
+      write(items);
+      return items;
+    }
+    const count = () => read().reduce((s, i) => s + i.qty, 0);
+    function badge() {
+      const n = count();
+      $$('[data-cart-count]').forEach(el => { el.textContent = n; el.hidden = n === 0; });
+    }
+    return { read, write, add, count, badge };
+  })();
 
   /* ---------- 1. Hlavička a mobilní menu ---------- */
   function initHeader() {
@@ -50,6 +89,7 @@
       if (hash) return;
       if (path.split('?')[0] === page) a.classList.add('is-active');
     });
+    Cart.badge();
   }
 
   /* ---------- 2. Odhalování při scrollu ---------- */
@@ -93,9 +133,20 @@
                : `<span class="chip chip--order">${esc(p.avail)}</span>`);
   }
 
+  // „Šířky 1,5–2,4 m“ — na kartě je hned vidět, že produkt má víc velikostí
+  function variantSummary(p) {
+    if (!p.variants || p.variants.length < 2) return '';
+    const first = p.variants[0].label, last = p.variants[p.variants.length - 1].label;
+    const n = p.variants.length;
+    if (p.variantLabel === 'Šířka') return `${n} ${plural(n, 'šířka', 'šířky', 'šířek')} ${first.replace(' m', '')}–${last}`;
+    return `${p.variants.length} ${plural(p.variants.length, 'varianta', 'varianty', 'variant')}`;
+  }
+
   function productCard(p) {
-    const specs = Object.entries(p.specs).slice(0, 2)
-      .map(([k, v]) => `<span>${esc(k)}: ${esc(v)}</span>`).join('');
+    const vs = variantSummary(p);
+    const specs = (vs ? `<span class="is-strong">${esc(vs)}</span>` : '') +
+      Object.entries(p.specs).filter(([k]) => !(vs && k === 'Šířka')).slice(0, vs ? 1 : 2)
+        .map(([k, v]) => `<span>${esc(k)}: ${esc(v)}</span>`).join('');
     return `
       <article class="product" data-reveal>
         <a class="product__link" href="produkt.html?id=${encodeURIComponent(p.id)}" aria-label="${esc(p.name)}"></a>
@@ -119,16 +170,19 @@
   function initHome() {
     const catWrap = $('[data-categories]');
     if (catWrap) {
-      catWrap.innerHTML = CATEGORIES.map((c, i) => `
-        <a class="cat-card" href="katalog.html?kategorie=${c.id}" data-reveal style="--d:${i * 55}ms">
-          <div class="cat-card__img"><img src="assets/img/nahledy/${c.img}" alt="${esc(c.name)}" loading="lazy" width="500" height="375"></div>
+      catWrap.innerHTML = CATEGORIES.map((c, i) => {
+        const n = PRODUCTS.filter(p => p.cat === c.id).length;
+        return `
+        <a class="cat-card${n ? '' : ' cat-card--soon'}" href="katalog.html?kategorie=${c.id}" data-reveal style="--d:${i * 45}ms">
+          <div class="cat-card__img"><img src="${catImg(c)}" alt="${esc(c.name)}" loading="lazy" width="500" height="375"></div>
           <div class="cat-card__body">
             <h3>${esc(c.name)}</h3>
             <p>${esc(c.desc)}</p>
-            <span class="cat-card__count">${PRODUCTS.filter(p => p.cat === c.id).length} produktů</span>
-            <span class="cat-card__more">Zobrazit nabídku ${ICON.arrow}</span>
+            <span class="cat-card__count">${n ? `${n} ${plural(n, 'produkt', 'produkty', 'produktů')}` : 'Připravujeme'}</span>
+            <span class="cat-card__more">${n ? 'Zobrazit nabídku' : 'Poptat'} ${ICON.arrow}</span>
           </div>
-        </a>`).join('');
+        </a>`;
+      }).join('');
     }
 
     const topWrap = $('[data-top-products]');
@@ -144,11 +198,15 @@
       topWrap.innerHTML = pick.slice(0, 8).map(productCard).join('');
     }
 
+    // uchycení už se nefiltruje — pás jen ukazuje, na co adaptéry dodáme
     const mountWrap = $('[data-mounts]');
     if (mountWrap) {
       mountWrap.innerHTML = MOUNTS.map(m => `
-        <a class="mount-pill" href="katalog.html?uchyceni=${m.id}"><b>${esc(m.name)}</b><small>${esc(m.note)}</small></a>`).join('');
+        <span class="mount-pill"><b>${esc(m.name)}</b><small>${esc(m.note)}</small></span>`).join('');
     }
+    $$('[data-count-cats]').forEach(el => el.textContent = CATEGORIES.length);
+    $$('[data-count-products]').forEach(el => el.textContent = PRODUCTS.length);
+    $$('[data-count-stock]').forEach(el => el.textContent = PRODUCTS.filter(p => p.stock).length);
     initReveal();
   }
 
@@ -158,10 +216,11 @@
     if (!grid) return;
 
     const params = new URLSearchParams(location.search);
+    // staré odkazy používaly stroj=smykovy
+    const machineIds = (params.get('stroj') || '').split(',').filter(Boolean).map(m => m === 'smykovy' ? 'mininakladac' : m);
     const state = {
       cats:     new Set((params.get('kategorie') || '').split(',').filter(Boolean)),
-      machines: new Set((params.get('stroj')     || '').split(',').filter(Boolean)),
-      mounts:   new Set((params.get('uchyceni')  || '').split(',').filter(Boolean)),
+      machines: new Set(machineIds),
       stock:  params.get('skladem') === '1',
       q:      params.get('q') || '',
       sort:   params.get('razeni') || 'default'
@@ -169,8 +228,7 @@
 
     const box = {
       cats:     $('[data-filter-cats]'),
-      machines: $('[data-filter-machines]'),
-      mounts:   $('[data-filter-mounts]')
+      machines: $('[data-filter-machines]')
     };
     const checks = (list, sel, key) => list.map(x => `
       <label class="check"><input type="checkbox" value="${x.id}" ${state[key].has(x.id) ? 'checked' : ''}>
@@ -178,7 +236,6 @@
 
     box.cats.innerHTML     = checks(CATEGORIES, c => p => p.cat === c.id, 'cats');
     box.machines.innerHTML = checks(MACHINES,   m => p => p.machines.includes(m.id), 'machines');
-    box.mounts.innerHTML   = checks(MOUNTS,     m => p => p.mounts.includes(m.id), 'mounts');
 
     const searchInput = $('[data-filter-search]');
     const stockInput  = $('[data-filter-stock]');
@@ -191,7 +248,6 @@
       const p = new URLSearchParams();
       if (state.cats.size)     p.set('kategorie', [...state.cats].join(','));
       if (state.machines.size) p.set('stroj',     [...state.machines].join(','));
-      if (state.mounts.size)   p.set('uchyceni',  [...state.mounts].join(','));
       if (state.stock)         p.set('skladem', '1');
       if (state.q)             p.set('q', state.q);
       if (state.sort !== 'default') p.set('razeni', state.sort);
@@ -199,11 +255,13 @@
       history.replaceState(null, '', qs ? '?' + qs : location.pathname);
     }
 
+    // výchozí pořadí = pořadí v data.js (kategorie a v nich od největšího po nejmenší)
+    const order = new Map(PRODUCTS.map((p, i) => [p.id, i]));
+
     function render() {
       const list = PRODUCTS.filter(p => {
         if (state.cats.size && !state.cats.has(p.cat)) return false;
         if (state.machines.size && !p.machines.some(m => state.machines.has(m))) return false;
-        if (state.mounts.size && !p.mounts.some(m => state.mounts.has(m))) return false;
         if (state.stock && !p.stock) return false;
         if (state.q) {
           const hay = (p.name + ' ' + p.perex + ' ' + p.desc.join(' ') + ' ' + catName(p.cat)).toLowerCase();
@@ -216,18 +274,29 @@
         'cena-asc':  (a, b) => a.price - b.price,
         'cena-desc': (a, b) => b.price - a.price,
         'nazev':     (a, b) => a.name.localeCompare(b.name, 'cs'),
-        'default':   (a, b) => (b.stock - a.stock) || (b.sale - a.sale) || b.price - a.price
+        'default':   (a, b) => order.get(a.id) - order.get(b.id)
       };
       list.sort(sorters[state.sort] || sorters.default);
 
-      const word = list.length === 1 ? 'produkt' : (list.length < 5 ? 'produkty' : 'produktů');
       $('[data-count]').innerHTML = list.length
-        ? `Nalezeno <b>${list.length}</b> ${word}`
+        ? `Nalezeno <b>${list.length}</b> ${plural(list.length, 'produkt', 'produkty', 'produktů')}`
         : 'Žádný produkt neodpovídá filtru';
+
+      // kategorie, která se teprve plní, dostane vlastní text místo „nic jsme nenašli“
+      const soon = !list.length && state.cats.size &&
+        [...state.cats].every(c => !PRODUCTS.some(p => p.cat === c));
+      const soonNames = [...state.cats].map(catName).join(', ');
 
       grid.innerHTML = list.length
         ? list.map(productCard).join('')
-        : `<div class="empty">
+        : soon
+          ? `<div class="empty">
+               <img src="assets/img/kategorie-pripravujeme.svg" alt="" width="200" height="150" style="width:160px;margin:0 auto 14px">
+               <h3>${esc(soonNames)} — nabídku právě doplňujeme</h3>
+               <p class="lead">Napište nám, co sháníte. Adaptéry z této kategorie dodáme na objednávku a cenu pošleme do 24 hodin.</p>
+               <p style="margin-top:18px"><a class="btn" href="kontakt.html">Poptat ${esc(soonNames.toLowerCase())}</a></p>
+             </div>`
+          : `<div class="empty">
              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
              <h3>Nic jsme nenašli</h3>
              <p class="lead">Zkuste zrušit část filtrů nebo nám rovnou napište — velkou část adaptérů dodáváme na míru.</p>
@@ -244,7 +313,7 @@
       e.target.checked ? state[key].add(v) : state[key].delete(v);
       render();
     });
-    bind(box.cats, 'cats'); bind(box.machines, 'machines'); bind(box.mounts, 'mounts');
+    bind(box.cats, 'cats'); bind(box.machines, 'machines');
 
     stockInput.addEventListener('change', () => { state.stock = stockInput.checked; render(); });
     sortSelect.addEventListener('change', () => { state.sort = sortSelect.value; render(); });
@@ -256,7 +325,7 @@
     });
 
     $('[data-reset]').addEventListener('click', () => {
-      state.cats.clear(); state.machines.clear(); state.mounts.clear();
+      state.cats.clear(); state.machines.clear();
       state.stock = false; state.q = ''; state.sort = 'default';
       $$('input[type=checkbox]', $('.filters')).forEach(i => i.checked = false);
       searchInput.value = ''; sortSelect.value = 'default';
@@ -272,7 +341,71 @@
     render();
   }
 
-  /* ---------- 8. Detail produktu ---------- */
+  /* ---------- 8. Uchycení: co je v ceně a za kolik je jiné ---------- */
+  const MANIPULATOR_MOUNTS = ['jcb', 'manitou', 'merlo', 'kramer'];
+
+  function includedMounts(p) {
+    const m = (p.mount || '').toLowerCase(), s = new Set();
+    if (m.includes('euro')) s.add('euro');
+    if (m.includes('tbz')) s.add('tribod');
+    if (m.includes('avant')) s.add('avant');
+    if (m.includes('manipul')) MANIPULATOR_MOUNTS.forEach(x => s.add(x));
+    return s;
+  }
+
+  // nabídka do konfigurátoru; null = uchycení se nevolí (redukční rámy, plošina na vidle)
+  function mountOptions(p) {
+    if (p.cat === 'ramy' || p.mount === 'na paletizační vidle') return null;
+    const incl = includedMounts(p);
+    const ids = new Set([...p.mounts, ...incl]);
+    const list = (ids.size ? MOUNTS.filter(m => ids.has(m.id)) : MOUNTS).map(m => ({
+      id: m.id, name: m.name, note: m.note, incl: incl.has(m.id),
+      extra: incl.has(m.id) ? 0 : (incl.size && p.mountExtra ? p.mountExtra : null)
+    }));
+    list.sort((a, b) => b.incl - a.incl);
+    list.push({ id: 'jine', name: 'Jiné uchycení', note: 'poradíme', incl: false, extra: incl.size && p.mountExtra ? p.mountExtra : null });
+    return { list, known: incl.size > 0 };
+  }
+
+  function mountSentence(p) {
+    const m = p.mount;
+    if (p.cat === 'ramy') return 'Redukční rám se nasadí mezi stroj a adaptér — na stroji pak můžete používat adaptéry s jiným uchycením, než má váš nakladač.';
+    if (!m) return 'Uchycení dodáme podle vašeho stroje — typ a cenu upřesníme v nabídce.';
+    if (m === 'EURO') return 'Cena platí s uchycením <b>EURO</b> (SMS / ISO).';
+    if (m === 'pro manipulátory') return 'Cena platí s uchycením <b>pro váš teleskopický manipulátor</b> (Manitou, Merlo, JCB, Kramer…) — typ upřesníme při objednávce.';
+    if (m === 'mininakladač') return 'Cena platí s uchycením <b>pro mininakladač</b> — typ upřesníme podle stroje.';
+    if (m === 'na paletizační vidle') return 'Plošina se nasazuje <b>na paletizační vidle</b>, vlastní uchycení nepotřebuje.';
+    return `Cena platí s uchycením <b>${esc(m)}</b>.`;
+  }
+
+  function mountBlock(p) {
+    let extra = '';
+    if (p.cat !== 'ramy' && p.mount && p.mount !== 'na paletizační vidle') {
+      extra = p.mountExtra
+        ? `Jiné uchycení za příplatek <b>${czk(p.mountExtra)}</b> bez DPH${p.mountNote ? ' — ' + esc(p.mountNote) : ''}.`
+        : 'Jiné uchycení dodáme na objednávku, cenu upřesníme.';
+    }
+    const showEuro = includedMounts(p).has('euro') || p.mounts.includes('euro');
+    const chips = p.mounts.length
+      ? `<div class="tag-row" style="margin-top:14px">${p.mounts.map(m => `<span class="chip chip--neutral">${esc(mountName(m))}</span>`).join('')}</div>` : '';
+    return `
+      <div class="detail__block mount-box" id="uchyceni">
+        <h3>Uchycení</h3>
+        <div class="mount-box__inner">
+          ${showEuro ? `<figure class="mount-box__img">
+            <img src="assets/img/uchyceni-euro.svg" alt="Příklad uchycení EURO — pohled na zadní stranu adaptéru" width="400" height="300" loading="lazy">
+            <figcaption>Příklad uchycení EURO</figcaption>
+          </figure>` : ''}
+          <div>
+            <p>${mountSentence(p)} ${extra}</p>
+            ${chips}
+            <p class="mount-box__help">Nevíte, jaké uchycení máte? Pošlete nám fotku úchytu na stroji a do druhého dne poradíme.</p>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  /* ---------- 9. Detail produktu s konfigurátorem ---------- */
   function initDetail() {
     const root = $('[data-detail]');
     if (!root) return;
@@ -289,7 +422,7 @@
 
     document.title = `${p.name} — ${SITE.brand}`;
     const meta = $('meta[name="description"]');
-    if (meta) meta.setAttribute('content', p.perex.slice(0, 160));
+    if (meta) meta.setAttribute('content', (p.perex || p.name + ' — ' + catName(p.cat)).slice(0, 160));
 
     const bc = $('[data-breadcrumb]');
     if (bc) bc.innerHTML =
@@ -306,11 +439,65 @@
           </button>`).join('')}
       </div>` : '';
 
-    const norm = x => x.toLowerCase().replace(/[^a-z0-9á-ž]/gi, '');
-    const sameAsName = !p.perex || norm(p.perex) === norm(p.name);
+    const variants = p.variants || [];
+    const mounts = mountOptions(p);
+    const extras = p.extras || [];
 
-    const specRows = Object.entries(p.specs)
-      .map(([k, v]) => `<tr><th>${esc(k)}</th><td>${esc(v)}</td></tr>`).join('');
+    const variantGroup = variants.length > 1 ? `
+      <div class="config__group">
+        <p class="config__label" id="cfg-var-label">${esc(p.variantLabel || 'Varianta')}</p>
+        <div class="config__opts" role="radiogroup" aria-labelledby="cfg-var-label">
+          ${variants.map((v, i) => `
+            <button type="button" class="opt" role="radio" aria-checked="${i ? 'false' : 'true'}" data-variant="${i}">
+              <b>${esc(v.label)}</b><small>${czk(v.price)}</small>
+            </button>`).join('')}
+        </div>
+      </div>` : '';
+
+    const mountGroup = mounts ? `
+      <div class="config__group">
+        <label class="config__label" for="cfg-mount">Uchycení</label>
+        <select class="select" id="cfg-mount" data-mount>
+          ${mounts.known ? '' : '<option value="">Upřesníme podle vašeho stroje</option>'}
+          ${mounts.list.map((m, i) => `<option value="${i}">${esc(m.name)}${m.note ? ' (' + esc(m.note) + ')' : ''}${
+            mounts.known ? ' — ' + (m.incl ? 'v ceně' : m.extra ? '+ ' + czk(m.extra) : 'cena na dotaz') : ''}</option>`).join('')}
+        </select>
+      </div>` : '';
+
+    const extrasGroup = extras.length ? `
+      <div class="config__group">
+        <p class="config__label">Příplatková výbava</p>
+        ${extras.map((e, i) => `
+          <label class="check config__extra"><input type="checkbox" data-extra="${i}">
+            <span>${esc(e.name)}${e.note ? `<small>${esc(e.note)}</small>` : ''}</span>
+            <span class="count">+ ${czk(e.price)}</span></label>`).join('')}
+      </div>` : '';
+
+    const descRows = p.desc.length ? `<div class="detail__block">
+          <h3>Popis</h3>
+          <ul class="desc-list">${p.desc.map(l => `<li>${esc(l)}</li>`).join('')}</ul>
+        </div>` : '';
+
+    const variantTable = variants.length > 1 ? (() => {
+      const keys = [...new Set(variants.flatMap(v => Object.keys(v.specs)))];
+      const hasCode = variants.some(v => v.code);
+      return `<div class="detail__block">
+        <h3>Přehled variant</h3>
+        <div class="table-scroll"><table class="var-table">
+          <thead><tr>${hasCode ? '<th>Kód</th>' : ''}${keys.length ? keys.map(k => `<th>${esc(k)}</th>`).join('') : `<th>${esc(p.variantLabel || 'Varianta')}</th>`}<th>Cena bez DPH</th></tr></thead>
+          <tbody>${variants.map((v, i) => `<tr data-row="${i}"${i ? '' : ' class="is-active"'}>${hasCode ? `<td>${esc(v.code || '—')}</td>` : ''}${
+            keys.length ? keys.map(k => `<td>${esc(v.specs[k] || '—')}</td>`).join('') : `<td>${esc(v.label)}</td>`}<td><b>${czk(v.price)}</b></td></tr>`).join('')}</tbody>
+        </table></div>
+      </div>`;
+    })() : '';
+
+    const drawings = (p.drawings || []).length ? `<div class="detail__block">
+        <h3>Technický nákres</h3>
+        <div class="drawings">${p.drawings.map(f => `
+          <a class="drawing" href="assets/img/nakresy/${encodeURIComponent(f)}" target="_blank" rel="noopener">
+            <img src="assets/img/nakresy/${encodeURIComponent(f)}" alt="Technický nákres — ${esc(p.name)}" loading="lazy">
+          </a>`).join('')}</div>
+      </div>` : '';
 
     root.innerHTML = `
       <div class="detail__gallery">
@@ -320,36 +507,46 @@
       <div>
         <p class="eyebrow">${esc(catName(p.cat))}</p>
         <h1>${esc(p.name)}</h1>
+        <p class="detail__code" data-code${variants[0] && variants[0].code ? '' : ' hidden'}>Kód: <span>${esc((variants[0] && variants[0].code) || '')}</span></p>
         <div class="detail__flags">${flags(p)}</div>
-        ${sameAsName ? '' : `<p class="lead">${esc(p.perex)}</p>`}
+        ${p.perex ? `<p class="lead">${esc(p.perex)}</p>` : ''}
 
-        <div class="detail__price">
-          <b>${priceLabel(p)}</b><span>bez DPH · ${czk(Math.round(p.price * 1.21))} s DPH</span>
+        <div class="config" data-config>
+          ${variantGroup}${mountGroup}${extrasGroup}
+          <div class="config__sum">
+            <div class="detail__price">
+              <b data-total>${priceLabel(p)}</b><span data-total-vat></span>
+            </div>
+            <p class="config__note" data-config-note hidden></p>
+            <div class="config__buy">
+              <div class="qty" aria-label="Počet kusů">
+                <button type="button" data-qty="-1" aria-label="Ubrat kus">${ICON.minus}</button>
+                <input type="number" min="1" max="99" value="1" inputmode="numeric" aria-label="Počet kusů" data-qty-input>
+                <button type="button" data-qty="1" aria-label="Přidat kus">${ICON.plus}</button>
+              </div>
+              <button type="button" class="btn" data-add-cart>${ICON.cart} Přidat do poptávky</button>
+            </div>
+            <a class="config__tel" href="tel:${SITE.phoneHref}">nebo zavolejte ${SITE.phone}</a>
+          </div>
         </div>
 
-        <div class="detail__actions">
-          <a class="btn" href="kontakt.html?produkt=${encodeURIComponent(p.name)}">Nezávazná poptávka ${ICON.arrow}</a>
-          <a class="btn btn--ghost" href="tel:${SITE.phoneHref}">Zavolat ${SITE.phone}</a>
-        </div>
-
-        ${specRows ? `<div class="detail__block">
+        <div class="detail__block">
           <h3>Technické parametry</h3>
-          <table class="spec-table"><tbody>${specRows}</tbody></table>
-        </div>` : ''}
+          <table class="spec-table"><tbody data-specs></tbody></table>
+        </div>
 
-        ${p.desc.length ? `<div class="detail__block">
-          <h3>Popis a varianty</h3>
-          <ul class="desc-list">${p.desc.map(l => `<li>${esc(l)}</li>`).join('')}</ul>
-        </div>` : ''}
+        ${variantTable}
+        ${drawings}
+        ${descRows}
 
         <div class="detail__block">
           <h3>Vhodné pro</h3>
           <div class="tag-row">
             ${p.machines.map(m => `<span class="chip chip--neutral">${esc(machineName(m))}</span>`).join('') || '<span class="chip chip--neutral">Upřesníme podle stroje</span>'}
           </div>
-          ${p.mounts.length ? `<h3 style="margin-top:22px">Uchycení</h3>
-          <div class="tag-row">${p.mounts.map(m => `<a class="chip" href="katalog.html?uchyceni=${m}">${esc(mountName(m))}</a>`).join('')}</div>` : ''}
         </div>
+
+        ${mountBlock(p)}
       </div>`;
 
     // přepínání fotek v galerii
@@ -359,6 +556,79 @@
       $$('.detail__thumb', root).forEach(x => x.classList.remove('is-active'));
       b.classList.add('is-active');
     }));
+
+    // --- konfigurátor ---
+    const cfg = { variant: 0, mount: mounts && mounts.known ? 0 : -1, extras: new Set(), qty: 1 };
+    const mountSel = $('[data-mount]', root);
+    const qtyInput = $('[data-qty-input]', root);
+
+    function current() {
+      const v = variants[cfg.variant];
+      const m = mounts && cfg.mount >= 0 ? mounts.list[cfg.mount] : null;
+      const base = v ? v.price : p.price;
+      const mountAdd = m && !m.incl && m.extra ? m.extra : 0;
+      const exAdd = [...cfg.extras].reduce((s, i) => s + extras[i].price, 0);
+      return { v, m, unit: base + mountAdd + exAdd, onRequest: !!(m && !m.incl && m.extra == null && mounts.known) };
+    }
+
+    function update() {
+      const c = current();
+      const specs = Object.assign({}, p.specs, c.v ? c.v.specs : {});
+      $('[data-specs]', root).innerHTML = Object.entries(specs)
+        .map(([k, val]) => `<tr><th>${esc(k)}</th><td>${esc(val)}</td></tr>`).join('') ||
+        '<tr><td colspan="2" style="color:var(--muted)">Parametry upřesníme v nabídce.</td></tr>';
+      const total = c.unit * cfg.qty;
+      // „od“ jen tam, kde cena opravdu není pevná (bez variant, cena „od“)
+      const from = p.priceFrom && variants.length < 2;
+      $('[data-total]', root).textContent = (from ? 'od ' : '') + czk(total);
+      $('[data-total-vat]', root).textContent = `bez DPH · ${czk(Math.round(total * 1.21))} s DPH${cfg.qty > 1 ? ` · ${cfg.qty} ks` : ''}`;
+      const note = $('[data-config-note]', root);
+      note.hidden = !c.onRequest;
+      note.textContent = c.onRequest ? 'Cenu za zvolené uchycení doplníme v nabídce.' : '';
+      const code = $('[data-code]', root);
+      if (code) { code.hidden = !(c.v && c.v.code); $('span', code).textContent = c.v && c.v.code ? c.v.code : ''; }
+      $$('[data-row]', root).forEach(r => r.classList.toggle('is-active', +r.dataset.row === cfg.variant));
+    }
+
+    $$('[data-variant]', root).forEach(b => b.addEventListener('click', () => {
+      cfg.variant = +b.dataset.variant;
+      $$('[data-variant]', root).forEach(x => x.setAttribute('aria-checked', x === b ? 'true' : 'false'));
+      update();
+    }));
+    // šipky v radiogroup
+    const optWrap = $('.config__opts', root);
+    if (optWrap) optWrap.addEventListener('keydown', e => {
+      if (!['ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp'].includes(e.key)) return;
+      e.preventDefault();
+      const dir = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : -1;
+      const next = (cfg.variant + dir + variants.length) % variants.length;
+      const btn = $(`[data-variant="${next}"]`, root); btn.click(); btn.focus();
+    });
+    if (mountSel) mountSel.addEventListener('change', () => { cfg.mount = mountSel.value === '' ? -1 : +mountSel.value; update(); });
+    $$('[data-extra]', root).forEach(ch => ch.addEventListener('change', () => {
+      ch.checked ? cfg.extras.add(+ch.dataset.extra) : cfg.extras.delete(+ch.dataset.extra); update();
+    }));
+    const setQty = n => { cfg.qty = Math.max(1, Math.min(99, n || 1)); qtyInput.value = cfg.qty; update(); };
+    $$('[data-qty]', root).forEach(b => b.addEventListener('click', () => setQty(cfg.qty + +b.dataset.qty)));
+    qtyInput.addEventListener('change', () => setQty(parseInt(qtyInput.value, 10)));
+
+    $('[data-add-cart]', root).addEventListener('click', () => {
+      const c = current();
+      const exNames = [...cfg.extras].sort().map(i => extras[i].name);
+      const item = {
+        id: p.id, name: p.name, img: p.imgs[0],
+        variant: c.v ? (p.variantLabel || 'Varianta') + ': ' + c.v.label + (c.v.code ? ' (' + c.v.code + ')' : '') : '',
+        mount: mounts ? (c.m ? c.m.name + (c.m.incl ? '' : c.m.extra ? '' : ' — cena na dotaz') : 'upřesníme podle stroje') : '',
+        extras: exNames,
+        unit: c.unit, from: p.priceFrom && variants.length < 2, onRequest: c.onRequest,
+        qty: cfg.qty
+      };
+      item.key = [item.id, item.variant, item.mount, exNames.join('+')].join('|');
+      Cart.add(item);
+      toast(item);
+    });
+
+    update();
 
     const rel = $('[data-related]');
     if (rel) {
@@ -371,15 +641,118 @@
     initReveal();
   }
 
-  /* ---------- 9. Poptávkový formulář ---------- */
+  /* ---------- 10. Upozornění po přidání do poptávky ---------- */
+  function toast(item) {
+    let t = $('.toast');
+    if (!t) {
+      t = document.createElement('div');
+      t.className = 'toast'; t.setAttribute('role', 'status'); t.setAttribute('aria-live', 'polite');
+      document.body.appendChild(t);
+    }
+    const n = Cart.count();
+    t.innerHTML = `
+      <img src="assets/img/nahledy/${esc(item.img)}" alt="" width="64" height="48">
+      <div class="toast__text"><b>Přidáno do poptávky</b><span>${esc(item.name)}${item.variant ? ' · ' + esc(item.variant.split(': ')[1] || item.variant) : ''}${item.qty > 1 ? ' · ' + item.qty + ' ks' : ''}</span></div>
+      <a class="btn btn--sm" href="poptavka.html">Poptávka (${n})</a>
+      <button class="toast__close" type="button" aria-label="Zavřít">${ICON.close}</button>`;
+    $('.toast__close', t).addEventListener('click', () => t.classList.remove('is-open'));
+    requestAnimationFrame(() => t.classList.add('is-open'));
+    clearTimeout(toast.timer);
+    toast.timer = setTimeout(() => t.classList.remove('is-open'), 7000);
+  }
+
+  /* ---------- 11. Stránka poptávky (košík) ---------- */
+  function cartLines(items) {
+    return items.map((i, n) => [
+      `${n + 1}) ${i.name} — ${i.qty} ks`,
+      i.variant ? '   ' + i.variant : '',
+      i.mount ? '   Uchycení: ' + i.mount : '',
+      i.extras.length ? '   Výbava: ' + i.extras.join(', ') : '',
+      `   Orientačně: ${i.from ? 'od ' : ''}${czk(i.unit * i.qty)} bez DPH`
+    ].filter(Boolean).join('\n')).join('\n');
+  }
+
+  function initCartPage() {
+    const wrap = $('[data-cart]');
+    if (!wrap) return;
+
+    function render() {
+      const items = Cart.read();
+      const sum = items.reduce((s, i) => s + i.unit * i.qty, 0);
+      $$('[data-cart-filled]').forEach(el => el.hidden = !items.length);
+      if (!items.length) {
+        wrap.innerHTML = `<div class="empty">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+          <h3>Poptávka je zatím prázdná</h3>
+          <p class="lead">V detailu produktu si vyberte šířku a uchycení a dejte „Přidat do poptávky“. Můžete poptat i víc adaptérů najednou.</p>
+          <p style="margin-top:18px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><a class="btn" href="katalog.html">Do katalogu</a><a class="btn btn--ghost" href="kontakt.html">Napsat bez výběru</a></p>
+        </div>`;
+        return;
+      }
+      wrap.innerHTML = `
+        <ul class="cart-list">
+          ${items.map((i, n) => `
+            <li class="cart-item">
+              <a class="cart-item__img" href="produkt.html?id=${encodeURIComponent(i.id)}"><img src="assets/img/nahledy/${esc(i.img)}" alt="" width="120" height="90"></a>
+              <div class="cart-item__body">
+                <a class="cart-item__name" href="produkt.html?id=${encodeURIComponent(i.id)}">${esc(i.name)}</a>
+                <ul class="cart-item__meta">
+                  ${i.variant ? `<li>${esc(i.variant)}</li>` : ''}
+                  ${i.mount ? `<li>Uchycení: ${esc(i.mount)}</li>` : ''}
+                  ${i.extras.length ? `<li>Výbava: ${esc(i.extras.join(', '))}</li>` : ''}
+                </ul>
+              </div>
+              <div class="qty qty--sm">
+                <button type="button" data-cqty="${n}" data-d="-1" aria-label="Ubrat kus">${ICON.minus}</button>
+                <input type="number" min="1" max="99" value="${i.qty}" data-cqty-input="${n}" aria-label="Počet kusů">
+                <button type="button" data-cqty="${n}" data-d="1" aria-label="Přidat kus">${ICON.plus}</button>
+              </div>
+              <div class="cart-item__price"><b>${i.from ? 'od ' : ''}${czk(i.unit * i.qty)}</b><small>${i.qty > 1 ? czk(i.unit) + ' / ks' : 'bez DPH'}</small></div>
+              <button class="cart-item__remove" type="button" data-remove="${n}" aria-label="Odebrat ${esc(i.name)}">${ICON.trash}</button>
+            </li>`).join('')}
+        </ul>
+        <div class="cart-sum">
+          <div><span>Orientační cena celkem</span><b>${czk(sum)}</b><small>bez DPH · ${czk(Math.round(sum * 1.21))} s DPH</small></div>
+          <p>Přesnou cenu, termín a dopravu potvrdíme v nabídce. Poptávka je nezávazná.</p>
+          <button class="btn btn--ghost btn--sm" type="button" data-cart-clear>Vyprázdnit poptávku</button>
+        </div>`;
+    }
+
+    wrap.addEventListener('click', e => {
+      const items = Cart.read();
+      const q = e.target.closest('[data-cqty]'), r = e.target.closest('[data-remove]'), c = e.target.closest('[data-cart-clear]');
+      if (q) { const it = items[+q.dataset.cqty]; it.qty = Math.max(1, Math.min(99, it.qty + +q.dataset.d)); Cart.write(items); render(); }
+      if (r) { items.splice(+r.dataset.remove, 1); Cart.write(items); render(); }
+      if (c && confirm('Opravdu vyprázdnit celou poptávku?')) { Cart.write([]); render(); }
+    });
+    wrap.addEventListener('change', e => {
+      const inp = e.target.closest('[data-cqty-input]');
+      if (!inp) return;
+      const items = Cart.read();
+      items[+inp.dataset.cqtyInput].qty = Math.max(1, Math.min(99, parseInt(inp.value, 10) || 1));
+      Cart.write(items); render();
+    });
+    render();
+  }
+
+  /* ---------- 12. Poptávkový formulář ---------- */
   function initForm() {
     const form = $('[data-form]');
     if (!form) return;
+    const withCart = form.dataset.form === 'cart';
 
     const produkt = new URLSearchParams(location.search).get('produkt');
     const msg = $('#zprava', form);
     if (produkt && msg && !msg.value) {
       msg.value = `Dobrý den,\nmám zájem o produkt ${produkt}. Prosím o cenovou nabídku a termín dodání.\n\nDěkuji`;
+    }
+
+    // na kontaktu upozornit, že v poptávce už něco čeká
+    const hint = $('[data-cart-hint]');
+    if (hint && !withCart) {
+      const n = Cart.count();
+      hint.hidden = !n;
+      if (n) hint.innerHTML = `V poptávce máte ${n} ${plural(n, 'adaptér', 'adaptéry', 'adaptérů')}. <a href="poptavka.html">Odeslat poptávku s vybranými adaptéry ${ICON.arrow}</a>`;
     }
 
     const sel = $('#uchyceni', form);
@@ -392,6 +765,13 @@
     form.addEventListener('submit', e => {
       e.preventDefault();
       status.className = 'form-status';
+
+      const items = withCart ? Cart.read() : [];
+      if (withCart && !items.length) {
+        status.classList.add('is-err');
+        status.textContent = 'Poptávka je prázdná — nejdřív přidejte adaptér z katalogu.';
+        return;
+      }
 
       const required = $$('[required]', form);
       const bad = required.find(f => (f.type === 'checkbox' ? !f.checked : !f.value.trim()));
@@ -415,12 +795,15 @@
         'E-mail: ' + d.get('email'),
         'Telefon: ' + (d.get('telefon') || '—'),
         'Stroj: ' + (d.get('stroj') || '—'),
-        'Uchycení: ' + (d.get('uchyceni') || '—'),
-        '', 'Zpráva:', d.get('zprava')
-      ].join('\n');
+        d.has('uchyceni') ? 'Uchycení: ' + (d.get('uchyceni') || '—') : '',
+        withCart ? '\nPoptávané adaptéry:\n' + cartLines(items) +
+          `\n\nOrientačně celkem: ${czk(items.reduce((s, i) => s + i.unit * i.qty, 0))} bez DPH` : '',
+        '', 'Zpráva:', d.get('zprava') || '—'
+      ].filter(x => x !== '').join('\n');
 
+      const subject = (withCart ? 'Poptávka adaptérů z webu — ' : 'Poptávka z webu — ') + (d.get('jmeno') || '');
       window.location.href = 'mailto:' + SITE.email
-        + '?subject=' + encodeURIComponent('Poptávka z webu — ' + (d.get('jmeno') || ''))
+        + '?subject=' + encodeURIComponent(subject)
         + '&body=' + encodeURIComponent(body);
 
       status.classList.add('is-ok');
@@ -428,11 +811,13 @@
     });
   }
 
-  /* ---------- 10. Start ---------- */
+  /* ---------- 13. Start ---------- */
   document.addEventListener('DOMContentLoaded', () => {
     initHeader(); initToTop(); initFaq();
-    initHome(); initCatalog(); initDetail(); initForm();
+    initHome(); initCatalog(); initDetail(); initCartPage(); initForm();
     initReveal();
     $$('[data-year]').forEach(el => el.textContent = new Date().getFullYear());
   });
+  // košík otevřený ve víc záložkách — počet v hlavičce drží krok
+  window.addEventListener('storage', e => { if (e.key === 'adaptery-poptavka-v1') Cart.badge(); });
 })();

@@ -2,6 +2,8 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://www.adapterypronakladace.cz/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
   <url><loc>https://www.adapterypronakladace.cz/katalog.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.adapterypronakladace.cz/katalog-tisk.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.adapterypronakladace.cz/assets/katalog-adaptery-pro-nakladace.pdf</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://www.adapterypronakladace.cz/na-miru.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://www.adapterypronakladace.cz/o-nas.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://www.adapterypronakladace.cz/kontakt.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>

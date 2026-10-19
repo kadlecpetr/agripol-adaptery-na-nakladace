@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Příklad uchycení EURO: zadní strana adaptéru s horními háky a spodními oky pro zajišťovací čepy">
+  <!-- zadní stěna adaptéru -->
+  <rect x="36" y="44" width="328" height="214" rx="10" fill="#F4F4F6" stroke="#CFD1D6" stroke-width="2"/>
+  <!-- příčná trubka rámu nakladače, na kterou se adaptér zavěsí -->
+  <rect x="78" y="64" width="244" height="16" rx="8" fill="none" stroke="#6B6E75" stroke-width="2" stroke-dasharray="7 5"/>
+  <!-- svislé nosné plechy -->
+  <g fill="#3B3D42">
+    <rect x="106" y="74" width="24" height="160" rx="3"/>
+    <rect x="270" y="74" width="24" height="160" rx="3"/>
+  </g>
+  <!-- horní háky -->
+  <g fill="#C8191F">
+    <path d="M100 94V70a18 18 0 0 1 36 0v6h-11v-6a7 7 0 0 0-14 0v24z"/>
+    <path d="M264 94V70a18 18 0 0 1 36 0v6h-11v-6a7 7 0 0 0-14 0v24z"/>
+  </g>
+  <!-- spodní oka s otvorem pro čep -->
+  <g fill="#3B3D42">
+    <rect x="98" y="196" width="40" height="44" rx="5"/>
+    <rect x="262" y="196" width="40" height="44" rx="5"/>
+  </g>
+  <g fill="#FFFFFF">
+    <rect x="108" y="209" width="20" height="16" rx="2"/>
+    <rect x="272" y="209" width="20" height="16" rx="2"/>
+  </g>
+  <!-- zajišťovací čepy nakladače -->
+  <g fill="#C8191F">
+    <rect x="52" y="212" width="70" height="10" rx="5"/>
+    <rect x="278" y="212" width="70" height="10" rx="5"/>
+  </g>
+  <!-- popisky -->
+  <g font-family="Inter,Arial,Helvetica,sans-serif" font-size="14" font-weight="600" fill="#1E1F22">
+    <text x="200" y="28" text-anchor="middle">horní háky</text>
+    <text x="200" y="286" text-anchor="middle">oka pro zajišťovací čepy</text>
+  </g>
+  <g fill="none" stroke="#6B6E75" stroke-width="1.5">
+    <path d="M160 32 132 56M240 32 268 56"/>
+    <path d="M168 270 138 238M232 270 262 238"/>
+  </g>
+</svg>
