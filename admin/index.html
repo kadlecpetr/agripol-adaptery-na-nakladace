@@ -333,8 +333,9 @@ const PRODUCTS = ${j(D.PRODUCTS)};
       <div class="photos" id="photos">${p.imgs.map((f, i) => `<div class="ph${i ? '' : ' is-main'}"><img src="${imgUrl(f)}" alt=""><small>${i ? '' : 'Hlavní fotka'}</small>
         <button class="btn btn--s" data-pl="${i}" ${i ? '' : 'disabled'} title="Posunout vlevo">←</button> <button class="btn btn--s" data-pr="${i}" ${i < p.imgs.length - 1 ? '' : 'disabled'}>→</button>
         <button class="btn btn--s btn--d" data-pd="${i}">✕</button></div>`).join('')}
-        <div class="ph" style="display:flex;align-items:center;justify-content:center"><label class="btn" style="margin:0">+ Přidat fotky<input type="file" id="file" accept="image/*" multiple hidden></label></div></div>
-      <p class="hint">Fotky se samy zmenší a převedou. Nejlépe na bílém nebo průhledném pozadí. První je hlavní.</p>
+        <div class="ph" style="display:flex;align-items:center;justify-content:center"><label class="btn" style="margin:0">+ Přidat fotky<input type="file" id="file" accept="image/*" multiple hidden></label></div>
+        <div class="ph" style="display:flex;align-items:center;justify-content:center"><label class="btn" style="margin:0">📷 Vyfotit<input type="file" id="cam" accept="image/*" capture="environment" hidden></label></div></div>
+      <p class="hint">Fotky se samy zmenší a převedou. Na telefonu a tabletu tlačítko „Vyfotit“ rovnou otevře foťák (na počítači otevře výběr souboru). Nejlépe na bílém nebo světlém pozadí. První fotka je hlavní.</p>
       <h3 class="sub">Uchycení a stroje</h3>
       <div class="grid">
         <div><label>Uchycení, se kterým platí cena</label><input type="text" data-k="mount" data-nul="1" value="${esc(p.mount || '')}" placeholder="např. EURO, na paletizační vidle"></div>
@@ -397,8 +398,8 @@ const PRODUCTS = ${j(D.PRODUCTS)};
       else return;
       syncPrice(); renderEdit();
     };
-    $('#file').onchange = async e => {
-      for (const f of e.target.files) { try { const name = await addPhoto(f, p); p.imgs.push(name); } catch (er) { alert('Fotku ' + f.name + ' se nepodařilo načíst.'); } }
+    $('#file').onchange = $('#cam').onchange = async e => {
+      for (const f of e.target.files) { try { const name = await addPhoto(f, p); p.imgs.push(name); touch(); } catch (er) { alert('Fotku se nepodařilo načíst.'); } }
       renderEdit();
     };
   }
