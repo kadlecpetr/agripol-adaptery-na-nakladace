@@ -61,7 +61,16 @@
   function initHeader() {
     const header = $('.header'), burger = $('.burger'), mnav = $('.mobile-nav');
     if (header) {
-      const onScroll = () => header.classList.toggle('is-stuck', window.scrollY > 12);
+      const hero = $('.hero'), logo = $('.logo__img', header);
+      /* na úvodu je lišta tmavá jen nad hero sekcí, pod ní zesvětlá */
+      const onScroll = () => {
+        header.classList.toggle('is-stuck', window.scrollY > 12);
+        if (hero) {
+          const dark = hero.getBoundingClientRect().bottom > header.offsetHeight;
+          header.classList.toggle('header--dark', dark);
+          if (logo) logo.src = logo.src.replace(/logo-full(-white)?\.svg/, dark ? 'logo-full-white.svg' : 'logo-full.svg');
+        }
+      };
       onScroll();
       window.addEventListener('scroll', onScroll, { passive: true });
     }
