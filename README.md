@@ -35,7 +35,7 @@ takže se všude vysází stejně — i v tiskárně.
 | `assets/img/logo-full.svg` | celé logo na světlé pozadí (hlavička, katalog) |
 | `assets/img/logo-full-white.svg` | celé logo na tmavé pozadí (patička, titulka katalogu) |
 | `assets/img/logo.svg` | jen dráp s pruhem, barevně |
-| `assets/img/logo-silhouette.svg` | bílý „výpalek“ drápu — velký tvar za fotkou na úvodu (jako na adapro.cz) |
+| `assets/img/logo-silhouette.svg` | bílá silueta drápu s prořezy (zatím nepoužitá — za fotkou na úvodu se klientovi nelíbila) |
 | `assets/img/logo-mark-white.svg` | totéž jako silueta, napevno bílá — na tmavé pozadí i přes `<img>` |
 | `assets/img/logo-mark-mono.svg` | silueta, dědí barvu přes `currentColor` — funguje **jen vložená přímo do HTML**; do razítka a na výrobní štítek |
 | `assets/img/favicon.svg`, `apple-touch-icon.png` | ikona: bílý dráp na červeném čtverci |
@@ -46,8 +46,8 @@ grafit `#1F2023`, šedá z pruhu `#A3A3A3`, text `#1E1F22`.
 Písmo Barlow Condensed 700 (nadpisy), Inter (běžný text).
 
 Úvodní fotka je vyříznutý render drapáku InterTech (`assets/img/hero-drapak.webp`,
-průhledné pozadí) na bílém výpalku loga. Až bude fotka adaptéru se skutečně
-vypáleným logem Agripol, stačí ji vyříznout a nahradit tenhle soubor.
+průhledné pozadí) na grafitu s červeným pruhem, bez loga v pozadí. Až bude fotka
+adaptéru se skutečně vypáleným logem Agripol, stačí ji vyříznout a nahradit tenhle soubor.
 
 Sdílecí obrázek se nepřegeneruje sám — když se změní texty, je potřeba ho
 vyrobit znovu (HTML předloha 1200×630 vyrenderovaná headless Chromem
