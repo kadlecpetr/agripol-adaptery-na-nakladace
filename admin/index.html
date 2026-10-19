@@ -175,33 +175,63 @@ const PRODUCTS = ${j(D.PRODUCTS)};
   const textToSpecs = t => { const o = {}; t.split('\n').forEach(l => { const i = l.indexOf(':'); if (i > 0 && l.slice(i + 1).trim()) o[l.slice(0, i).trim()] = l.slice(i + 1).trim(); }); return o; };
   const numOrNull = v => { v = String(v).replace(/\s/g, '').replace(',', '.'); return v === '' || isNaN(+v) ? null : +v; };
 
+  /* ---------- heslo (token zašifrovaný heslem v admin/key.json) ---------- */
+  const b64 = u8 => btoa(String.fromCharCode(...u8));
+  const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+  async function deriveKey(pw, salt) {
+    const km = await crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveKey']);
+    return crypto.subtle.deriveKey({ name: 'PBKDF2', salt, iterations: 300000, hash: 'SHA-256' }, km, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+  }
+  async function encryptToken(tok, pw) {
+    const salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12));
+    const ct = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, await deriveKey(pw, salt), new TextEncoder().encode(tok)));
+    return JSON.stringify({ v: 1, salt: b64(salt), iv: b64(iv), data: b64(ct) });
+  }
+  async function decryptToken(blob, pw) {
+    const ct = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(blob.iv) }, await deriveKey(pw, unb64(blob.salt)), unb64(blob.data));
+    return new TextDecoder().decode(ct);
+  }
+  async function fetchKey() {
+    try { const r = await fetch('key.json?t=' + Date.now()); return r.ok ? await r.json() : null; } catch (e) { return null; }
+  }
+  async function savePassword(pw) {
+    const body = { message: 'Administrace: nastavení hesla', branch: BRANCH, content: btoa(await encryptToken(getTok(), pw)) };
+    try { body.sha = (await gh('/contents/admin/key.json?ref=' + BRANCH)).sha; } catch (e) {}
+    await gh('/contents/admin/key.json', { method: 'PUT', body: JSON.stringify(body) });
+    headSha = (await gh('/git/ref/heads/' + BRANCH)).object.sha;
+  }
+
   /* ---------- přihlášení ---------- */
-  function viewLogin(err) {
+  async function viewLogin(err) {
     $('#bar').hidden = true; $('#logout').hidden = true;
+    const key = await fetchKey();
     $('#app').innerHTML = `<div class="card login">
       <h2>Přihlášení do administrace</h2>
-      <p>Zadejte přístupový klíč (token) k webu. Uloží se jen do tohoto prohlížeče.</p>
-      <label for="tok">Přístupový klíč</label>
-      <input type="password" id="tok" autocomplete="off" placeholder="github_pat_…">
+      ${key ? `<label for="pw">Heslo</label><input type="password" id="pw" autocomplete="current-password" autofocus>` : `
+      <p>Heslo zatím není nastavené. Přihlaste se jednorázově přístupovým klíčem (token) a heslo si pak nastavíte v záložce „Přístup“.</p>
+      <label for="tok">Přístupový klíč</label><input type="password" id="tok" autocomplete="off" placeholder="github_pat_…">`}
       ${err ? `<p class="msg err">${esc(err)}</p>` : ''}
       <p><button class="btn btn--p" id="go">Přihlásit</button></p>
-      <details><summary>Kde klíč získat (jednorázově)</summary>
+      ${key ? `<p><a href="#" id="usetok" class="hint">Přihlásit klíčem místo hesla</a></p>` : `<details><summary>Kde klíč získat (jednorázově)</summary>
         <ol class="steps">
-          <li>Přihlaste se na github.com účtem, který má přístup k repozitáři <code>${REPO}</code>.</li>
-          <li>Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token.</li>
-          <li>Repository access: pouze tento repozitář. Permissions → Repository permissions → <b>Contents: Read and write</b>.</li>
-          <li>Token vygenerujte, zkopírujte a vložte sem.</li>
-        </ol>
-      </details></div>`;
-    $('#go').onclick = start;
-    $('#tok').onkeydown = e => { if (e.key === 'Enter') start(); };
+          <li>Přihlaste se na github.com jako majitel repozitáře <code>${REPO.split('/')[0]}</code> a otevřete <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">tento odkaz</a>.</li>
+          <li>Token name: <code>admin</code>, Expiration: No expiration (nebo 1 rok), Repository access: <b>Only select repositories</b> → <code>${REPO.split('/')[1]}</code>.</li>
+          <li>Repository permissions → <b>Contents: Read and write</b>.</li>
+          <li>Generate token, zkopírujte (začíná <code>github_pat_</code>) a vložte sem.</li>
+        </ol></details>`}</div>`;
+    $('#go').onclick = () => start(key);
+    const f = $('#pw') || $('#tok'); f.onkeydown = e => { if (e.key === 'Enter') start(key); };
+    const u = $('#usetok'); if (u) u.onclick = e => { e.preventDefault(); const t = prompt('Vložte přístupový klíč (github_pat_…):'); if (t) { setTok(t.trim()); start(null); } };
   }
-  async function start() {
-    const el = $('#tok'); if (el && el.value.trim()) setTok(el.value.trim());
+  async function start(key) {
+    const pwEl = $('#pw'), tokEl = $('#tok');
+    if (pwEl && key) {
+      try { setTok(await decryptToken(key, pwEl.value)); } catch (e) { return viewLogin('Nesprávné heslo.'); }
+    } else if (tokEl && tokEl.value.trim()) setTok(tokEl.value.trim());
     if (!getTok()) return viewLogin();
     $('#app').innerHTML = '<p class="card">Načítám data…</p>';
     try { await load(); } catch (e) {
-      if (e.status === 401 || e.status === 403 || e.status === 404) { setTok(''); return viewLogin('Klíč nefunguje (' + e.message + '). Zkontrolujte jeho oprávnění.'); }
+      if (e.status === 401 || e.status === 403 || e.status === 404) { setTok(''); return viewLogin('Přístup nefunguje (' + e.message + '). Zkontrolujte oprávnění klíče.'); }
       return viewLogin('Načtení se nepovedlo: ' + e.message);
     }
     $('#bar').hidden = false; $('#logout').hidden = false; msg(''); refreshBar(); render();
@@ -213,10 +243,10 @@ const PRODUCTS = ${j(D.PRODUCTS)};
   /* ---------- hlavní zobrazení ---------- */
   function render() {
     if (edit) return renderEdit();
-    const tabs = [['produkty', 'Produkty'], ['kategorie', 'Kategorie'], ['firma', 'Firemní údaje']];
+    const tabs = [['produkty', 'Produkty'], ['kategorie', 'Kategorie'], ['firma', 'Firemní údaje'], ['pristup', 'Přístup']];
     $('#app').innerHTML = `<div class="tabs">${tabs.map(t => `<button class="tab${tab === t[0] ? ' is-on' : ''}" data-tab="${t[0]}">${t[1]}</button>`).join('')}</div><div id="pane"></div>`;
     document.querySelectorAll('.tab').forEach(b => b.onclick = () => { tab = b.dataset.tab; render(); });
-    ({ produkty: paneProducts, kategorie: paneCats, firma: paneSite })[tab]();
+    ({ produkty: paneProducts, kategorie: paneCats, firma: paneSite, pristup: paneAccess })[tab]();
   }
 
   function paneProducts() {
@@ -401,8 +431,25 @@ const PRODUCTS = ${j(D.PRODUCTS)};
     $('#pane').oninput = e => { const k = e.target.dataset.s; if (k) { D.SITE[k] = e.target.value; touch(); } };
   }
 
+  /* ---------- přístup (heslo) ---------- */
+  function paneAccess() {
+    $('#pane').innerHTML = `<div class="card" style="max-width:560px"><h3>Heslo do administrace</h3>
+      <p class="hint">Nastavte heslo, kterým se bude klient přihlašovat (místo klíče). Zadejte alespoň 10 znaků — nejlépe delší větu. Heslo můžete kdykoli změnit.</p>
+      <label>Nové heslo</label><input type="password" id="p1" autocomplete="new-password">
+      <label style="margin-top:10px">Heslo znovu</label><input type="password" id="p2" autocomplete="new-password">
+      <p><button class="btn btn--p" id="setpw">Nastavit heslo</button> <span class="msg" id="pwmsg"></span></p></div>`;
+    $('#setpw').onclick = async () => {
+      const a = $('#p1').value, m = $('#pwmsg');
+      if (a.length < 10) { m.className = 'msg err'; m.textContent = 'Heslo je příliš krátké (min. 10 znaků).'; return; }
+      if (a !== $('#p2').value) { m.className = 'msg err'; m.textContent = 'Hesla se neshodují.'; return; }
+      m.className = 'msg'; m.textContent = 'Ukládám…';
+      try { await savePassword(a); m.className = 'msg ok'; m.textContent = 'Heslo nastaveno. Platí od příštího přihlášení (za 1–2 minuty).'; }
+      catch (e) { m.className = 'msg err'; m.textContent = 'Nepovedlo se: ' + e.message; }
+    };
+  }
+
   /* ---------- start ---------- */
-  getTok() ? start() : viewLogin();
+  getTok() ? start(null) : viewLogin();
 })();
 </script>
 </body>
