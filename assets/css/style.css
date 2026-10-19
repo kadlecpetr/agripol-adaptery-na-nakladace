@@ -142,24 +142,26 @@ strong{color:var(--ink);font-weight:600;}
 .header{
   position:fixed;inset:0 0 auto;z-index:100;
   height:var(--header-h);
-  background:rgba(31,32,35,.96);
+  background:rgba(255,255,255,.96);
   backdrop-filter:saturate(150%) blur(14px);
   -webkit-backdrop-filter:saturate(150%) blur(14px);
   border-bottom:1px solid transparent;
   transition:border-color .3s var(--ease),box-shadow .3s var(--ease),height .3s var(--ease);
 }
-.header.is-stuck{border-bottom-color:rgba(255,255,255,.08);box-shadow:0 6px 24px rgba(0,0,0,.28);}
-/* tmavá lišta navazuje na hero, odkazy jsou světlé */
-.header .nav__link{color:rgba(255,255,255,.82);}
-.header .nav__link:hover{color:#fff;background:rgba(255,255,255,.08);}
-.header .nav__link.is-active{color:#fff;}
-.header .nav__link.is-active::after{background:var(--accent-light);}
-.header .header__tel{color:#fff;}
-.header .header__tel svg{color:var(--accent-light);}
-.header .header__tel:hover{color:var(--accent-light);}
-.header .burger{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);}
-.header .burger span,.header .burger span::before,.header .burger span::after{background:#fff;}
-.header .burger.is-open span{background:transparent;}
+.header.is-stuck{border-bottom-color:var(--line);box-shadow:0 6px 24px rgba(20,22,26,.08);}
+.header--dark{background:rgba(31,32,35,.96);}
+.header--dark.is-stuck{border-bottom-color:rgba(255,255,255,.08);box-shadow:0 6px 24px rgba(0,0,0,.28);}
+/* na úvodu tmavá lišta navazuje na hero, jinde je světlá */
+.header--dark .nav__link{color:rgba(255,255,255,.82);}
+.header--dark .nav__link:hover{color:#fff;background:rgba(255,255,255,.08);}
+.header--dark .nav__link.is-active{color:#fff;}
+.header--dark .nav__link.is-active::after{background:var(--accent-light);}
+.header--dark .header__tel{color:#fff;}
+.header--dark .header__tel svg{color:var(--accent-light);}
+.header--dark .header__tel:hover{color:var(--accent-light);}
+.header--dark .burger{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);}
+.header--dark .burger span,.header--dark .burger span::before,.header--dark .burger span::after{background:#fff;}
+.header--dark .burger.is-open span{background:transparent;}
 .header__inner{display:flex;align-items:center;gap:20px;height:100%;}
 .logo{display:flex;align-items:center;flex:none;}
 /* logo Agripol s nápisem — výšku drží obrázek, šířka se dopočítá */
