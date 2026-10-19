@@ -162,7 +162,7 @@ table.vt tr:nth-child(even) td{background:var(--soft);}
   const czk = n => new Intl.NumberFormat('cs-CZ').format(n) + ' Kč';
   // ?jpg=1 — při výrobě PDF se berou JPEG kopie fotek, PDF je pak výrazně menší
   const JPG = new URLSearchParams(location.search).get('jpg') === '1';
-  const photo = f => JPG ? 'assets/img/tisk/' + f.replace(/\.webp$/, '.jpg') : 'assets/img/produkty/' + f;
+  const photo = f => !f ? 'assets/img/nahledy/_bez-foto.svg' : JPG ? 'assets/img/tisk/' + f.replace(/\.webp$/, '.jpg') : 'assets/img/produkty/' + f;
   const now = new Date();
   const edition = String(now.getMonth() + 1).padStart(2, '0') + '/' + now.getFullYear();
 

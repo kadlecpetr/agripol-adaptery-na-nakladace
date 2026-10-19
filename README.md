@@ -221,3 +221,14 @@ python3 -m http.server 8080
 # http://localhost:8080
 ```
 
+
+## Administrace (admin.html)
+
+Stránka `admin.html` (mimo vyhledávače, bez odkazu z webu) umožňuje klientovi přidávat a upravovat produkty,
+kategorie, ceny, fotky a firemní údaje. Změny ukládá přímo do repozitáře jedním commitem
+(`assets/js/data.js` + nové fotky), GitHub Pages web přenasadí za 1–2 minuty.
+
+- Přihlášení: fine-grained GitHub token (Contents: Read and write) jen pro tento repozitář; ukládá se v prohlížeči (localStorage).
+- Klient musí mít GitHub účet s právem zápisu do repozitáře (Settings → Collaborators).
+- Fotky se v prohlížeči zmenší na 4:3 (900×675 a 500×375, WebP).
+- Tištěný PDF katalog se z administrace nepřegenerovává (postup výše).

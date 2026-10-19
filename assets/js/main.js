@@ -161,7 +161,7 @@
         <a class="product__link" href="produkt.html?id=${encodeURIComponent(p.id)}" aria-label="${esc(p.name)}"></a>
         <div class="product__media">
           <div class="product__flags">${flags(p)}</div>
-          <img src="assets/img/nahledy/${p.imgs[0]}" alt="${esc(p.name)}" loading="lazy" width="500" height="375">
+          <img src="assets/img/nahledy/${p.imgs[0] || '_bez-foto.svg'}" alt="${esc(p.name)}" loading="lazy" width="500" height="375">
         </div>
         <div class="product__body">
           <p class="product__cat">${esc(catName(p.cat))}</p>
@@ -510,7 +510,7 @@
 
     root.innerHTML = `
       <div class="detail__gallery">
-        <div class="detail__stage"><img src="assets/img/produkty/${p.imgs[0]}" alt="${esc(p.name)}" width="900" height="675"></div>
+        <div class="detail__stage"><img src="${p.imgs[0] ? 'assets/img/produkty/' + p.imgs[0] : 'assets/img/nahledy/_bez-foto.svg'}" alt="${esc(p.name)}" width="900" height="675"></div>
         ${thumbs}
       </div>
       <div>
@@ -625,7 +625,7 @@
       const c = current();
       const exNames = [...cfg.extras].sort().map(i => extras[i].name);
       const item = {
-        id: p.id, name: p.name, img: p.imgs[0],
+        id: p.id, name: p.name, img: p.imgs[0] || '_bez-foto.svg',
         variant: c.v ? (p.variantLabel || 'Varianta') + ': ' + c.v.label + (c.v.code ? ' (' + c.v.code + ')' : '') : '',
         mount: mounts ? (c.m ? c.m.name + (c.m.incl ? '' : c.m.extra ? '' : ' — cena na dotaz') : 'upřesníme podle stroje') : '',
         extras: exNames,
