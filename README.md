@@ -25,9 +25,9 @@ robots.txt, sitemap.xml
 ## Logo a značka
 
 Logo je logo **Agripol**, jen místo nápisu AGRIPOL je v šedém pruhu
-**ADAPTÉRY** a pod ním **PRO NAKLADAČE** (domluveno na schůzce s klientem).
+**ADAPTÉRY** a pod ním **PRO NAKLADAČE** (domluveno na schůzce s klientem), bez jména Luboš Ehrenberger.
 Tvar drápu, stín a pruh jsou obkreslené z originálního loga z agripol.cz,
-texty jsou převedené na křivky (písmo Saira Semi Condensed / Saira Condensed),
+texty jsou převedené na křivky (písmo Orbitron, nejbližší k písmu loga AGRIPOL; háček nad Č je dokreslený),
 takže se všude vysází stejně — i v tiskárně.
 
 | soubor | k čemu |
