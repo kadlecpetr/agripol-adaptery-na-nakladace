@@ -222,9 +222,9 @@ python3 -m http.server 8080
 ```
 
 
-## Administrace (admin.html)
+## Administrace (/admin)
 
-Stránka `admin.html` (mimo vyhledávače, bez odkazu z webu) umožňuje klientovi přidávat a upravovat produkty,
+Stránka `admin/index.html` (adresa `/admin`) (mimo vyhledávače, bez odkazu z webu) umožňuje klientovi přidávat a upravovat produkty,
 kategorie, ceny, fotky a firemní údaje. Změny ukládá přímo do repozitáře jedním commitem
 (`assets/js/data.js` + nové fotky), GitHub Pages web přenasadí za 1–2 minuty.
 

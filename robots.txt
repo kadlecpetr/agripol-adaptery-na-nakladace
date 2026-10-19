@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /admin.html
+Disallow: /admin/
 Sitemap: https://www.adapterypronakladace.cz/sitemap.xml

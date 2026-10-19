@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>Administrace – Adaptéry pro nakladače</title>
-<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
 <style>
 :root{--accent:#C8191F;--accent-d:#A5131A;--ink:#1F2023;--soft:#5E6168;--line:#E1E2E6;--bg:#F5F6F8;--ok:#1B7F3B;}
 *{box-sizing:border-box}
@@ -60,9 +60,9 @@ code{background:#EEF0F3;padding:1px 5px;border-radius:4px;font-size:.85em}
 </head>
 <body>
 <div class="top">
-  <img src="assets/img/logo-full-white.svg" alt="">
+  <img src="../assets/img/logo-full-white.svg" alt="">
   <span class="top__t">Administrace webu</span>
-  <a href="index.html" target="_blank" rel="noopener">Zobrazit web ↗</a>
+  <a href="../" target="_blank" rel="noopener">Zobrazit web ↗</a>
   <button class="btn btn--s" id="logout" hidden>Odhlásit</button>
 </div>
 
@@ -116,7 +116,7 @@ code{background:#EEF0F3;padding:1px 5px;border-radius:4px;font-size:.85em}
     const j = o => JSON.stringify(o, null, 2);
     return `/* =========================================================
    DATA — jediné místo, kde se edituje obsah katalogu
-   Soubor generuje administrace (admin.html); ruční úpravy jsou možné,
+   Soubor generuje administrace (admin/index.html); ruční úpravy jsou možné,
    admin si je při dalším načtení přečte.
    ========================================================= */
 
@@ -149,7 +149,7 @@ const PRODUCTS = ${j(D.PRODUCTS)};
         if (!used.has(name)) continue;
         const ph = pending[name];
         if (ph.big) tree.push({ path: 'assets/img/produkty/' + name, mode: '100644', type: 'blob', sha: await blob(ph.big, 'base64') });
-        tree.push({ path: 'assets/img/nahledy/' + name, mode: '100644', type: 'blob', sha: await blob(ph.small, 'base64') });
+        tree.push({ path: '../assets/img/nahledy/' + name, mode: '100644', type: 'blob', sha: await blob(ph.small, 'base64') });
       }
       tree.push({ path: 'assets/js/data.js', mode: '100644', type: 'blob', sha: await blob(serialize(), 'utf-8') });
       const base = (await gh('/git/commits/' + headSha)).tree.sha;
@@ -170,7 +170,7 @@ const PRODUCTS = ${j(D.PRODUCTS)};
   window.addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
   const catName = id => (D.CATEGORIES.find(c => c.id === id) || {}).name || id;
   const fmt = n => n == null ? '' : new Intl.NumberFormat('cs-CZ').format(n);
-  const imgUrl = f => pending[f] ? pending[f].url : 'assets/img/nahledy/' + f;
+  const imgUrl = f => pending[f] ? pending[f].url : '../assets/img/nahledy/' + f;
   const specsToText = o => Object.entries(o || {}).map(([k, v]) => k + ': ' + v).join('\n');
   const textToSpecs = t => { const o = {}; t.split('\n').forEach(l => { const i = l.indexOf(':'); if (i > 0 && l.slice(i + 1).trim()) o[l.slice(0, i).trim()] = l.slice(i + 1).trim(); }); return o; };
   const numOrNull = v => { v = String(v).replace(/\s/g, '').replace(',', '.'); return v === '' || isNaN(+v) ? null : +v; };
@@ -230,7 +230,7 @@ const PRODUCTS = ${j(D.PRODUCTS)};
       </div>
       <table><thead><tr><th></th><th>Název</th><th>Kategorie</th><th>Cena od</th><th>Stav</th><th></th></tr></thead><tbody>
       ${list.map(({ p, i }) => `<tr>
-        <td><img src="${p.imgs[0] ? imgUrl(p.imgs[0]) : 'assets/img/nahledy/_bez-foto.svg'}" alt=""></td>
+        <td><img src="${p.imgs[0] ? imgUrl(p.imgs[0]) : '../assets/img/nahledy/_bez-foto.svg'}" alt=""></td>
         <td><b>${esc(p.name)}</b></td><td>${esc(catName(p.cat))}</td>
         <td>${p.price ? fmt(p.price) + ' Kč' : '–'}</td>
         <td>${p.stock ? '<span class="badge badge--g">Skladem</span>' : '<span class="badge">' + esc(p.avail || '') + '</span>'}</td>
@@ -372,7 +372,7 @@ const PRODUCTS = ${j(D.PRODUCTS)};
   /* ---------- kategorie ---------- */
   function paneCats() {
     $('#pane').innerHTML = `<div class="card">${D.CATEGORIES.map((c, i) => `<div class="sublist"><div class="row">
-      <img src="${c.img ? imgUrl(c.img) : 'assets/img/kategorie-pripravujeme.svg'}" style="width:80px;height:60px;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:6px" alt="">
+      <img src="${c.img ? imgUrl(c.img) : '../assets/img/kategorie-pripravujeme.svg'}" style="width:80px;height:60px;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:6px" alt="">
       <div style="flex:1;min-width:220px"><label>Název</label><input type="text" data-c="${i}" data-f="name" value="${esc(c.name)}"></div>
       <div style="flex:2;min-width:260px"><label>Popis</label><input type="text" data-c="${i}" data-f="desc" value="${esc(c.desc)}"></div>
       <div><span class="badge">${D.PRODUCTS.filter(p => p.cat === c.id).length} produktů</span></div>
