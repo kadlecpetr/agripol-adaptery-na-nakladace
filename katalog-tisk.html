@@ -154,7 +154,7 @@ table.vt tr:nth-child(even) td{background:var(--soft);}
 
 <main class="sheets" data-sheets></main>
 
-<script src="assets/js/data.js?v=202610192008"></script>
+<script src="assets/js/data.js?v=202610211807"></script>
 <script>
 (function () {
   'use strict';
@@ -188,13 +188,13 @@ table.vt tr:nth-child(even) td{background:var(--soft);}
       keys.map(k => `<th>${esc(k)}</th>`).join('') + '<th class="price">Cena*</th>';
     const rows = vs.map(v => '<tr>' + (hasCode ? `<td>${esc(v.code || '—')}</td>` : '') + (showLabel ? `<td>${esc(v.label)}</td>` : '') +
       keys.map(k => `<td>${esc((v.specs || {})[k] || '—')}</td>`).join('') +
-      `<td class="price">${(p.priceFrom && vs.length < 2 ? 'od ' : '') + czk(v.price)}</td></tr>`).join('');
+      `<td class="price">${(v.price ? (p.priceFrom && vs.length < 2 ? 'od ' : '') + czk(v.price) : 'na dotaz')}</td></tr>`).join('');
     return `<table class="vt"><thead><tr>${head}</tr></thead><tbody>${rows}</tbody></table>
       <p class="vt-note">*Ceny bez DPH, platí s výbavou v ceně. Orientační, přesnou cenu potvrdíme v nabídce.</p>`;
   }
 
   function side(p) {
-    const extra = (p.extras || []).map(e => `<li>${esc(e.name)} — ${czk(e.price)}${e.note && /kus/.test(e.note) ? ' / ks' : ''}</li>`);
+    const extra = (p.extras || []).map(e => `<li>${esc(e.name)} — ${e.price ? czk(e.price) : 'na dotaz'}${e.note && /kus/.test(e.note) ? ' / ks' : ''}</li>`);
     if (p.cat !== 'ramy' && p.mount && p.mount !== 'na paletizační vidle')
       extra.push(`<li>Jiné uchycení — ${p.mountExtra ? czk(p.mountExtra) : 'na dotaz'}</li>`);
     const notes = p.desc.map(l => l.replace(/^[-–.\s]+/, '').trim())

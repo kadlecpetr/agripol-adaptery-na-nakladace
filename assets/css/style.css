@@ -861,3 +861,5 @@ a.chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
 }
 
 @media(max-width:560px){.var-table{font-size:.8rem}.var-table th,.var-table td{padding:9px 8px}.var-table th{font-size:.66rem;letter-spacing:.04em}}
+.catalog__more{text-align:center;margin:32px 0 0;}
+.catalog__more:empty{display:none;}

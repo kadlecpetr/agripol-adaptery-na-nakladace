@@ -161,7 +161,9 @@ const MOUNTS = ${j(D.MOUNTS)};
 const CATEGORIES = ${j(D.CATEGORIES)};
 
 /* ---- Produkty — pořadí v poli = pořadí v katalogu ---- */
-const PRODUCTS = ${j(D.PRODUCTS)};
+const PRODUCTS = [
+${D.PRODUCTS.map(p => '  ' + JSON.stringify(p)).join(',\n')}
+];
 `;
   }
 

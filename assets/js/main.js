@@ -12,7 +12,9 @@
   const catName     = id => (CATEGORIES.find(c => c.id === id) || {}).name || '';
   const mountName   = id => (MOUNTS.find(m => m.id === id)   || {}).name || id;
   const machineName = id => (MACHINES.find(m => m.id === id) || {}).name || id;
-  const priceLabel  = p => (p.priceFrom ? 'od ' : '') + czk(p.price);
+  const hasPrice    = n => typeof n === 'number' && n > 0;
+  const czkOr       = n => hasPrice(n) ? czk(n) : 'na dotaz';
+  const priceLabel  = p => hasPrice(p.price) ? (p.priceFrom ? 'od ' : '') + czk(p.price) : 'Cena na dotaz';
   const plural = (n, one, few, many) => n === 1 ? one : (n > 1 && n < 5 ? few : many);
   const catImg = c => c.img ? 'assets/img/nahledy/' + c.img : 'assets/img/kategorie-pripravujeme.svg';
 
@@ -147,7 +149,7 @@
     if (!p.variants || p.variants.length < 2) return '';
     const first = p.variants[0].label, last = p.variants[p.variants.length - 1].label;
     const n = p.variants.length;
-    if (p.variantLabel === 'Šířka') return `${n} ${plural(n, 'šířka', 'šířky', 'šířek')} ${first.replace(' m', '')}–${last}`;
+    if (p.variantLabel === 'Šířka') return `${n} ${plural(n, 'šířka', 'šířky', 'šířek')} ${first.replace(/\s*(mm|cm|m)$/, '')}–${last}`;
     return `${p.variants.length} ${plural(p.variants.length, 'varianta', 'varianty', 'variant')}`;
   }
 
@@ -199,7 +201,7 @@
       // jeden nejdražší skladový kus z každé kategorie, zbytek doplní akce a skladovky
       const pick = [];
       CATEGORIES.forEach(c => {
-        const best = PRODUCTS.filter(p => p.cat === c.id && p.stock).sort((a, b) => b.price - a.price)[0];
+        const best = PRODUCTS.filter(p => p.cat === c.id && p.stock).sort((a, b) => (b.price || 0) - (a.price || 0))[0];
         if (best) pick.push(best);
       });
       PRODUCTS.filter(p => p.sale && !pick.includes(p)).forEach(p => pick.push(p));
@@ -267,7 +269,11 @@
     // výchozí pořadí = pořadí v data.js (kategorie a v nich od největšího po nejmenší)
     const order = new Map(PRODUCTS.map((p, i) => [p.id, i]));
 
-    function render() {
+    // katalog se vykresluje po stránkách, další karty přidá tlačítko
+    const PAGE = 48;
+    let limit = PAGE;
+    function render(keep) {
+      if (keep !== true) limit = PAGE;
       const list = PRODUCTS.filter(p => {
         if (state.cats.size && !state.cats.has(p.cat)) return false;
         if (state.machines.size && !p.machines.some(m => state.machines.has(m))) return false;
@@ -280,8 +286,8 @@
       });
 
       const sorters = {
-        'cena-asc':  (a, b) => a.price - b.price,
-        'cena-desc': (a, b) => b.price - a.price,
+        'cena-asc':  (a, b) => (hasPrice(a.price) ? a.price : Infinity) - (hasPrice(b.price) ? b.price : Infinity) || 0,
+        'cena-desc': (a, b) => (b.price || 0) - (a.price || 0),
         'nazev':     (a, b) => a.name.localeCompare(b.name, 'cs'),
         'default':   (a, b) => order.get(a.id) - order.get(b.id)
       };
@@ -297,7 +303,7 @@
       const soonNames = [...state.cats].map(catName).join(', ');
 
       grid.innerHTML = list.length
-        ? list.map(productCard).join('')
+        ? list.slice(0, limit).map(productCard).join('')
         : soon
           ? `<div class="empty">
                <img src="assets/img/kategorie-pripravujeme.svg" alt="" width="200" height="150" style="width:160px;margin:0 auto 14px">
@@ -313,6 +319,14 @@
            </div>`;
       grid.classList.toggle('products', list.length > 0);
       grid.classList.toggle('grid', list.length > 0);
+      let more = $('[data-more]');
+      if (!more) {
+        more = document.createElement('p'); more.className = 'catalog__more'; more.setAttribute('data-more', '');
+        grid.after(more);
+        more.addEventListener('click', e => { if (e.target.closest('button')) { limit += PAGE; render(true); } });
+      }
+      const rest = list.length - limit;
+      more.innerHTML = rest > 0 ? `<button class="btn btn--ghost" type="button">Zobrazit další ${Math.min(rest, PAGE)} z ${rest}</button>` : '';
       syncUrl();
       initReveal();
     }
@@ -364,7 +378,7 @@
 
   // nabídka do konfigurátoru; null = uchycení se nevolí (redukční rámy, plošina na vidle)
   function mountOptions(p) {
-    if (p.cat === 'ramy' || p.mount === 'na paletizační vidle') return null;
+    if (p.cat === 'ramy' || p.cat === 'bagrove' || p.mount === 'na paletizační vidle') return null;
     const incl = includedMounts(p);
     const ids = new Set([...p.mounts, ...incl]);
     const list = (ids.size ? MOUNTS.filter(m => ids.has(m.id)) : MOUNTS).map(m => ({
@@ -378,6 +392,7 @@
 
   function mountSentence(p) {
     const m = p.mount;
+    if (p.cat === 'bagrove') return 'Uchycení na rypadlo (čepy nebo rychloupínák) upravíme podle vašeho stroje — typ upřesníme v nabídce.';
     if (p.cat === 'ramy') return 'Redukční rám se nasadí mezi stroj a adaptér — na stroji pak můžete používat adaptéry s jiným uchycením, než má váš nakladač.';
     if (!m) return 'Uchycení dodáme podle vašeho stroje — typ a cenu upřesníme v nabídce.';
     if (m === 'EURO') return 'Cena platí s uchycením <b>EURO</b> (SMS / ISO).';
@@ -458,7 +473,7 @@
         <div class="config__opts" role="radiogroup" aria-labelledby="cfg-var-label">
           ${variants.map((v, i) => `
             <button type="button" class="opt" role="radio" aria-checked="${i ? 'false' : 'true'}" data-variant="${i}">
-              <b>${esc(v.label)}</b><small>${czk(v.price)}</small>
+              <b>${esc(v.label)}</b><small>${czkOr(v.price)}</small>
             </button>`).join('')}
         </div>
       </div>` : '';
@@ -479,7 +494,7 @@
         ${extras.map((e, i) => `
           <label class="check config__extra"><input type="checkbox" data-extra="${i}">
             <span>${esc(e.name)}${e.note ? `<small>${esc(e.note)}</small>` : ''}</span>
-            <span class="count">+ ${czk(e.price)}</span></label>`).join('')}
+            <span class="count">${hasPrice(e.price) ? '+ ' + czk(e.price) : 'na dotaz'}</span></label>`).join('')}
       </div>` : '';
 
     const descRows = p.desc.length ? `<div class="detail__block">
@@ -495,7 +510,7 @@
         <div class="table-scroll"><table class="var-table">
           <thead><tr>${hasCode ? '<th>Kód</th>' : ''}${keys.length ? keys.map(k => `<th>${esc(k)}</th>`).join('') : `<th>${esc(p.variantLabel || 'Varianta')}</th>`}<th>Cena bez DPH</th></tr></thead>
           <tbody>${variants.map((v, i) => `<tr data-row="${i}"${i ? '' : ' class="is-active"'}>${hasCode ? `<td>${esc(v.code || '—')}</td>` : ''}${
-            keys.length ? keys.map(k => `<td>${esc(v.specs[k] || '—')}</td>`).join('') : `<td>${esc(v.label)}</td>`}<td><b>${czk(v.price)}</b></td></tr>`).join('')}</tbody>
+            keys.length ? keys.map(k => `<td>${esc(v.specs[k] || '—')}</td>`).join('') : `<td>${esc(v.label)}</td>`}<td><b>${czkOr(v.price)}</b></td></tr>`).join('')}</tbody>
         </table></div>
       </div>`;
     })() : '';
@@ -576,8 +591,8 @@
       const m = mounts && cfg.mount >= 0 ? mounts.list[cfg.mount] : null;
       const base = v ? v.price : p.price;
       const mountAdd = m && !m.incl && m.extra ? m.extra : 0;
-      const exAdd = [...cfg.extras].reduce((s, i) => s + extras[i].price, 0);
-      return { v, m, unit: base + mountAdd + exAdd, onRequest: !!(m && !m.incl && m.extra == null && mounts.known) };
+      const exAdd = [...cfg.extras].reduce((s, i) => s + (extras[i].price || 0), 0);
+      return { v, m, unit: hasPrice(base) ? base + mountAdd + exAdd : null, onRequest: !!(m && !m.incl && m.extra == null && mounts.known) };
     }
 
     function update() {
@@ -589,8 +604,13 @@
       const total = c.unit * cfg.qty;
       // „od“ jen tam, kde cena opravdu není pevná (bez variant, cena „od“)
       const from = p.priceFrom && variants.length < 2;
-      $('[data-total]', root).textContent = (from ? 'od ' : '') + czk(total);
-      $('[data-total-vat]', root).textContent = `bez DPH · ${czk(Math.round(total * 1.21))} s DPH${cfg.qty > 1 ? ` · ${cfg.qty} ks` : ''}`;
+      if (c.unit == null) {
+        $('[data-total]', root).textContent = 'Cena na dotaz';
+        $('[data-total-vat]', root).textContent = `přesnou cenu pošleme v nabídce${cfg.qty > 1 ? ` · ${cfg.qty} ks` : ''}`;
+      } else {
+        $('[data-total]', root).textContent = (from ? 'od ' : '') + czk(total);
+        $('[data-total-vat]', root).textContent = `bez DPH · ${czk(Math.round(total * 1.21))} s DPH${cfg.qty > 1 ? ` · ${cfg.qty} ks` : ''}`;
+      }
       const note = $('[data-config-note]', root);
       note.hidden = !c.onRequest;
       note.textContent = c.onRequest ? 'Cenu za zvolené uchycení doplníme v nabídce.' : '';
@@ -677,7 +697,7 @@
       i.variant ? '   ' + i.variant : '',
       i.mount ? '   Uchycení: ' + i.mount : '',
       i.extras.length ? '   Výbava: ' + i.extras.join(', ') : '',
-      `   Orientačně: ${i.from ? 'od ' : ''}${czk(i.unit * i.qty)} bez DPH`
+      (i.unit == null ? '   Cena: na dotaz' : `   Orientačně: ${i.from ? 'od ' : ''}${czk(i.unit * i.qty)} bez DPH`)
     ].filter(Boolean).join('\n')).join('\n');
   }
 
@@ -687,7 +707,8 @@
 
     function render() {
       const items = Cart.read();
-      const sum = items.reduce((s, i) => s + i.unit * i.qty, 0);
+      const sum = items.reduce((s, i) => s + (i.unit || 0) * i.qty, 0);
+      const anyAsk = items.some(i => i.unit == null);
       $$('[data-cart-filled]').forEach(el => el.hidden = !items.length);
       if (!items.length) {
         wrap.innerHTML = `<div class="empty">
@@ -716,12 +737,12 @@
                 <input type="number" min="1" max="99" value="${i.qty}" data-cqty-input="${n}" aria-label="Počet kusů">
                 <button type="button" data-cqty="${n}" data-d="1" aria-label="Přidat kus">${ICON.plus}</button>
               </div>
-              <div class="cart-item__price"><b>${i.from ? 'od ' : ''}${czk(i.unit * i.qty)}</b><small>${i.qty > 1 ? czk(i.unit) + ' / ks' : 'bez DPH'}</small></div>
+              <div class="cart-item__price">${i.unit == null ? '<b>Na dotaz</b><small>cenu pošleme</small>' : `<b>${i.from ? 'od ' : ''}${czk(i.unit * i.qty)}</b><small>${i.qty > 1 ? czk(i.unit) + ' / ks' : 'bez DPH'}</small>`}</div>
               <button class="cart-item__remove" type="button" data-remove="${n}" aria-label="Odebrat ${esc(i.name)}">${ICON.trash}</button>
             </li>`).join('')}
         </ul>
         <div class="cart-sum">
-          <div><span>Orientační cena celkem</span><b>${czk(sum)}</b><small>bez DPH · ${czk(Math.round(sum * 1.21))} s DPH</small></div>
+          <div><span>Orientační cena celkem${anyAsk ? ' (bez položek na dotaz)' : ''}</span><b>${czk(sum)}</b><small>bez DPH · ${czk(Math.round(sum * 1.21))} s DPH</small></div>
           <p>Přesnou cenu, termín a dopravu potvrdíme v nabídce. Poptávka je nezávazná.</p>
           <button class="btn btn--ghost btn--sm" type="button" data-cart-clear>Vyprázdnit poptávku</button>
         </div>`;
@@ -806,7 +827,7 @@
         'Stroj: ' + (d.get('stroj') || '—'),
         d.has('uchyceni') ? 'Uchycení: ' + (d.get('uchyceni') || '—') : '',
         withCart ? '\nPoptávané adaptéry:\n' + cartLines(items) +
-          `\n\nOrientačně celkem: ${czk(items.reduce((s, i) => s + i.unit * i.qty, 0))} bez DPH` : '',
+          `\n\nOrientačně celkem: ${czk(items.reduce((s, i) => s + (i.unit || 0) * i.qty, 0))} bez DPH` : '',
         '', 'Zpráva:', d.get('zprava') || '—'
       ].filter(x => x !== '').join('\n');
 
