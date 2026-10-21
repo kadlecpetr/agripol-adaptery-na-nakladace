@@ -16,7 +16,9 @@
   const czkOr       = n => hasPrice(n) ? czk(n) : 'na dotaz';
   const priceLabel  = p => hasPrice(p.price) ? (p.priceFrom ? 'od ' : '') + czk(p.price) : 'Cena na dotaz';
   const plural = (n, one, few, many) => n === 1 ? one : (n > 1 && n < 5 ? few : many);
-  const catImg = c => c.img ? 'assets/img/nahledy/' + c.img : 'assets/img/kategorie-pripravujeme.svg';
+  // verze obrázků — zvýšit po hromadné výměně fotek, aby prohlížeče nebraly staré z cache
+  const IMG_V = '?v=2';
+  const catImg = c => c.img ? 'assets/img/nahledy/' + c.img + IMG_V : 'assets/img/kategorie-pripravujeme.svg';
 
   const ICON = {
     arrow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
@@ -163,7 +165,7 @@
         <a class="product__link" href="produkt.html?id=${encodeURIComponent(p.id)}" aria-label="${esc(p.name)}"></a>
         <div class="product__media">
           <div class="product__flags">${flags(p)}</div>
-          <img src="assets/img/nahledy/${p.imgs[0] || '_bez-foto.svg'}" alt="${esc(p.name)}" loading="lazy" width="500" height="375">
+          <img src="assets/img/nahledy/${p.imgs[0] ? p.imgs[0] + IMG_V : '_bez-foto.svg'}" alt="${esc(p.name)}" loading="lazy" width="500" height="375">
         </div>
         <div class="product__body">
           <p class="product__cat">${esc(catName(p.cat))}</p>
@@ -459,7 +461,7 @@
       <div class="detail__thumbs">
         ${p.imgs.map((f, i) => `
           <button class="detail__thumb${i ? '' : ' is-active'}" type="button" data-img="${esc(f)}" aria-label="Fotka ${i + 1}">
-            <img src="assets/img/nahledy/${f}" alt="" loading="lazy">
+            <img src="assets/img/nahledy/${f}${IMG_V}" alt="" loading="lazy">
           </button>`).join('')}
       </div>` : '';
 
@@ -525,7 +527,7 @@
 
     root.innerHTML = `
       <div class="detail__gallery">
-        <div class="detail__stage"><img src="${p.imgs[0] ? 'assets/img/produkty/' + p.imgs[0] : 'assets/img/nahledy/_bez-foto.svg'}" alt="${esc(p.name)}" width="900" height="675"></div>
+        <div class="detail__stage"><img src="${p.imgs[0] ? 'assets/img/produkty/' + p.imgs[0] + IMG_V : 'assets/img/nahledy/_bez-foto.svg'}" alt="${esc(p.name)}" width="900" height="675"></div>
         ${thumbs}
       </div>
       <div>
@@ -576,7 +578,7 @@
     // přepínání fotek v galerii
     const stage = $('.detail__stage img', root);
     $$('.detail__thumb', root).forEach(b => b.addEventListener('click', () => {
-      stage.src = 'assets/img/produkty/' + b.dataset.img;
+      stage.src = 'assets/img/produkty/' + b.dataset.img + IMG_V;
       $$('.detail__thumb', root).forEach(x => x.classList.remove('is-active'));
       b.classList.add('is-active');
     }));
@@ -680,7 +682,7 @@
     }
     const n = Cart.count();
     t.innerHTML = `
-      <img src="assets/img/nahledy/${esc(item.img)}" alt="" width="64" height="48">
+      <img src="assets/img/nahledy/${esc(item.img)}${IMG_V}" alt="" width="64" height="48">
       <div class="toast__text"><b>Přidáno do poptávky</b><span>${esc(item.name)}${item.variant ? ' · ' + esc(item.variant.split(': ')[1] || item.variant) : ''}${item.qty > 1 ? ' · ' + item.qty + ' ks' : ''}</span></div>
       <a class="btn btn--sm" href="poptavka.html">Poptávka (${n})</a>
       <button class="toast__close" type="button" aria-label="Zavřít">${ICON.close}</button>`;
@@ -723,7 +725,7 @@
         <ul class="cart-list">
           ${items.map((i, n) => `
             <li class="cart-item">
-              <a class="cart-item__img" href="produkt.html?id=${encodeURIComponent(i.id)}"><img src="assets/img/nahledy/${esc(i.img)}" alt="" width="120" height="90"></a>
+              <a class="cart-item__img" href="produkt.html?id=${encodeURIComponent(i.id)}"><img src="assets/img/nahledy/${esc(i.img)}${IMG_V}" alt="" width="120" height="90"></a>
               <div class="cart-item__body">
                 <a class="cart-item__name" href="produkt.html?id=${encodeURIComponent(i.id)}">${esc(i.name)}</a>
                 <ul class="cart-item__meta">
