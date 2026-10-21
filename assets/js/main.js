@@ -170,7 +170,7 @@
           <h3 class="product__name">${esc(p.name)}</h3>
           <div class="product__specs">${specs}</div>
           <div class="product__foot">
-            <div class="product__price"><b>${priceLabel(p)}</b><small>bez DPH</small></div>
+            <div class="product__price"><b>${priceLabel(p)}</b><small>${hasPrice(p.price) ? 'bez DPH' : 'pošleme v nabídce'}</small></div>
             <a class="btn btn--sm btn--ghost product__btn" href="produkt.html?id=${encodeURIComponent(p.id)}" tabindex="-1">Detail ${ICON.arrow}</a>
           </div>
         </div>

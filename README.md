@@ -232,3 +232,12 @@ kategorie, ceny, fotky a firemní údaje. Změny ukládá přímo do repozitář
 - Klient musí mít GitHub účet s právem zápisu do repozitáře (Settings → Collaborators).
 - Fotky se v prohlížeči zmenší na 4:3 (900×675 a 500×375, WebP).
 - Tištěný PDF katalog se z administrace nepřegenerovává (postup výše).
+
+## Produkty FK Machinery (import 2026-10-21)
+
+315 produktů převzatých z katalogu FK Machinery (kolaszewski.com/cs/fkmachinery-cs) — názvy, parametry,
+tabulky verzí (varianty s kódy), specifikace (popis), možnosti (příplatková výbava), fotky a technické nákresy.
+Obrázky mají předponu `fk-` (fotky v `produkty/` + `nahledy/`, nákresy v `nakresy/`).
+Ceny zdroj neuvádí → `price: null`, web ukazuje „Cena na dotaz“ (ceny lze doplnit v administraci).
+Bagrovací lopaty pro rypadla mají vlastní kategorii `bagrove` a stroj `rypadlo`.
+Katalog se vykresluje po 48 kartách (tlačítko „Zobrazit další“).
