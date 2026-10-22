@@ -125,7 +125,7 @@ const CATEGORIES = [
   {
     "id": "komunalni",
     "name": "Komunální adaptéry",
-    "img": "fk-drzak-pro-ruzne-montazni-prvky-1.webp",
+    "img": "fk-tezky-snezny-pluh-rovny-1.webp",
     "desc": "Sněhové radlice, zametače a technika pro údržbu ploch."
   },
   {
