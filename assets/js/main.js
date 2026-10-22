@@ -380,7 +380,7 @@
 
   // nabídka do konfigurátoru; null = uchycení se nevolí (redukční rámy, plošina na vidle)
   function mountOptions(p) {
-    if (p.cat === 'ramy' || p.cat === 'bagrove' || p.mount === 'na paletizační vidle') return null;
+    if (p.cat === 'ramy' || p.mount === 'na paletizační vidle') return null;
     const incl = includedMounts(p);
     const ids = new Set([...p.mounts, ...incl]);
     const list = (ids.size ? MOUNTS.filter(m => ids.has(m.id)) : MOUNTS).map(m => ({
@@ -394,7 +394,6 @@
 
   function mountSentence(p) {
     const m = p.mount;
-    if (p.cat === 'bagrove') return 'Uchycení na rypadlo (čepy nebo rychloupínák) upravíme podle vašeho stroje — typ upřesníme v nabídce.';
     if (p.cat === 'ramy') return 'Redukční rám se nasadí mezi stroj a adaptér — na stroji pak můžete používat adaptéry s jiným uchycením, než má váš nakladač.';
     if (!m) return 'Uchycení dodáme podle vašeho stroje — typ a cenu upřesníme v nabídce.';
     if (m === 'EURO') return 'Cena platí s uchycením <b>EURO</b> (SMS / ISO).';

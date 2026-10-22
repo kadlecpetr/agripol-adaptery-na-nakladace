@@ -239,7 +239,7 @@ kategorie, ceny, fotky a firemní údaje. Změny ukládá přímo do repozitář
 tabulky verzí (varianty s kódy), specifikace (popis), možnosti (příplatková výbava), fotky a technické nákresy.
 Obrázky mají předponu `fk-` (fotky v `produkty/` + `nahledy/`, nákresy v `nakresy/`).
 Ceny zdroj neuvádí → `price: null`, web ukazuje „Cena na dotaz“ (ceny lze doplnit v administraci).
-Bagrovací lopaty pro rypadla mají vlastní kategorii `bagrove` a stroj `rypadlo`.
+Bagrovací lopaty (pro rypadla) byly 2026-10-22 na přání klienta z webu odstraněny.
 Katalog se vykresluje po 48 kartách (tlačítko „Zobrazit další“).
 Fotky FK Machinery jsou přebarvené do barev webu (tělo grafit, oranžové prvky červeně); 22 fotek (nákresy,
 průhledné řezy, čistě bílé díly) zůstalo v původních barvách. Po hromadné výměně fotek zvyšte `IMG_V` v main.js.
