@@ -235,7 +235,7 @@ kategorie, ceny, fotky a firemní údaje. Změny ukládá přímo do repozitář
 
 ## Produkty FK Machinery (import 2026-10-21)
 
-315 produktů převzatých z katalogu FK Machinery (kolaszewski.com/cs/fkmachinery-cs) — názvy, parametry,
+315 produktů převzatých z katalogu FK Machinery (88 duplicitních s původními INTER-TECH aj. pak smazáno → 227) (kolaszewski.com/cs/fkmachinery-cs) — názvy, parametry,
 tabulky verzí (varianty s kódy), specifikace (popis), možnosti (příplatková výbava), fotky a technické nákresy.
 Obrázky mají předponu `fk-` (fotky v `produkty/` + `nahledy/`, nákresy v `nakresy/`).
 Ceny zdroj neuvádí → `price: null`, web ukazuje „Cena na dotaz“ (ceny lze doplnit v administraci).

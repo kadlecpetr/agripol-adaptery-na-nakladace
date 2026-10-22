@@ -38,7 +38,7 @@ textarea{min-height:90px;resize:vertical}
 .chk{display:inline-flex;align-items:center;gap:7px;font-weight:500;color:var(--ink);font-size:.92rem;margin:0 14px 6px 0}
 .hint{font-size:.82rem;color:var(--soft);margin:4px 0 0}
 table{width:100%;border-collapse:collapse}
-td:nth-child(4){white-space:nowrap}
+td:nth-child(3){white-space:nowrap}
 th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
 th{font-size:.76rem;text-transform:uppercase;letter-spacing:.05em;color:var(--soft)}
 td img{width:56px;height:42px;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:6px}
@@ -60,6 +60,25 @@ ol.steps{padding-left:20px;color:var(--soft)}
 .badge--g{background:#E6F5EB;color:var(--ok)}
 code{background:#EEF0F3;padding:1px 5px;border-radius:4px;font-size:.85em}
 [hidden]{display:none!important}
+.split{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:18px;align-items:start}
+.split .card{margin-bottom:0}
+.side{position:sticky;top:78px;padding:16px}
+.side__h{margin:16px 4px 8px;font-size:.74rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--soft)}
+.side__list{display:flex;flex-direction:column;gap:2px}
+.side__item{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;border:0;background:transparent;padding:9px 10px;border-radius:8px;cursor:pointer;font-weight:500;text-align:left}
+.side__item b{font-size:.78rem;font-weight:600;color:var(--soft);background:#EEF0F3;border-radius:99px;padding:1px 8px}
+.side__item:hover{background:#F3F4F6}
+.side__item.is-on{background:#FDEBEC;color:var(--accent);font-weight:700}
+.side__item.is-on b{background:var(--accent);color:#fff}
+.side__item--all{margin-top:6px;border-top:1px solid var(--line);border-radius:0 0 8px 8px;padding-top:12px}
+h3.grp{margin:22px 0 4px;font-size:1rem;display:flex;gap:8px;align-items:baseline}
+@media(max-width:980px){
+  .split{grid-template-columns:minmax(0,1fr)}
+  .side{position:static;order:-1}
+  .side__list{flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:4px}
+  .side__item{width:auto;white-space:nowrap;background:#F3F4F6}
+  .side__item--all{margin-top:0;border-top:0;border-radius:8px;padding-top:9px}
+}
 .tabs{overflow-x:auto}
 .tab{white-space:nowrap}
 @media(max-width:900px){
@@ -76,7 +95,7 @@ code{background:#EEF0F3;padding:1px 5px;border-radius:4px;font-size:.85em}
   tbody tr{display:grid;grid-template-columns:64px 1fr;gap:3px 12px;padding:12px 0;border-bottom:1px solid var(--line)}
   tbody td{border:0;padding:0;min-width:0}
   tbody td:nth-child(1){grid-row:1/4}
-  tbody td:nth-child(6){grid-column:1/-1;text-align:left!important;white-space:normal!important;padding-top:8px;display:flex;flex-wrap:wrap;gap:6px}
+  tbody td:nth-child(5){grid-column:1/-1;text-align:left!important;white-space:normal!important;padding-top:8px;display:flex;flex-wrap:wrap;gap:6px}
   .bar{flex-direction:column;align-items:stretch;padding:10px 14px;gap:8px;text-align:center}
   .bar .row{justify-content:center}
   .row>input[type=text],.row>select{max-width:none!important;flex:1 1 100%}
@@ -115,7 +134,7 @@ code{background:#EEF0F3;padding:1px 5px;border-radius:4px;font-size:.85em}
   let headSha = '';           // commit, ze kterého jsme data načetli
   let dirty = false;
   let tab = 'produkty';
-  let q = '', fcat = '';
+  let q = '', fcat = null;
   let edit = null;            // { idx, p, isNew }
   const pending = {};         // nové fotky: název → { big, small, url }
 
@@ -283,30 +302,47 @@ ${D.PRODUCTS.map(p => '  ' + JSON.stringify(p)).join(',\n')}
   const STAV = [['Skladem', true, false], ['Na objednávku', false, false], ['Na cestě', false, false], ['Akční cena', false, true]];
   const stavOf = p => p.sale ? 'Akční cena' : p.stock ? 'Skladem' : (p.avail || 'Na objednávku');
   function paneProducts() {
-    const list = D.PRODUCTS.map((p, i) => ({ p, i })).filter(x => (!fcat || x.p.cat === fcat) && (!q || x.p.name.toLowerCase().includes(q.toLowerCase())));
-    $('#pane').innerHTML = `<div class="card">
-      <div class="row" style="margin-bottom:14px">
-        <input type="text" id="q" placeholder="Hledat produkt…" value="${esc(q)}" style="max-width:260px">
-        <select id="fc" style="max-width:220px"><option value="">Všechny kategorie</option>${D.CATEGORIES.map(c => `<option value="${c.id}"${fcat === c.id ? ' selected' : ''}>${esc(c.name)}</option>`).join('')}</select>
-        <span style="flex:1"></span><span class="hint">${list.length} produktů</span>
-        <button class="btn btn--p" id="new">+ Nový produkt</button>
-      </div>
-      <table><thead><tr><th></th><th>Název</th><th>Kategorie</th><th>Cena od</th><th>Stav</th><th></th></tr></thead><tbody>
-      ${list.map(({ p, i }) => `<tr>
+    if (fcat === null) fcat = D.CATEGORIES[0].id;
+    const searching = q.trim() !== '';
+    const all = D.PRODUCTS.map((p, i) => ({ p, i }));
+    const list = all.filter(x => (searching || !fcat || x.p.cat === fcat) && (!searching || x.p.name.toLowerCase().includes(q.trim().toLowerCase())));
+    const count = id => D.PRODUCTS.filter(p => p.cat === id).length;
+    const row = ({ p, i }) => `<tr>
         <td><img src="${p.imgs[0] ? imgUrl(p.imgs[0]) : '../assets/img/nahledy/_bez-foto.svg'}" alt=""></td>
-        <td><b>${esc(p.name)}</b></td><td>${esc(catName(p.cat))}</td>
-        <td>${p.price ? fmt(p.price) + ' Kč' : '–'}</td>
+        <td><b>${esc(p.name)}</b>${searching ? `<br><span class="hint">${esc(catName(p.cat))}</span>` : ''}</td>
+        <td>${p.price ? fmt(p.price) + ' Kč' : '<span class="hint">na dotaz</span>'}</td>
         <td><select class="stav${p.stock ? ' is-stock' : ''}" data-st="${i}">${STAV.map(x => `<option${stavOf(p) === x[0] ? ' selected' : ''}>${x[0]}</option>`).join('')}${STAV.some(x => x[0] === stavOf(p)) ? '' : `<option selected>${esc(stavOf(p))}</option>`}</select></td>
         <td style="white-space:nowrap;text-align:right">
           <button class="btn btn--s" data-up="${i}" title="Výš v katalogu">↑</button>
           <button class="btn btn--s" data-dn="${i}" title="Níž v katalogu">↓</button>
           <button class="btn btn--s" data-ed="${i}">Upravit</button>
           <button class="btn btn--s" data-cp="${i}" title="Vytvořit kopii">Kopie</button>
-          <button class="btn btn--s btn--d" data-rm="${i}">Smazat</button></td></tr>`).join('')}
-      </tbody></table>
-      <p class="hint">Pořadí šipkami platí v rámci jedné kategorie (v katalogu se řadí od největšího po nejmenší).</p></div>`;
+          <button class="btn btn--s btn--d" data-rm="${i}">Smazat</button></td></tr>`;
+    // „Všechny“ = seznam rozdělený do bloků po kategoriích
+    const groups = searching || fcat ? [{ c: searching ? null : D.CATEGORIES.find(c => c.id === fcat), items: list }]
+      : D.CATEGORIES.map(c => ({ c, items: list.filter(x => x.p.cat === c.id) })).filter(g => g.items.length);
+    const title = searching ? `Hledání „${esc(q.trim())}“` : fcat ? esc(catName(fcat)) : 'Všechny produkty';
+    $('#pane').innerHTML = `<div class="split">
+      <div class="card split__main">
+        <div class="row" style="margin-bottom:6px">
+          <h2 style="flex:1">${title} <span class="hint" style="font-weight:500">${list.length} ${list.length === 1 ? 'produkt' : list.length < 5 && list.length ? 'produkty' : 'produktů'}</span></h2>
+          <button class="btn btn--p" id="new">+ Nový produkt</button>
+        </div>
+        ${list.length ? groups.map(g => `${g.c && !fcat ? `<h3 class="grp">${esc(g.c.name)} <span class="hint">${g.items.length}</span></h3>` : ''}
+        <table><thead><tr><th></th><th>Název</th><th>Cena od</th><th>Stav</th><th></th></tr></thead><tbody>${g.items.map(row).join('')}</tbody></table>`).join('')
+        : '<p class="hint" style="padding:30px 0">Žádný produkt. Přidejte ho tlačítkem „+ Nový produkt“.</p>'}
+        <p class="hint">Pořadí šipkami platí v rámci jedné kategorie (v katalogu se řadí od největšího po nejmenší).</p>
+      </div>
+      <aside class="card side">
+        <input type="text" id="q" placeholder="Hledat produkt…" value="${esc(q)}">
+        <p class="side__h">Kategorie</p>
+        <nav class="side__list">
+          ${D.CATEGORIES.map(c => `<button class="side__item${!searching && fcat === c.id ? ' is-on' : ''}" data-cat="${c.id}"><span>${esc(c.name)}</span><b>${count(c.id)}</b></button>`).join('')}
+          <button class="side__item side__item--all${!searching && fcat === '' ? ' is-on' : ''}" data-cat=""><span>Všechny produkty</span><b>${D.PRODUCTS.length}</b></button>
+        </nav>
+      </aside></div>`;
     $('#q').oninput = e => { q = e.target.value; paneProducts(); const el = $('#q'); el.focus(); el.setSelectionRange(q.length, q.length); };
-    $('#fc').onchange = e => { fcat = e.target.value; paneProducts(); };
+    document.querySelectorAll('[data-cat]').forEach(b => b.onclick = () => { fcat = b.dataset.cat; q = ''; paneProducts(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
     $('#new').onclick = () => { edit = { idx: -1, isNew: true, p: blank() }; render(); };
     $('#pane').onchange = e => {
       const el = e.target; if (el.dataset.st == null) return;
@@ -327,7 +363,7 @@ ${D.PRODUCTS.map(p => '  ' + JSON.stringify(p)).join(',\n')}
     };
   }
   const uniqueId = base => { let id = base || 'produkt', n = 2; while (D.PRODUCTS.some(p => p.id === id)) id = (base || 'produkt') + '-' + n++; return id; };
-  const blank = () => ({ id: '', name: '', cat: D.CATEGORIES[0].id, price: null, priceFrom: true, stock: false, sale: false, avail: 'Na objednávku', machines: [], mounts: [], mount: null, mountExtra: null, specs: {}, perex: '', desc: [], variantLabel: '', variants: [], extras: [], drawings: [], imgs: [] });
+  const blank = () => ({ id: '', name: '', cat: fcat || D.CATEGORIES[0].id, price: null, priceFrom: true, stock: false, sale: false, avail: 'Na objednávku', machines: [], mounts: [], mount: null, mountExtra: null, specs: {}, perex: '', desc: [], variantLabel: '', variants: [], extras: [], drawings: [], imgs: [] });
 
   /* ---------- editor produktu ---------- */
   function renderEdit() {
