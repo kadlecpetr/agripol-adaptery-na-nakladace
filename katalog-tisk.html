@@ -154,7 +154,7 @@ table.vt tr:nth-child(even) td{background:var(--soft);}
 
 <main class="sheets" data-sheets></main>
 
-<script src="assets/js/data.js?v=202610220849"></script>
+<script src="assets/js/data.js?v=202610220914"></script>
 <script>
 (function () {
   'use strict';
@@ -170,9 +170,9 @@ table.vt tr:nth-child(even) td{background:var(--soft);}
 
   function mountText(p) {
     const m = p.mount;
-    if (p.cat === 'ramy') return 'Redukční rám — přechod mezi systémy uchycení';
-    if (!m) return 'Uchycení podle vašeho stroje (upřesníme)';
-    if (m === 'EURO') return 'Uchycení EURO';
+    if (p.cat === 'ramy') return 'Redukční rám' + (m ? ' ' + m : '');
+    if (!m) return 'Uchycení upřesníme podle stroje';
+    if (m === 'EURO') return 'Uchycení EURO (SMS / ISO)';
     if (m === 'pro manipulátory') return 'Uchycení pro váš manipulátor (Manitou, Merlo, JCB, Kramer…)';
     if (m === 'mininakladač') return 'Uchycení pro mininakladač';
     if (m === 'na paletizační vidle') return 'Nasazení na paletizační vidle';
@@ -195,8 +195,6 @@ table.vt tr:nth-child(even) td{background:var(--soft);}
 
   function side(p) {
     const extra = (p.extras || []).map(e => `<li>${esc(e.name)} — ${e.price ? czk(e.price) : 'na dotaz'}${e.note && /kus/.test(e.note) ? ' / ks' : ''}</li>`);
-    if (p.cat !== 'ramy' && p.mount && p.mount !== 'na paletizační vidle')
-      extra.push(`<li>Jiné uchycení — ${p.mountExtra ? czk(p.mountExtra) : 'na dotaz'}</li>`);
     const notes = p.desc.map(l => l.replace(/^[-–.\s]+/, '').trim())
       .filter(l => l && l.length <= 80 && !/cena|kč/i.test(l)).slice(0, 4);
     return `<div class="prod__side">
@@ -276,7 +274,7 @@ table.vt tr:nth-child(even) td{background:var(--soft);}
           <h3>Jak číst katalog</h3>
           <ul>
             <li>Ceny jsou uvedené <b>bez DPH</b> a jsou orientační — přesnou cenu, termín a dopravu potvrdíme v nabídce.</li>
-            <li>U každého adaptéru je <b>výbava v ceně</b> — nejčastěji uchycení EURO. Jiné uchycení dodáme na příplatek.</li>
+            <li>Každý adaptér má <b>pevné uchycení</b> uvedené u produktu — nejčastěji EURO.</li>
             <li>Varianty jsou seřazené od nejmenší šířky, produkty v kategorii <b>od největšího po nejmenší</b>.</li>
           </ul>
           <h3>Příklad uchycení EURO</h3>

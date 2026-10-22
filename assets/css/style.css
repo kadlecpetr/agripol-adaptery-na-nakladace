@@ -508,7 +508,10 @@ a.chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
 .config__extra .count{white-space:nowrap;font-weight:600;color:var(--ink-soft);}
 .config__sum{margin-top:22px;padding-top:20px;border-top:1px solid var(--line);}
 .config__sum .detail__price{margin:0 0 14px;}
-.config__note{font-size:.85rem;color:#9A6B06;margin:-4px 0 12px;}
+.config__fixed{margin:0;padding:11px 14px;border:1px solid var(--line);border-radius:var(--radius-s);background:var(--bg-soft);font-size:.95rem;color:var(--ink-soft);}
+.config__fixed b{color:var(--ink);}
+.product__mount{margin:-2px 0 8px;font-size:.8rem;color:var(--muted);}
+.product__mount b{color:var(--ink-soft);font-weight:600;}
 .config__buy{display:flex;flex-wrap:wrap;gap:12px;align-items:center;}
 .config__buy .btn{flex:1 1 220px;}
 .config__tel{display:inline-block;margin-top:8px;padding:6px 0;font-size:.88rem;color:var(--muted);}

@@ -243,3 +243,7 @@ Bagrovací lopaty (pro rypadla) byly 2026-10-22 na přání klienta z webu odstr
 Katalog se vykresluje po 48 kartách (tlačítko „Zobrazit další“).
 Fotky FK Machinery jsou přebarvené do barev webu (tělo grafit, oranžové prvky červeně); 22 fotek (nákresy,
 průhledné řezy, čistě bílé díly) zůstalo v původních barvách. Po hromadné výměně fotek zvyšte `IMG_V` v main.js.
+
+## Uchycení (od 2026-10-22)
+Každý produkt má jedno pevné uchycení (`mount`, text) — na webu se nevolí, jen zobrazí (karta, detail, košík, PDF).
+Prázdné `mount` = „upřesníme podle vašeho stroje“; doplňuje se v administraci. `mounts`/`mountExtra` se už nepoužívají.

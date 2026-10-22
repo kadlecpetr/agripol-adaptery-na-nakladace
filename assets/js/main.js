@@ -10,7 +10,6 @@
   const czk = n => new Intl.NumberFormat('cs-CZ').format(n) + ' Kč';
   const esc = s => String(s).replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
   const catName     = id => (CATEGORIES.find(c => c.id === id) || {}).name || '';
-  const mountName   = id => (MOUNTS.find(m => m.id === id)   || {}).name || id;
   const machineName = id => (MACHINES.find(m => m.id === id) || {}).name || id;
   const hasPrice    = n => typeof n === 'number' && n > 0;
   const czkOr       = n => hasPrice(n) ? czk(n) : 'na dotaz';
@@ -170,6 +169,7 @@
         <div class="product__body">
           <p class="product__cat">${esc(catName(p.cat))}</p>
           <h3 class="product__name">${esc(p.name)}</h3>
+          ${mountLabel(p) ? `<p class="product__mount">Uchycení: <b>${esc(mountLabel(p))}</b></p>` : ''}
           <div class="product__specs">${specs}</div>
           <div class="product__foot">
             <div class="product__price"><b>${priceLabel(p)}</b><small>${hasPrice(p.price) ? 'bez DPH' : 'pošleme v nabídce'}</small></div>
@@ -366,53 +366,26 @@
     render();
   }
 
-  /* ---------- 8. Uchycení: co je v ceně a za kolik je jiné ---------- */
-  const MANIPULATOR_MOUNTS = ['jcb', 'manitou', 'merlo', 'kramer'];
-
-  function includedMounts(p) {
-    const m = (p.mount || '').toLowerCase(), s = new Set();
-    if (m.includes('euro')) s.add('euro');
-    if (m.includes('tbz')) s.add('tribod');
-    if (m.includes('avant')) s.add('avant');
-    if (m.includes('manipul')) MANIPULATOR_MOUNTS.forEach(x => s.add(x));
-    return s;
-  }
-
-  // nabídka do konfigurátoru; null = uchycení se nevolí (redukční rámy, plošina na vidle)
-  function mountOptions(p) {
-    if (p.cat === 'ramy' || p.mount === 'na paletizační vidle') return null;
-    const incl = includedMounts(p);
-    const ids = new Set([...p.mounts, ...incl]);
-    const list = (ids.size ? MOUNTS.filter(m => ids.has(m.id)) : MOUNTS).map(m => ({
-      id: m.id, name: m.name, note: m.note, incl: incl.has(m.id),
-      extra: incl.has(m.id) ? 0 : (incl.size && p.mountExtra ? p.mountExtra : null)
-    }));
-    list.sort((a, b) => b.incl - a.incl);
-    list.push({ id: 'jine', name: 'Jiné uchycení', note: 'poradíme', incl: false, extra: incl.size && p.mountExtra ? p.mountExtra : null });
-    return { list, known: incl.size > 0 };
+  /* ---------- 8. Uchycení: každý produkt má jedno pevné uchycení, nevolí se ---------- */
+  function mountLabel(p) {
+    const m = p.mount;
+    if (!m) return '';
+    if (m === 'EURO') return 'EURO (SMS / ISO)';
+    if (m === 'pro manipulátory') return 'pro teleskopické manipulátory';
+    if (m === 'mininakladač') return 'pro mininakladač';
+    return m;
   }
 
   function mountSentence(p) {
-    const m = p.mount;
-    if (p.cat === 'ramy') return 'Redukční rám se nasadí mezi stroj a adaptér — na stroji pak můžete používat adaptéry s jiným uchycením, než má váš nakladač.';
-    if (!m) return 'Uchycení dodáme podle vašeho stroje — typ a cenu upřesníme v nabídce.';
-    if (m === 'EURO') return 'Cena platí s uchycením <b>EURO</b> (SMS / ISO).';
-    if (m === 'pro manipulátory') return 'Cena platí s uchycením <b>pro váš teleskopický manipulátor</b> (Manitou, Merlo, JCB, Kramer…) — typ upřesníme při objednávce.';
-    if (m === 'mininakladač') return 'Cena platí s uchycením <b>pro mininakladač</b> — typ upřesníme podle stroje.';
-    if (m === 'na paletizační vidle') return 'Plošina se nasazuje <b>na paletizační vidle</b>, vlastní uchycení nepotřebuje.';
-    return `Cena platí s uchycením <b>${esc(m)}</b>.`;
+    const m = mountLabel(p);
+    if (p.cat === 'ramy') return `Redukční rám se nasadí mezi stroj a adaptér${m ? ` — provedení <b>${esc(m)}</b>` : ''}.`;
+    if (p.mount === 'na paletizační vidle') return 'Nasazuje se <b>na paletizační vidle</b>, vlastní uchycení nepotřebuje.';
+    if (!m) return 'Uchycení upřesníme podle vašeho stroje.';
+    return `Adaptér má pevné uchycení <b>${esc(m)}</b>.`;
   }
 
   function mountBlock(p) {
-    let extra = '';
-    if (p.cat !== 'ramy' && p.mount && p.mount !== 'na paletizační vidle') {
-      extra = p.mountExtra
-        ? `Jiné uchycení za příplatek <b>${czk(p.mountExtra)}</b> bez DPH${p.mountNote ? ' — ' + esc(p.mountNote) : ''}.`
-        : 'Jiné uchycení dodáme na objednávku, cenu upřesníme.';
-    }
-    const showEuro = includedMounts(p).has('euro') || p.mounts.includes('euro');
-    const chips = p.mounts.length
-      ? `<div class="tag-row" style="margin-top:14px">${p.mounts.map(m => `<span class="chip chip--neutral">${esc(mountName(m))}</span>`).join('')}</div>` : '';
+    const showEuro = /euro/i.test(p.mount || '') && p.cat !== 'ramy';
     return `
       <div class="detail__block mount-box" id="uchyceni">
         <h3>Uchycení</h3>
@@ -422,9 +395,8 @@
             <figcaption>Příklad uchycení EURO</figcaption>
           </figure>` : ''}
           <div>
-            <p>${mountSentence(p)} ${extra}</p>
-            ${chips}
-            <p class="mount-box__help">Nevíte, jaké uchycení máte? Pošlete nám fotku úchytu na stroji a do druhého dne poradíme.</p>
+            <p>${mountSentence(p)}</p>
+            <p class="mount-box__help">Nevíte, jestli uchycení sedí na váš stroj? Pošlete nám fotku úchytu na stroji a do druhého dne poradíme.</p>
           </div>
         </div>
       </div>`;
@@ -465,7 +437,6 @@
       </div>` : '';
 
     const variants = p.variants || [];
-    const mounts = mountOptions(p);
     const extras = p.extras || [];
 
     const variantGroup = variants.length > 1 ? `
@@ -479,15 +450,11 @@
         </div>
       </div>` : '';
 
-    const mountGroup = mounts ? `
+    const mountGroup = `
       <div class="config__group">
-        <label class="config__label" for="cfg-mount">Uchycení</label>
-        <select class="select" id="cfg-mount" data-mount>
-          ${mounts.known ? '' : '<option value="">Upřesníme podle vašeho stroje</option>'}
-          ${mounts.list.map((m, i) => `<option value="${i}">${esc(m.name)}${m.note ? ' (' + esc(m.note) + ')' : ''}${
-            mounts.known ? ' — ' + (m.incl ? 'v ceně' : m.extra ? '+ ' + czk(m.extra) : 'cena na dotaz') : ''}</option>`).join('')}
-        </select>
-      </div>` : '';
+        <p class="config__label">Uchycení</p>
+        <p class="config__fixed">${mountLabel(p) ? `<b>${esc(mountLabel(p))}</b>` : 'upřesníme podle vašeho stroje'}</p>
+      </div>`;
 
     const extrasGroup = extras.length ? `
       <div class="config__group">
@@ -542,7 +509,6 @@
             <div class="detail__price">
               <b data-total>${priceLabel(p)}</b><span data-total-vat></span>
             </div>
-            <p class="config__note" data-config-note hidden></p>
             <div class="config__buy">
               <div class="qty" aria-label="Počet kusů">
                 <button type="button" data-qty="-1" aria-label="Ubrat kus">${ICON.minus}</button>
@@ -583,17 +549,14 @@
     }));
 
     // --- konfigurátor ---
-    const cfg = { variant: 0, mount: mounts && mounts.known ? 0 : -1, extras: new Set(), qty: 1 };
-    const mountSel = $('[data-mount]', root);
+    const cfg = { variant: 0, extras: new Set(), qty: 1 };
     const qtyInput = $('[data-qty-input]', root);
 
     function current() {
       const v = variants[cfg.variant];
-      const m = mounts && cfg.mount >= 0 ? mounts.list[cfg.mount] : null;
       const base = v ? v.price : p.price;
-      const mountAdd = m && !m.incl && m.extra ? m.extra : 0;
       const exAdd = [...cfg.extras].reduce((s, i) => s + (extras[i].price || 0), 0);
-      return { v, m, unit: hasPrice(base) ? base + mountAdd + exAdd : null, onRequest: !!(m && !m.incl && m.extra == null && mounts.known) };
+      return { v, unit: hasPrice(base) ? base + exAdd : null };
     }
 
     function update() {
@@ -612,9 +575,6 @@
         $('[data-total]', root).textContent = (from ? 'od ' : '') + czk(total);
         $('[data-total-vat]', root).textContent = `bez DPH · ${czk(Math.round(total * 1.21))} s DPH${cfg.qty > 1 ? ` · ${cfg.qty} ks` : ''}`;
       }
-      const note = $('[data-config-note]', root);
-      note.hidden = !c.onRequest;
-      note.textContent = c.onRequest ? 'Cenu za zvolené uchycení doplníme v nabídce.' : '';
       const code = $('[data-code]', root);
       if (code) { code.hidden = !(c.v && c.v.code); $('span', code).textContent = c.v && c.v.code ? c.v.code : ''; }
       $$('[data-row]', root).forEach(r => r.classList.toggle('is-active', +r.dataset.row === cfg.variant));
@@ -634,7 +594,6 @@
       const next = (cfg.variant + dir + variants.length) % variants.length;
       const btn = $(`[data-variant="${next}"]`, root); btn.click(); btn.focus();
     });
-    if (mountSel) mountSel.addEventListener('change', () => { cfg.mount = mountSel.value === '' ? -1 : +mountSel.value; update(); });
     $$('[data-extra]', root).forEach(ch => ch.addEventListener('change', () => {
       ch.checked ? cfg.extras.add(+ch.dataset.extra) : cfg.extras.delete(+ch.dataset.extra); update();
     }));
@@ -648,9 +607,9 @@
       const item = {
         id: p.id, name: p.name, img: p.imgs[0] || '_bez-foto.svg',
         variant: c.v ? (p.variantLabel || 'Varianta') + ': ' + c.v.label + (c.v.code ? ' (' + c.v.code + ')' : '') : '',
-        mount: mounts ? (c.m ? c.m.name + (c.m.incl ? '' : c.m.extra ? '' : ' — cena na dotaz') : 'upřesníme podle stroje') : '',
+        mount: p.cat === 'ramy' || p.mount === 'na paletizační vidle' ? (mountLabel(p) || '') : (mountLabel(p) || 'upřesníme podle stroje'),
         extras: exNames,
-        unit: c.unit, from: p.priceFrom && variants.length < 2, onRequest: c.onRequest,
+        unit: c.unit, from: p.priceFrom && variants.length < 2,
         qty: cfg.qty
       };
       item.key = [item.id, item.variant, item.mount, exNames.join('+')].join('|');

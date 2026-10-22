@@ -390,11 +390,11 @@ ${D.PRODUCTS.map(p => '  ' + JSON.stringify(p)).join(',\n')}
       <p class="hint">Fotky se samy zmenší a převedou. Na telefonu a tabletu tlačítko „Vyfotit“ rovnou otevře foťák (na počítači otevře výběr souboru). Nejlépe na bílém nebo světlém pozadí. První fotka je hlavní.</p>
       <h3 class="sub">Uchycení a stroje</h3>
       <div class="grid">
-        <div><label>Uchycení, se kterým platí cena</label><input type="text" data-k="mount" data-nul="1" value="${esc(p.mount || '')}" placeholder="např. EURO, na paletizační vidle"></div>
-        <div><label>Příplatek za jiné uchycení (Kč, prázdné = na dotaz)</label><input type="text" data-k="mountExtra" data-n="1" value="${p.mountExtra == null ? '' : p.mountExtra}"></div>
+        <div style="grid-column:1/-1"><label>Uchycení (pevné — zobrazí se u produktu, zákazník ho nemění)</label><input type="text" list="mount-list" data-k="mount" data-nul="1" value="${esc(p.mount || '')}" placeholder="např. EURO, pro manipulátory, Avant, Tříbodový závěs kat. II">
+          <datalist id="mount-list">${['EURO', 'pro manipulátory', 'Avant', 'mininakladač', 'Smykový nakladač (skid-steer)', 'Tříbodový závěs kat. II', 'TBZ / EURO', 'na paletizační vidle', 'Upínací deska UNIMOG'].map(x => `<option value="${x}">`).join('')}</datalist>
+          <p class="hint">Prázdné = na webu bude „upřesníme podle vašeho stroje“.</p></div>
       </div>
       <div style="margin-top:10px"><label>Hodí se na stroje</label>${D.MACHINES.map(m => `<label class="chk"><input type="checkbox" data-mc="${m.id}"${p.machines.includes(m.id) ? ' checked' : ''}> ${esc(m.name)}</label>`).join('')}</div>
-      <div><label>Další nabízená uchycení</label>${D.MOUNTS.map(m => `<label class="chk"><input type="checkbox" data-mt="${m.id}"${p.mounts.includes(m.id) ? ' checked' : ''}> ${esc(m.name)}</label>`).join('')}</div>
       <h3 class="sub">Popis</h3>
       <label>Krátký popis (perex)</label><textarea data-k="perex">${esc(p.perex)}</textarea>
       <label style="margin-top:10px">Podrobný popis (každý odstavec na nový řádek)</label><textarea data-k="desc" data-lines="1" style="min-height:130px">${esc(p.desc.join('\n'))}</textarea>
