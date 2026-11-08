@@ -168,8 +168,7 @@ strong{color:var(--ink);font-weight:600;}
 .logo{display:flex;align-items:center;flex:none;}
 /* logo (dráp Agripolu + nápis) — výšku drží obrázek, šířka se dopočítá */
 .logo__img{height:60px;width:auto;}
-/* na tmavém podkladu bílé logo „vystupuje“: ostrý stín dole + měkký stín pod ním */
-.header--dark .logo__img,.footer .logo__img{filter:drop-shadow(0 2px 0 rgba(0,0,0,.85)) drop-shadow(0 5px 9px rgba(0,0,0,.7));}
+/* plastický efekt bílého loga (červená extruze + stín) je přímo v logo-full-white.svg — černý CSS stín na tmavém podkladu nebyl vidět */
 /* bez menu (pod 960 px) odsune logo poptávku a hamburger k pravému okraji */
 @media (max-width:959px){.logo{margin-right:auto;}}
 
