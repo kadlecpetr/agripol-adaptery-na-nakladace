@@ -58,7 +58,7 @@ img{display:block;max-width:100%;}
 /* --- titulní strana --- */
 .cover{background:var(--dark);color:#fff;}
 .cover::before{content:"";position:absolute;right:-62mm;bottom:-40mm;width:120mm;height:200mm;background:var(--accent);transform:skewX(-22deg);}
-.cover__logo{position:relative;margin:18mm 0 0 16mm;width:92mm;}
+.cover__logo{position:relative;margin:16mm 0 0 16mm;width:68mm;}
 .cover__glow{position:absolute;left:30mm;top:50mm;width:170mm;height:150mm;border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.16),rgba(255,255,255,0));}
 .cover__product{position:absolute;left:42mm;top:72mm;width:156mm;filter:drop-shadow(0 8mm 7mm rgba(0,0,0,.4));}
 .cover__title{position:absolute;left:16mm;right:16mm;bottom:40mm;}
@@ -135,7 +135,7 @@ table.vt tr:nth-child(even) td{background:var(--soft);}
 .back{background:var(--dark);color:#fff;justify-content:center;align-items:center;text-align:center;}
 .back::before{content:"";position:absolute;left:-70mm;top:-30mm;width:110mm;height:150mm;background:var(--accent);transform:skewX(-22deg);}
 .back > *{position:relative;}
-.back img{width:110mm;margin:0 auto 12mm;}
+.back img{width:84mm;margin:0 auto 12mm;}
 .back h2{font-family:var(--head);font-weight:700;font-size:12mm;text-transform:uppercase;margin:0 0 6mm;}
 .back p{font-size:4.2mm;line-height:1.7;margin:0;color:rgba(255,255,255,.85);}
 .back b{color:#fff;}
@@ -144,7 +144,7 @@ table.vt tr:nth-child(even) td{background:var(--soft);}
 <body>
 <div class="bar">
   <div class="bar__in">
-    <a class="bar__logo" href="index.html"><img src="assets/img/logo-full.svg?v=8" alt="Adaptéry pro nakladače — zpět na web" width="104" height="40"></a>
+    <a class="bar__logo" href="index.html"><img src="assets/img/logo-full.svg?v=10" alt="Adaptéry pro nakladače — zpět na web" width="104" height="40"></a>
     <span class="bar__title">Katalog adaptérů</span>
     <a class="btn" href="assets/katalog-adaptery-pro-nakladace.pdf" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12M6 11l6 6 6-6M5 20h14"/></svg>Stáhnout PDF</a>
     <button class="btn btn--ghost" type="button" onclick="window.print()">Vytisknout</button>
@@ -246,11 +246,11 @@ table.vt tr:nth-child(even) td{background:var(--soft);}
   });
   const total = pageNo; // včetně zadní strany
 
-  const head = c => `<header class="ph"><img src="assets/img/logo-full.svg?v=8" alt=""><span class="ph__cat">${esc(c ? c.name : 'Obsah')}</span></header>`;
+  const head = c => `<header class="ph"><img src="assets/img/logo-full.svg?v=10" alt=""><span class="ph__cat">${esc(c ? c.name : 'Obsah')}</span></header>`;
   const foot = no => `<footer class="pf"><span>Katalog adaptérů pro nakladače · vydání ${edition} · ceny bez DPH</span><span>adapterypronakladace.cz · ${esc(SITE.phone)}</span><b>${no}</b></footer>`;
 
   const cover = `<section class="page cover">
-      <img class="cover__logo" src="assets/img/logo-full-white.svg?v=9" alt="Adaptéry pro nakladače">
+      <img class="cover__logo" src="assets/img/logo-full-white.svg?v=10" alt="Adaptéry pro nakladače">
       <div class="cover__glow"></div>
       <img class="cover__product" src="assets/img/hero-drapak.webp?v=9" alt="">
       <div class="cover__title">
@@ -293,7 +293,7 @@ table.vt tr:nth-child(even) td{background:var(--soft);}
     </section>`).join('');
 
   const back = `<section class="page back">
-      <img src="assets/img/logo-full-white.svg?v=9" alt="">
+      <img src="assets/img/logo-full-white.svg?v=10" alt="">
       <h2>Poradíme s výběrem</h2>
       <p><b>${esc(SITE.phone)}</b> · <b>${esc(SITE.email)}</b><br>
       ${esc(SITE.owner)} · IČO ${esc(SITE.ico)}<br>${esc(SITE.street)}, ${esc(SITE.city)} · ${esc(SITE.hours)}<br><br>
@@ -301,6 +301,22 @@ table.vt tr:nth-child(even) td{background:var(--soft);}
     </section>`;
 
   document.querySelector('[data-sheets]').innerHTML = cover + toc + body + back;
+  // dlouhé texty u produktu: zmenší fotku/nákres, aby výbava a parametry nepřetekly do patičky
+  const fit = () => document.querySelectorAll('.page .body').forEach(b => {
+    const ft = b.parentElement.querySelector('.pf').getBoundingClientRect().top - 2;
+    const prods = [...b.querySelectorAll('.prod')];
+    prods.forEach((pr, i) => {
+      const lim = i < prods.length - 1 ? prods[i + 1].getBoundingClientRect().top - 2 : ft;
+      const m = pr.querySelector('.prod__media');
+      for (let h = 62; h > 28; h -= 2) {
+        let bottom = 0;
+        pr.querySelectorAll('li,td,.vt-note').forEach(e => { bottom = Math.max(bottom, e.getBoundingClientRect().bottom); });
+        if (bottom <= lim) break;
+        m.style.height = h + 'mm';
+      }
+    });
+  });
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(fit);
   document.documentElement.dataset.pages = total;
 })();
 </script>
