@@ -144,7 +144,7 @@ table.vt tr:nth-child(even) td{background:var(--soft);}
 <body>
 <div class="bar">
   <div class="bar__in">
-    <a class="bar__logo" href="index.html"><img src="assets/img/logo-full.svg?v=6" alt="Adaptéry pro nakladače — zpět na web" width="104" height="40"></a>
+    <a class="bar__logo" href="index.html"><img src="assets/img/logo-full.svg?v=7" alt="Adaptéry pro nakladače — zpět na web" width="104" height="40"></a>
     <span class="bar__title">Katalog adaptérů</span>
     <a class="btn" href="assets/katalog-adaptery-pro-nakladace.pdf" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12M6 11l6 6 6-6M5 20h14"/></svg>Stáhnout PDF</a>
     <button class="btn btn--ghost" type="button" onclick="window.print()">Vytisknout</button>
@@ -246,11 +246,11 @@ table.vt tr:nth-child(even) td{background:var(--soft);}
   });
   const total = pageNo; // včetně zadní strany
 
-  const head = c => `<header class="ph"><img src="assets/img/logo-full.svg?v=6" alt=""><span class="ph__cat">${esc(c ? c.name : 'Obsah')}</span></header>`;
+  const head = c => `<header class="ph"><img src="assets/img/logo-full.svg?v=7" alt=""><span class="ph__cat">${esc(c ? c.name : 'Obsah')}</span></header>`;
   const foot = no => `<footer class="pf"><span>Katalog adaptérů pro nakladače · vydání ${edition} · ceny bez DPH</span><span>adapterypronakladace.cz · ${esc(SITE.phone)}</span><b>${no}</b></footer>`;
 
   const cover = `<section class="page cover">
-      <img class="cover__logo" src="assets/img/logo-full-white.svg?v=6" alt="Adaptéry pro nakladače">
+      <img class="cover__logo" src="assets/img/logo-full-white.svg?v=7" alt="Adaptéry pro nakladače">
       <div class="cover__glow"></div>
       <img class="cover__product" src="assets/img/hero-drapak.webp?v=9" alt="">
       <div class="cover__title">
@@ -293,7 +293,7 @@ table.vt tr:nth-child(even) td{background:var(--soft);}
     </section>`).join('');
 
   const back = `<section class="page back">
-      <img src="assets/img/logo-full-white.svg?v=6" alt="">
+      <img src="assets/img/logo-full-white.svg?v=7" alt="">
       <h2>Poradíme s výběrem</h2>
       <p><b>${esc(SITE.phone)}</b> · <b>${esc(SITE.email)}</b><br>
       ${esc(SITE.owner)} · IČO ${esc(SITE.ico)}<br>${esc(SITE.street)}, ${esc(SITE.city)} · ${esc(SITE.hours)}<br><br>
