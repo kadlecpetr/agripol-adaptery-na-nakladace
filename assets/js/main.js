@@ -287,11 +287,15 @@
         return true;
       });
 
+      // výchozí řazení: kategorie v pořadí webu, uvnitř od nejlevnějšího; „na dotaz“ na konec
+      const catOrder = new Map(CATEGORIES.map((c, i) => [c.id, i]));
+      const priceKey = p => hasPrice(p.price) ? p.price : Infinity;
       const sorters = {
+        'default':   (a, b) => (catOrder.get(a.cat) - catOrder.get(b.cat)) || (priceKey(a) - priceKey(b)) || (order.get(a.id) - order.get(b.id)),
+        'velikost':  (a, b) => order.get(a.id) - order.get(b.id),
         'cena-asc':  (a, b) => (hasPrice(a.price) ? a.price : Infinity) - (hasPrice(b.price) ? b.price : Infinity) || 0,
         'cena-desc': (a, b) => (b.price || 0) - (a.price || 0),
-        'nazev':     (a, b) => a.name.localeCompare(b.name, 'cs'),
-        'default':   (a, b) => order.get(a.id) - order.get(b.id)
+        'nazev':     (a, b) => a.name.localeCompare(b.name, 'cs')
       };
       list.sort(sorters[state.sort] || sorters.default);
 
