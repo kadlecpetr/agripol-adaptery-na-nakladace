@@ -89,9 +89,9 @@ Krmné lopaty a komunální adaptéry jsou zatím prázdné — na webu se uká�
 „připravujeme“ s odkazem na poptávku. Podklady (názvy, ceny, parametry, popisy,
 fotky) pocházejí z **agripol.cz/adaptery** — viz „Původ podkladů" níže.
 
-**Pořadí:** pořadí produktů v `data.js` = pořadí v katalogu i v tištěném katalogu.
-V každé kategorii jsou seřazené od největšího po nejmenší (např. kleště na klády
-INTER-TECH → Spaw-met). Nový produkt vložte na správné místo v poli.
+**Pořadí:** výchozí řazení katalogu i tištěného katalogu je po kategoriích a v nich od nejmenší
+šířky po největší (logika v `assets/js/razeni.js`: šířka z `specs`/variant, bez šířky hmotnost
+nebo nosnost, jinak cena). Pořadí v poli `PRODUCTS` je s ním sladěné, ale rozhoduje `razeni.js`.
 
 Vše se edituje v `assets/js/data.js`. Produkt vypadá takhle:
 

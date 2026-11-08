@@ -331,7 +331,7 @@ ${D.PRODUCTS.map(p => '  ' + JSON.stringify(p)).join(',\n')}
         ${list.length ? groups.map(g => `${g.c && !fcat ? `<h3 class="grp">${esc(g.c.name)} <span class="hint">${g.items.length}</span></h3>` : ''}
         <table><thead><tr><th></th><th>Název</th><th>Cena od</th><th>Stav</th><th></th></tr></thead><tbody>${g.items.map(row).join('')}</tbody></table>`).join('')
         : '<p class="hint" style="padding:30px 0">Žádný produkt. Přidejte ho tlačítkem „+ Nový produkt“.</p>'}
-        <p class="hint">Pořadí šipkami platí v rámci jedné kategorie (v katalogu se řadí od největšího po nejmenší).</p>
+        <p class="hint">Pořadí šipkami platí v rámci jedné kategorie (výchozí řazení v katalogu se řídí šířkou od nejmenší po největší, šipky pořadí v katalogu nemění).</p>
       </div>
       <aside class="card side">
         <input type="text" id="q" placeholder="Hledat produkt…" value="${esc(q)}">

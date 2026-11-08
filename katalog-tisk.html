@@ -154,7 +154,8 @@ table.vt tr:nth-child(even) td{background:var(--soft);}
 
 <main class="sheets" data-sheets></main>
 
-<script src="assets/js/data.js?v=202611081614"></script>
+<script src="assets/js/data.js?v=202611081800"></script>
+<script src="assets/js/razeni.js?v=202611081800"></script>
 <script>
 (function () {
   'use strict';
@@ -166,7 +167,7 @@ table.vt tr:nth-child(even) td{background:var(--soft);}
   const now = new Date();
   const edition = String(now.getMonth() + 1).padStart(2, '0') + '/' + now.getFullYear();
 
-  const cats = CATEGORIES.map(c => ({ c, items: PRODUCTS.filter(p => p.cat === c.id) })).filter(x => x.items.length);
+  const cats = CATEGORIES.map(c => ({ c, items: PRODUCTS.filter(p => p.cat === c.id).sort(ProductSort.compare) })).filter(x => x.items.length);
 
   function mountText(p) {
     const m = p.mount;
@@ -275,7 +276,7 @@ table.vt tr:nth-child(even) td{background:var(--soft);}
           <ul>
             <li>Ceny jsou uvedené <b>bez DPH</b> a jsou orientační — přesnou cenu, termín a dopravu potvrdíme v nabídce.</li>
             <li>Každý adaptér má <b>pevné uchycení</b> uvedené u produktu — nejčastěji EURO.</li>
-            <li>Varianty jsou seřazené od nejmenší šířky, produkty v kategorii <b>od největšího po nejmenší</b>.</li>
+            <li>Varianty jsou seřazené od nejmenší šířky, produkty v kategorii <b>od nejmenší šířky po největší</b>.</li>
           </ul>
           <h3>Příklad uchycení EURO</h3>
           <img class="mount" src="assets/img/uchyceni-euro.svg" alt="">

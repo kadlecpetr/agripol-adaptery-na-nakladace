@@ -348,14 +348,14 @@
         (n > 1 ? '<button class="catalog__clear" type="button" data-reset>Zrušit vše</button>' : '') : '';
     }
 
-    // výchozí pořadí = pořadí v data.js (kategorie a v nich od největšího po nejmenší)
+    // pořadí v data.js = pořadí z administrace (kategorie a v nich od nejmenší šířky); řazení podle šířky viz razeni.js
     const order = new Map(PRODUCTS.map((p, i) => [p.id, i]));
-    const catOrder = new Map(CATEGORIES.map((c, i) => [c.id, i]));
     const priceKey = p => hasPrice(p.price) ? p.price : Infinity;
     const sorters = {
-      // kategorie v pořadí webu, uvnitř od nejlevnějšího; „na dotaz“ na konec kategorie
-      'default':   (a, b) => (catOrder.get(a.cat) - catOrder.get(b.cat)) || (priceKey(a) - priceKey(b)) || (order.get(a.id) - order.get(b.id)),
-      'velikost':  (a, b) => order.get(a.id) - order.get(b.id),
+      // kategorie v pořadí webu, uvnitř od nejmenší šířky po největší (produkty bez šířky podle hmotnosti/nosnosti/ceny)
+      'default':   ProductSort.byCategory(CATEGORIES),
+      // od největší šířky (kategorie v pořadí webu)
+      'velikost':  ProductSort.byCategory(CATEGORIES, ProductSort.compareDesc),
       'cena-asc':  (a, b) => (priceKey(a) - priceKey(b)) || (order.get(a.id) - order.get(b.id)),
       'cena-desc': (a, b) => ((b.price || 0) - (a.price || 0)) || (order.get(a.id) - order.get(b.id)),
       'nazev':     (a, b) => a.name.localeCompare(b.name, 'cs')
