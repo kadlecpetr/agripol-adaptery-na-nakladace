@@ -167,7 +167,7 @@ strong{color:var(--ink);font-weight:600;}
 .header__inner{display:flex;align-items:center;gap:20px;height:100%;}
 .logo{display:flex;align-items:center;flex:none;}
 /* logo Agripol s nápisem — výšku drží obrázek, šířka se dopočítá */
-.logo__img{height:60px;width:auto;}
+.logo__img{height:44px;width:auto;}
 /* bez menu (pod 960 px) odsune logo poptávku a hamburger k pravému okraji */
 @media (max-width:959px){.logo{margin-right:auto;}}
 
@@ -754,7 +754,7 @@ a.chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
 /* ---------- 16. Patička ---------- */
 .footer{background:var(--bg-dark);color:rgba(255,255,255,.62);padding:clamp(48px,6vw,76px) 0 0;font-size:.92rem;}
 .footer__grid{display:grid;gap:34px;padding-bottom:44px;}
-.footer .logo__img{height:72px;}
+.footer .logo__img{height:52px;}
 .footer__about{max-width:34ch;margin-top:16px;}
 .footer h4{color:#fff;font-family:var(--font-body);font-size:.78rem;letter-spacing:.13em;text-transform:uppercase;margin-bottom:16px;}
 .footer__links li{margin-bottom:9px;}
@@ -858,7 +858,7 @@ a.chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
   .footer__contact a{display:inline-block;padding:4px 0;}
   .breadcrumb a{display:inline-block;padding:4px 0;}
   .wrap{width:min(100% - 32px,var(--wrap));}
-  .logo__img{height:50px;}
+  .logo__img{height:38px;}
   .hero__badge{left:auto;right:4px;bottom:-6%;padding:12px 15px;}
   .hero__badge b{font-size:1.55rem;}
   .hero__actions .btn{flex:1 1 auto;}
