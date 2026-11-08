@@ -160,7 +160,7 @@ table.vt tr:nth-child(even) td{background:var(--soft);}
   'use strict';
   const esc = s => String(s).replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
   const czk = n => new Intl.NumberFormat('cs-CZ').format(n) + ' Kč';
-  // ?jpg=1 — při výrobě PDF se berou JPEG kopie fotek, PDF je pak výrazně menší
+  // ?jpg=1 — při výrobě PDF se berou JPEG kopie fotek a nákresů (assets/img/tisk/, tisk/nakresy/), PDF je pak výrazně menší
   const JPG = new URLSearchParams(location.search).get('jpg') === '1';
   const photo = f => !f ? 'assets/img/nahledy/_bez-foto.svg' : JPG ? 'assets/img/tisk/' + f.replace(/\.webp$/, '.jpg') : 'assets/img/produkty/' + f;
   const now = new Date();
@@ -213,7 +213,7 @@ table.vt tr:nth-child(even) td{background:var(--soft);}
 
   function product(p) {
     const drawing = (p.drawings || [])[0];
-    const second = drawing ? 'assets/img/nakresy/' + drawing : (p.imgs[1] ? photo(p.imgs[1]) : '');
+    const second = drawing ? (JPG ? 'assets/img/tisk/nakresy/' + drawing.replace(/\.webp$/, '.jpg') : 'assets/img/nakresy/' + drawing) :(p.imgs[1] ? photo(p.imgs[1]) : '');
     const t = tag(p);
     return `<article class="prod">
       <div class="prod__media${second ? '' : ' is-single'}">
@@ -250,7 +250,7 @@ table.vt tr:nth-child(even) td{background:var(--soft);}
   const foot = no => `<footer class="pf"><span>Katalog adaptérů pro nakladače · vydání ${edition} · ceny bez DPH</span><span>adapterypronakladace.cz · ${esc(SITE.phone)}</span><b>${no}</b></footer>`;
 
   const cover = `<section class="page cover">
-      <img class="cover__logo" src="assets/img/logo-full-white.svg?v=2" alt="Adaptéry pro nakladače">
+      <img class="cover__logo" src="assets/img/logo-full-white.svg?v=3" alt="Adaptéry pro nakladače">
       <div class="cover__glow"></div>
       <img class="cover__product" src="assets/img/hero-drapak.webp?v=7" alt="">
       <div class="cover__title">
@@ -293,7 +293,7 @@ table.vt tr:nth-child(even) td{background:var(--soft);}
     </section>`).join('');
 
   const back = `<section class="page back">
-      <img src="assets/img/logo-full-white.svg?v=2" alt="">
+      <img src="assets/img/logo-full-white.svg?v=3" alt="">
       <h2>Poradíme s výběrem</h2>
       <p><b>${esc(SITE.phone)}</b> · <b>${esc(SITE.email)}</b><br>
       ${esc(SITE.owner)} · IČO ${esc(SITE.ico)}<br>${esc(SITE.street)}, ${esc(SITE.city)} · ${esc(SITE.hours)}<br><br>

@@ -163,9 +163,12 @@ od nové strany. Na webu se dá listovat, vytisknout, nebo stáhnout jako PDF
 PDF se **nepřegeneruje samo** — po změně `data.js` ho vyrobte znovu:
 
 ```bash
-# 1) JPEG kopie fotek (PDF je pak ~7 MB místo desítek MB); složka tisk/ se necommituje
+# 1) JPEG kopie fotek (PDF je pak ~16 MB místo ~110 MB); složka tisk/ se necommituje
 mkdir -p assets/img/tisk && for f in assets/img/produkty/*.webp; do
   magick "$f" -background white -alpha remove -resize '720x720>' -quality 74 "assets/img/tisk/$(basename "${f%.webp}").jpg"; done
+# …a nákresů (bez nich má PDF přes 25 MB)
+mkdir -p assets/img/tisk/nakresy && for f in assets/img/nakresy/*.webp; do
+  magick "$f" -background white -alpha remove -resize '800x800>' -quality 85 "assets/img/tisk/nakresy/$(basename "${f%.webp}").jpg"; done
 # 2) lokální server a tisk do PDF
 python3 -m http.server 8765 &
 "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --no-pdf-header-footer \
