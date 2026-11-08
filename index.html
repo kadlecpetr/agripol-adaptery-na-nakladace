@@ -22,7 +22,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="assets/css/style.css?v=202611081637">
+<link rel="stylesheet" href="assets/css/style.css?v=202611081705">
 </head>
 <body>
 <a class="sr-only" href="#main">Přeskočit na obsah</a>
@@ -30,7 +30,7 @@
 <header class="header header--dark">
   <div class="wrap header__inner">
     <a class="logo" href="index.html" aria-label="Adaptéry pro nakladače — úvodní stránka">
-      <img class="logo__img" src="assets/img/logo-full-white.svg?v=5" alt="Adaptéry pro nakladače" width="215" height="44">
+      <img class="logo__img" src="assets/img/logo-full-white.svg?v=6" alt="Adaptéry pro nakladače" width="135" height="52">
     </a>
 
     <nav class="nav" aria-label="Hlavní navigace">
@@ -65,7 +65,7 @@
     <a class="mobile-nav__link" href="na-miru.html">Na míru <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a>
     <a class="mobile-nav__link" href="o-nas.html">O nás <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a>
     <a class="mobile-nav__link" href="kontakt.html">Kontakt <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a>
-    <a class="mobile-nav__link" href="poptavka.html">Poptávka <b class="header__cart-count" data-cart-count hidden>0</b></a>
+    <a class="mobile-nav__link" href="poptavka.html"><span>Poptávka <b class="header__cart-count" data-cart-count hidden>0</b></span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a>
     <div class="mobile-nav__foot">
       <a class="mobile-nav__contact" href="tel:+420605434314">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1 1 .3 1.9.6 2.8a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.8.6a2 2 0 0 1 1.7 2Z"/></svg>
@@ -73,7 +73,7 @@
       <a class="mobile-nav__contact" href="mailto:info@agripol.cz">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m3 7 9 6 9-6"/></svg>
         info@agripol.cz</a>
-      <a class="btn btn--block" href="kontakt.html" style="margin-top:8px">Nezávazná poptávka</a>
+      <a class="btn btn--block mobile-nav__cta" href="kontakt.html">Nezávazná poptávka</a>
     </div>
   </div>
 </nav>
@@ -112,50 +112,36 @@
 </section>
 
 <!-- ===== KATEGORIE ===== -->
-<section class="section">
+<section class="section home-cats">
   <div class="wrap">
-    <div class="section-head center" data-reveal>
-      <p class="eyebrow">Sortiment</p>
-      <h2>Deset kategorií, jeden stroj</h2>
-      <p class="lead">Od lopat a manipulace s balíky přes siláž a stavební adaptéry až po redukční rámy
-        a zvedací zařízení. Vybíráme tak, aby to vydrželo každodenní provoz, ne jen sezónu.</p>
+    <div class="section-head home-head" data-reveal>
+      <div>
+        <p class="eyebrow">Sortiment</p>
+        <h2>Vyberte podle práce, kterou děláte</h2>
+      </div>
+      <p class="lead">Od lopat a manipulace s&nbsp;balíky přes siláž a stavební adaptéry až po redukční rámy
+        a&nbsp;zvedací zařízení. Vybíráme nářadí, které vydrží každodenní provoz, ne jen sezónu.</p>
     </div>
     <div class="grid cats" data-categories></div>
   </div>
 </section>
 
-<!-- ===== NEJPRODÁVANĚJŠÍ ===== -->
+<!-- ===== SKLADEM ===== -->
 <section class="section section--soft">
   <div class="wrap">
-    <div class="section-head" data-reveal>
-      <p class="eyebrow">Nejžádanější</p>
-      <h2>Co od nás jezdí nejčastěji</h2>
-      <p class="lead">Modely, které máme prakticky pořád skladem — expedujeme je do dvou pracovních dnů.</p>
-    </div>
-    <div class="grid products" data-top-products></div>
-    <p class="center" style="margin-top:36px" data-reveal>
-      <a class="btn btn--ghost" href="katalog.html">Zobrazit všech <span data-count-products>199</span> adaptérů
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-    </p>
-  </div>
-</section>
-
-<!-- ===== KATALOG KE STAŽENÍ ===== -->
-<section class="section">
-  <div class="wrap catalog-dl">
-    <div class="catalog-dl__cover" data-reveal>
-      <img src="assets/img/katalog-titulka.webp?v=5" alt="Titulní strana katalogu adaptérů" width="600" height="849" loading="lazy">
-    </div>
-    <div data-reveal style="--d:80ms">
-      <p class="eyebrow">Katalog ke stažení</p>
-      <h2>Celá nabídka v listovacím katalogu</h2>
-      <p class="lead">Všechny adaptéry na stránkách A4 — fotky, varianty šířek s cenami, výbava v ceně
-        i příplatková výbava. Vytiskněte si ho do dílny nebo pošlete kolegovi.</p>
-      <div class="catalog-dl__actions">
-        <a class="btn" href="assets/katalog-adaptery-pro-nakladace.pdf" download>Stáhnout PDF
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12M6 11l6 6 6-6M5 20h14"/></svg></a>
-        <a class="btn btn--ghost" href="katalog-tisk.html">Listovat online</a>
+    <div class="section-head home-head" data-reveal>
+      <div>
+        <p class="eyebrow">Skladem</p>
+        <h2>Vybrané adaptéry k&nbsp;odběru hned</h2>
       </div>
+      <p class="lead">Adaptéry z&nbsp;různých kategorií, které máme právě na skladě. Můžete si je
+        hned odvézt, nebo je do 48&nbsp;hodin odešleme.</p>
+    </div>
+    <div class="grid products products--home" data-top-products></div>
+    <div class="home-more" data-reveal>
+      <a class="btn" href="katalog.html?skladem=1"><span>Vše skladem (<span data-count-stock>37</span>)</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="btn btn--ghost" href="katalog.html"><span>Celý katalog (<span data-count-products>199</span>)</span></a>
     </div>
   </div>
 </section>
@@ -163,11 +149,15 @@
 <!-- ===== PROČ MY ===== -->
 <section class="section">
   <div class="wrap">
-    <div class="section-head center" data-reveal>
-      <p class="eyebrow">Proč právě my</p>
-      <h2>Proč nakoupit u nás</h2>
+    <div class="section-head home-head" data-reveal>
+      <div>
+        <p class="eyebrow">Proč u nás</p>
+        <h2>Na čem si zakládáme</h2>
+      </div>
+      <p class="lead">Prodáváme nářadí, za kterým si stojíme — od výběru správného provedení
+        přes dodání až po náhradní díly roky po prodeji.</p>
     </div>
-    <div class="grid features">
+    <div class="grid features features--home">
       <div class="feature" data-reveal>
         <div class="feature__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 3 6v6c0 5.2 3.8 9.4 9 10 5.2-.6 9-4.8 9-10V6l-9-4Z"/><path d="m9 12 2 2 4-4"/></svg></div>
         <h3>Prověření výrobci</h3>
@@ -193,25 +183,28 @@
 </section>
 
 <!-- ===== ČÍSLA ===== -->
-<section class="section section--tight">
+<section class="section section--tight home-stats">
   <div class="wrap">
     <div class="stats" data-reveal>
+      <div class="stat"><b data-count-products>199</b><span>adaptérů v nabídce</span></div>
       <div class="stat"><b data-count-cats>10</b><span>kategorií nářadí</span></div>
       <div class="stat"><b data-count-stock>37</b><span>položek skladem</span></div>
-      <div class="stat"><b data-count-products>199</b><span>adaptérů v nabídce</span></div>
-      <div class="stat"><b>8</b><span>systémů uchycení</span></div>
+      <div class="stat"><b data-count-mounts>8</b><span>systémů uchycení</span></div>
     </div>
   </div>
 </section>
 
 <!-- ===== JAK TO PROBÍHÁ ===== -->
-<section class="section section--soft">
+<section class="section">
   <div class="wrap">
-    <div class="section-head" data-reveal>
-      <p class="eyebrow">Jak to probíhá</p>
-      <h2>Od telefonátu k adaptéru na stroji</h2>
+    <div class="section-head home-head" data-reveal>
+      <div>
+        <p class="eyebrow">Jak to probíhá</p>
+        <h2>Od telefonátu k&nbsp;adaptéru na stroji</h2>
+      </div>
+      <p class="lead">Nemusíte znát přesný typ uchycení ani katalogové číslo. Stačí popsat stroj a práci.</p>
     </div>
-    <div class="grid steps">
+    <div class="grid steps steps--home">
       <div class="step" data-reveal>
         <h3>Řeknete, co potřebujete</h3>
         <p>Stačí značka stroje a co s adaptérem budete dělat. Zbytek doladíme my.</p>
@@ -227,6 +220,31 @@
       <div class="step" data-reveal style="--d:210ms">
         <h3>Dodáme</h3>
         <p>Skladové kusy odvezete hned, zakázkovou výrobu domluvíme podle termínu.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== KATALOG KE STAŽENÍ ===== -->
+<section class="section section--soft home-dl">
+  <div class="wrap catalog-dl">
+    <div class="catalog-dl__cover" data-reveal>
+      <img src="assets/img/katalog-titulka.webp?v=5" alt="Titulní strana katalogu adaptérů" width="600" height="849" loading="lazy">
+    </div>
+    <div data-reveal style="--d:80ms">
+      <p class="eyebrow">Katalog ke stažení</p>
+      <h2>Celá nabídka v&nbsp;jednom katalogu</h2>
+      <p class="lead">Všechny adaptéry na stránkách A4 — fotky, varianty šířek s cenami, výbava v ceně
+        i příplatková výbava. Vytiskněte si ho do dílny nebo pošlete kolegovi.</p>
+      <ul class="catalog-dl__facts">
+        <li><b data-count-products>199</b> adaptérů</li>
+        <li><b data-count-cats>10</b> kategorií</li>
+        <li>ceny bez DPH</li>
+      </ul>
+      <div class="catalog-dl__actions">
+        <a class="btn" href="assets/katalog-adaptery-pro-nakladace.pdf" download>Stáhnout PDF
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12M6 11l6 6 6-6M5 20h14"/></svg></a>
+        <a class="btn btn--ghost" href="katalog-tisk.html">Listovat online</a>
       </div>
     </div>
   </div>
@@ -274,7 +292,7 @@
     <div class="footer__grid">
       <div>
         <a class="logo" href="index.html" aria-label="Adaptéry pro nakladače — úvodní stránka">
-          <img class="logo__img" src="assets/img/logo-full-white.svg?v=5" alt="Adaptéry pro nakladače" width="215" height="44">
+          <img class="logo__img" src="assets/img/logo-full-white.svg?v=6" alt="Adaptéry pro nakladače" width="135" height="52">
         </a>
         <p class="footer__about">Prodáváme adaptéry pro čelní nakladače, teleskopické manipulátory a traktory. Skladem i na objednávku, zakázková výroba po domluvě.</p>
         <div class="socials">
@@ -335,6 +353,6 @@
 </button>
 
 <script src="assets/js/data.js?v=202611081614"></script>
-<script src="assets/js/main.js?v=202611081627"></script>
+<script src="assets/js/main.js?v=202611081705"></script>
 </body>
 </html>

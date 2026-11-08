@@ -37,7 +37,7 @@
   --shadow-l:0 4px 12px rgba(18,18,22,.06), 0 24px 60px rgba(18,18,22,.10);
 
   --wrap:1220px;
-  --header-h:84px;
+  --header-h:78px;
 
   --font-head:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
   --font-body:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
@@ -164,10 +164,13 @@ strong{color:var(--ink);font-weight:600;}
 .header--dark .burger{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);}
 .header--dark .burger span,.header--dark .burger span::before,.header--dark .burger span::after{background:#fff;}
 .header--dark .burger.is-open span{background:transparent;}
+.header--dark .burger:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.28);}
+/* fokus z klávesnice: na tmavé liště i v tmavém menu světlejší červená, ať je vidět */
+.header--dark :focus-visible,.mobile-nav :focus-visible,.footer :focus-visible{outline-color:var(--accent-light);}
 .header__inner{display:flex;align-items:center;gap:20px;height:100%;}
 .logo{display:flex;align-items:center;flex:none;}
 /* logo Agripol s nápisem — výšku drží obrázek, šířka se dopočítá */
-.logo__img{height:44px;width:auto;}
+.logo__img{height:52px;width:auto;}
 /* bez menu (pod 960 px) odsune logo poptávku a hamburger k pravému okraji */
 @media (max-width:959px){.logo{margin-right:auto;}}
 
@@ -179,26 +182,32 @@ strong{color:var(--ink);font-weight:600;}
   transition:color .2s var(--ease),background .2s var(--ease);
 }
 .nav__link:hover{color:var(--accent-700);background:var(--accent-50);}
+.nav__link:focus-visible{outline-offset:0;}
 .nav__link.is-active{color:var(--accent-700);font-weight:600;}
 .nav__link.is-active::after{
-  content:"";position:absolute;left:15px;right:15px;bottom:4px;height:2px;
+  content:"";position:absolute;left:15px;right:15px;bottom:3px;height:2px;
   background:var(--accent);border-radius:2px;
 }
 .header__cta{display:flex;align-items:center;gap:12px;flex:none;}
+/* oddělovač mezi menu a kontaktem, ať pravá část nesplývá s položkami menu */
+@media (min-width:960px){
+  .header__cta{padding-left:20px;border-left:1px solid var(--line);}
+  .header--dark .header__cta{border-left-color:rgba(255,255,255,.14);}
+}
 .header__tel{
   display:inline-flex;align-items:center;gap:8px;
   font-weight:600;font-size:.93rem;color:var(--ink);white-space:nowrap;
-  padding:8px 4px;
+  padding:8px 4px;transition:color .2s var(--ease);
 }
 .header__tel svg{width:17px;height:17px;color:var(--accent);}
 .header__tel:hover{color:var(--accent-700);}
 .header__cart{
   position:relative;display:inline-flex;align-items:center;gap:8px;
-  padding:10px 18px;border-radius:100px;background:var(--accent);color:#fff;
-  font-weight:600;font-size:.86rem;line-height:1;white-space:nowrap;
-  transition:background .2s var(--ease),transform .2s var(--ease);
+  height:42px;padding:0 18px;border-radius:100px;background:var(--accent);color:#fff;
+  font-weight:600;font-size:.88rem;line-height:1;white-space:nowrap;
+  transition:background .2s var(--ease),transform .2s var(--ease),box-shadow .2s var(--ease);
 }
-.header__cart:hover{background:var(--accent-600);transform:translateY(-1px);}
+.header__cart:hover{background:var(--accent-600);transform:translateY(-1px);box-shadow:0 6px 16px rgba(200,25,31,.28);}
 .header__cart svg{width:18px;height:18px;flex:none;}
 .header__cart-count{
   min-width:20px;height:20px;padding:0 6px;border-radius:10px;
@@ -211,7 +220,9 @@ strong{color:var(--ink);font-weight:600;}
   display:none;width:44px;height:44px;flex:none;
   align-items:center;justify-content:center;
   background:var(--bg-soft);border:1px solid var(--line);border-radius:10px;cursor:pointer;
+  transition:background .2s var(--ease),border-color .2s var(--ease);
 }
+.burger:hover{background:#fff;border-color:var(--line-strong);}
 .burger span{display:block;width:19px;height:2px;background:var(--ink);border-radius:2px;position:relative;transition:.25s var(--ease);}
 .burger span::before,.burger span::after{content:"";position:absolute;left:0;width:19px;height:2px;background:var(--ink);border-radius:2px;transition:.25s var(--ease);}
 .burger span::before{top:-6px;}
@@ -222,21 +233,27 @@ strong{color:var(--ink);font-weight:600;}
 
 .mobile-nav{
   position:fixed;inset:var(--header-h) 0 0;z-index:99;
-  background:var(--bg-dark);padding:26px 0 40px;overflow-y:auto;
+  background:var(--bg-dark);padding:14px 0 calc(32px + env(safe-area-inset-bottom,0px));overflow-y:auto;overscroll-behavior:contain;
+  border-top:1px solid rgba(255,255,255,.08);
   transform:translateY(-8px);opacity:0;visibility:hidden;
   transition:.28s var(--ease);
 }
 .mobile-nav.is-open{transform:none;opacity:1;visibility:visible;}
 .mobile-nav__link{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:16px 4px;border-bottom:1px solid rgba(255,255,255,.1);
-  font-family:var(--font-head);font-size:1.5rem;font-weight:600;color:#fff;text-transform:uppercase;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  min-height:52px;padding:8px 4px;border-bottom:1px solid rgba(255,255,255,.1);
+  font-family:var(--font-head);font-size:1.4rem;font-weight:600;letter-spacing:.01em;color:#fff;text-transform:uppercase;
+  transition:color .2s var(--ease);
 }
-.mobile-nav__link.is-active{color:var(--accent-light);}
-.mobile-nav__link svg{width:18px;height:18px;color:rgba(255,255,255,.4);}
-.mobile-nav__foot{margin-top:28px;display:grid;gap:12px;}
-.mobile-nav__contact{display:flex;align-items:center;gap:12px;font-weight:600;color:#fff;padding:6px 0;}
-.mobile-nav__contact svg{width:19px;height:19px;color:var(--accent-light);}
+.mobile-nav__link > span{display:inline-flex;align-items:center;gap:10px;}
+.mobile-nav__link .header__cart-count{background:var(--accent);color:#fff;font-family:var(--font-body);}
+.mobile-nav__link:hover,.mobile-nav__link.is-active{color:var(--accent-light);}
+.mobile-nav__link.is-active svg{color:var(--accent-light);}
+.mobile-nav__link svg{width:18px;height:18px;flex:none;color:rgba(255,255,255,.4);}
+.mobile-nav__foot{margin-top:22px;display:grid;gap:4px;}
+.mobile-nav__contact{display:flex;align-items:center;gap:12px;min-height:44px;font-weight:600;color:#fff;}
+.mobile-nav__contact svg{width:19px;height:19px;flex:none;color:var(--accent-light);}
+.mobile-nav__cta{margin-top:14px;}
 body.no-scroll{overflow:hidden;}
 
 /* ---------- 6. Hero ----------
@@ -335,13 +352,27 @@ body.no-scroll{overflow:hidden;}
 .mount-pill small{color:rgba(255,255,255,.72);font-size:.78rem;}
 
 /* ---------- 8. Karty kategorií ---------- */
-.cats{grid-template-columns:repeat(auto-fit,minmax(250px,1fr));}
+/* 10 kategorií: na mobilu 2 vedle sebe, na desktopu 2 řady po 5 — bez osiřelých karet */
+.cats{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+@media (min-width:640px){ .cats{gap:18px;} }
+@media (min-width:1100px){ .cats{grid-template-columns:repeat(5,minmax(0,1fr));} }
+/* tablet: 2 sloupce, karta naležato (fotka vlevo), ať sekce není přes tři obrazovky */
+@media (min-width:640px) and (max-width:1099px){
+  .cats .cat-card{flex-direction:row;}
+  .cat-card .cat-card__img{flex:0 0 42%;aspect-ratio:auto;min-height:150px;border-bottom:0;border-right:1px solid var(--line);}
+}
 .cat-card{
-  display:flex;flex-direction:column;
+  position:relative;display:flex;flex-direction:column;
   background:#fff;border:1px solid var(--line);border-radius:var(--radius);
   overflow:hidden;transition:.28s var(--ease);
 }
-.cat-card:hover{border-color:var(--accent);box-shadow:var(--shadow);transform:translateY(-4px);}
+/* červená linka zespodu při najetí — stejný akcent jako hrana v hero */
+.cat-card::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--accent);
+  transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease);
+}
+.cat-card:hover{border-color:var(--line-strong);box-shadow:var(--shadow);transform:translateY(-4px);}
+.cat-card:hover::after{transform:scaleX(1);}
 /* obrázek pozicujeme napevno — procentní max-height se uvnitř aspect-ratio boxu
    nemá o co opřít a obrázek pak přetéká ve své nativní výšce */
 .cat-card__img{position:relative;aspect-ratio:4/3;background:#fff;overflow:hidden;border-bottom:1px solid var(--line);}
@@ -351,15 +382,30 @@ body.no-scroll{overflow:hidden;}
   object-fit:contain;transition:transform .35s var(--ease);
 }
 .cat-card:hover .cat-card__img img{transform:scale(1.05);}
-.cat-card__body{padding:20px 22px 24px;display:flex;flex-direction:column;flex:1;}
-.cat-card__body h3{margin-bottom:8px;}
-.cat-card__body p{font-size:.9rem;color:var(--muted);margin-bottom:16px;}
-.cat-card__count{display:inline-block;font-size:.78rem;font-weight:600;color:var(--muted);
-  background:var(--bg-soft);border:1px solid var(--line);border-radius:100px;padding:4px 11px;margin-bottom:14px;align-self:flex-start;}
-.cat-card__more{margin-top:auto;display:inline-flex;align-items:center;gap:8px;font-size:.88rem;font-weight:600;color:var(--accent-700);}
+.cat-card__body{padding:18px 18px 18px;display:flex;flex-direction:column;flex:1;}
+.cat-card__body h3{font-size:1.28rem;line-height:1.12;margin-bottom:6px;}
+.cat-card__body p{font-size:.86rem;line-height:1.5;color:var(--muted);margin-bottom:14px;}
+/* počet a šipka vždy na spodní hraně karty, ať jsou v řadě zarovnané */
+.cat-card__foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding-top:12px;border-top:1px solid var(--line);}
+.cat-card__count{font-size:.8rem;font-weight:600;color:var(--muted);white-space:nowrap;}
+.cat-card__more{
+  width:32px;height:32px;flex:none;border-radius:50%;display:grid;place-items:center;
+  background:var(--bg-soft);color:var(--ink);transition:background .25s var(--ease),color .25s var(--ease);
+}
 .cat-card__more svg{width:15px;height:15px;transition:transform .25s var(--ease);}
-.cat-card:hover .cat-card__more svg{transform:translateX(4px);}
-.cat-card--soon .cat-card__count{background:var(--accent-50);border-color:var(--accent-100);color:var(--accent-700);}
+.cat-card:hover .cat-card__more{background:var(--accent);color:#fff;}
+.cat-card:hover .cat-card__more svg{transform:translateX(2px);}
+.cat-card--soon .cat-card__count{color:var(--accent-700);}
+@media (max-width:639px){
+  .cat-card__img img{top:6px;left:6px;width:calc(100% - 12px);height:calc(100% - 12px);}
+  .cat-card__body{padding:12px 12px 12px;}
+  .cat-card__body h3{font-size:1.08rem;margin-bottom:0;}
+  .cat-card__body p{display:none;}
+  .cat-card__foot{margin-top:auto;padding-top:10px;border-top:0;}
+  .cat-card__count{font-size:.74rem;}
+  .cat-card__more{width:28px;height:28px;}
+}
 
 /* ---------- 9. Produktové karty ---------- */
 .products{grid-template-columns:repeat(auto-fill,minmax(258px,1fr));}
@@ -376,21 +422,61 @@ body.no-scroll{overflow:hidden;}
   object-fit:contain;transition:transform .35s var(--ease);
 }
 .product:hover .product__media img{transform:scale(1.05);}
-.product__flags{position:absolute;top:12px;left:12px;z-index:2;display:flex;flex-direction:column;gap:6px;align-items:flex-start;}
-.product__body{padding:18px 20px 20px;display:flex;flex-direction:column;flex:1;}
-.product__cat{font-size:.72rem;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:7px;}
-.product__name{font-family:var(--font-head);font-size:1.32rem;font-weight:700;color:var(--ink);line-height:1.15;margin:0 0 6px;}
+.product__flags{position:absolute;top:10px;left:10px;z-index:2;display:flex;flex-direction:column;gap:5px;align-items:flex-start;pointer-events:none;}
+.product__flags .chip{padding:4px 10px;font-size:.7rem;box-shadow:0 1px 3px rgba(18,18,22,.08);}
+.product__body{padding:16px 18px 18px;display:flex;flex-direction:column;flex:1;min-width:0;}
+.product__cat{font-size:.7rem;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0 0 6px;}
+/* název má místo na dva řádky (karty v řadě pak mají uchycení i parametry ve stejné výšce),
+   delší se zalomí nejvýš do tří */
+.product__name{
+  font-family:var(--font-head);font-size:1.3rem;font-weight:700;color:var(--ink);line-height:1.15;margin:0 0 8px;
+  min-height:2.3em;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;line-clamp:3;overflow:hidden;
+  overflow-wrap:anywhere;text-wrap:pretty;
+}
 .product__code{font-size:.78rem;color:var(--muted);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;margin-bottom:12px;}
 .product__specs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
-.product__specs span{font-size:.75rem;padding:4px 9px;background:var(--bg-soft);border-radius:6px;color:var(--muted);border:1px solid var(--line);}
+.product__specs span{font-size:.74rem;line-height:1.35;padding:3px 8px;background:var(--bg-soft);border-radius:6px;color:var(--ink-soft);border:1px solid var(--line);}
 .product__specs span.is-strong{background:var(--accent-50);border-color:var(--accent-100);color:var(--accent-700);font-weight:600;}
-.product__foot{margin-top:auto;display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding-top:14px;border-top:1px solid var(--line);}
-.product__price b{display:block;font-family:var(--font-head);font-size:1.5rem;color:var(--ink);line-height:1;}
-.product__price small{font-size:.72rem;color:var(--muted);}
+.product__foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;border-top:1px solid var(--line);}
+.product__price{min-width:0;}
+.product__price b{display:block;font-family:var(--font-head);font-size:1.5rem;color:var(--ink);line-height:1;white-space:nowrap;}
+.product__price small{display:block;margin-top:3px;font-size:.72rem;line-height:1.3;color:var(--muted);}
+.product__price--ask b{font-size:1.22rem;color:var(--ink-soft);}
 .product__link{position:absolute;inset:0;z-index:1;}
 /* tlačítko leží nad překryvným odkazem, proto musí být samo odkazem */
 .product__btn{position:relative;z-index:2;}
 .product:hover .product__btn{background:var(--accent-50);color:var(--accent-700);border-color:var(--accent);}
+/* tablety a větší telefony: dvě až tři karty vedle sebe */
+@media (max-width:720px){
+  .products{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
+  .product__body{padding:14px 15px 16px;}
+  .product__name{font-size:1.14rem;}
+  .product__price b{font-size:1.25rem;}
+  .product__price--ask b{font-size:1.1rem;}
+  .product__foot{flex-direction:column;align-items:stretch;gap:10px;}
+  .product__foot .btn{width:100%;}
+}
+/* telefon: karta jako řádek seznamu — fotka vlevo, text vpravo; celá karta je odkaz */
+@media (max-width:560px){
+  .products{grid-template-columns:minmax(0,1fr);gap:12px;}
+  .product{display:grid;grid-template-columns:124px minmax(0,1fr);}
+  .product:hover{transform:none;}
+  .product__media{aspect-ratio:auto;min-height:124px;border-bottom:0;border-right:1px solid var(--line);}
+  .product__media img{top:6px;left:6px;width:calc(100% - 12px);height:calc(100% - 12px);}
+  .product:hover .product__media img{transform:none;}
+  .product__flags{top:6px;left:6px;gap:4px;}
+  .product__flags .chip{padding:2px 7px;font-size:.62rem;letter-spacing:0;}
+  .product__body{padding:11px 13px 12px;}
+  .product__cat{font-size:.62rem;margin-bottom:3px;}
+  .product__name{font-size:1.1rem;min-height:0;margin-bottom:5px;}
+  .product__mount{font-size:.75rem;margin-bottom:7px;}
+  .product__specs{gap:4px;margin-bottom:10px;}
+  .product__specs span{font-size:.68rem;padding:2px 6px;}
+  .product__foot{padding-top:9px;flex-direction:row;align-items:center;}
+  .product__price b{font-size:1.2rem;}
+  .product__price small{font-size:.68rem;}
+  .product__btn{display:none;}
+}
 
 /* ---------- 10. Filtry katalogu ---------- */
 .catalog{display:grid;gap:30px;align-items:start;}
@@ -411,7 +497,12 @@ body.no-scroll{overflow:hidden;}
 .filters::-webkit-scrollbar-thumb:hover{background:var(--muted);}
 .filters__group + .filters__group{margin-top:22px;padding-top:22px;border-top:1px solid var(--line);}
 .filters__title{font-family:var(--font-body);font-size:.76rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);margin-bottom:12px;}
-.filters__reset{width:100%;margin-top:22px;}
+.filters__reset{width:100%;}
+.filters__foot{margin-top:22px;}
+.filters__head,.filters__apply{display:none;}
+.filters-backdrop{display:none;}
+.filters .check.is-empty{opacity:.45;}
+.filters .check__text{flex:1;min-width:0;}
 .check{display:flex;align-items:center;gap:10px;padding:6px 0;cursor:pointer;font-size:.9rem;color:var(--ink-soft);}
 .check input{
   appearance:none;width:20px;height:20px;flex:none;
@@ -444,66 +535,193 @@ body.no-scroll{overflow:hidden;}
 .search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--muted);pointer-events:none;}
 .search .input{padding-left:44px;}
 
+/* hlavička katalogu je nižší než na ostatních stránkách, ať jsou produkty dřív vidět */
+.page-head.catalog-head{padding-bottom:clamp(24px,3vw,36px);}
+.catalog-head__inner{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:18px 40px;}
+.catalog-head__inner .lead{margin:0;}
+.catalog-head__inner h1{margin-bottom:12px;}
+.catalog-head__pdf{flex:none;}
+.section--tight.catalog-section{padding-top:clamp(22px,3vw,34px);}
+.catalog__main{min-width:0;}
+
 .catalog__bar{
-  display:flex;flex-wrap:wrap;align-items:center;gap:14px;
-  margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--line);
+  display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px;
+  margin-bottom:22px;padding-bottom:16px;border-bottom:1px solid var(--line);
 }
-.catalog__count{font-size:.9rem;color:var(--muted);}
-.catalog__count b{color:var(--ink);}
+.catalog__count{margin:0;font-size:.92rem;color:var(--muted);}
+.catalog__count b{color:var(--ink);font-size:1rem;}
 .catalog__sort{margin-left:auto;display:flex;align-items:center;gap:10px;}
-.catalog__sort .select{width:auto;min-width:190px;padding-top:9px;padding-bottom:9px;}
+.catalog__sort-label{font-size:.86rem;font-weight:500;color:var(--muted);white-space:nowrap;}
+.catalog__sort .select{width:auto;min-width:200px;padding-top:9px;padding-bottom:9px;}
+.catalog__active{flex-basis:100%;display:flex;flex-wrap:wrap;align-items:center;gap:8px;}
+.catalog__active[hidden]{display:none;}
+.catalog__tag{
+  display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:5px 10px 5px 13px;cursor:pointer;
+  border:1px solid var(--accent-100);border-radius:100px;background:var(--accent-50);color:var(--accent-700);
+  font:600 .8rem/1.2 var(--font-body);transition:.18s var(--ease);
+}
+.catalog__tag svg{width:14px;height:14px;flex:none;}
+.catalog__tag:hover{background:var(--accent);border-color:var(--accent);color:#fff;}
+.catalog__clear{border:0;background:none;padding:6px 4px;cursor:pointer;font:500 .82rem var(--font-body);color:var(--muted);text-decoration:underline;text-underline-offset:3px;}
+.catalog__clear:hover{color:var(--accent-700);}
 .filters-toggle{display:none;}
-.empty{text-align:center;padding:70px 20px;border:1px dashed var(--line-strong);border-radius:var(--radius);background:var(--bg-soft);}
+.filters-toggle svg{width:18px;height:18px;}
+.filters-toggle__n{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--accent);color:#fff;font-size:.72rem;line-height:1;}
+.filters-toggle__n[hidden]{display:none;}
+/* nadpis kategorie uvnitř mřížky (výchozí řazení jde po kategoriích) */
+.catalog__group{
+  grid-column:1 / -1;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;
+  margin:22px 0 -4px;padding-left:12px;border-left:3px solid var(--accent);
+  font-size:1.55rem;line-height:1.1;text-transform:uppercase;color:var(--ink);
+}
+.catalog__group:first-child{margin-top:0;}
+/* pod nadpisem kategorie by se její název na každé kartě jen opakoval */
+.products.is-grouped .product__cat{display:none;}
+.catalog__group span{font:500 .82rem/1.2 var(--font-body);letter-spacing:0;text-transform:none;color:var(--muted);}
+.catalog__more{display:flex;flex-direction:column;align-items:center;gap:14px;margin:38px 0 0;text-align:center;}
+.catalog__more:empty{display:none;}
+.catalog__progress{display:grid;justify-items:center;gap:9px;margin:0;font-size:.86rem;color:var(--muted);}
+.catalog__progress b{color:var(--ink);}
+.catalog__progress .catalog__bar-fill{display:block;width:min(240px,70vw);height:4px;border-radius:4px;background:var(--line) linear-gradient(var(--accent),var(--accent)) no-repeat 0 0 / var(--p,0%) 100%;}
+.empty{text-align:center;padding:64px 22px;border:1px dashed var(--line-strong);border-radius:var(--radius);background:var(--bg-soft);}
 .empty svg{width:48px;height:48px;color:var(--line-strong);margin:0 auto 14px;}
+.empty h3{margin-bottom:8px;}
+.empty .lead{margin-inline:auto;font-size:1rem;}
+.empty__actions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:22px 0 0;}
+
+/* mobil a tablet: filtry jako vysouvací panel zleva */
+@media (max-width:999px){
+  .filters-toggle{display:inline-flex;}
+  .filters{
+    position:fixed;top:0;bottom:0;left:0;z-index:130;
+    width:min(380px,88vw);max-height:none;padding:0 20px;
+    border:0;border-radius:0 var(--radius) var(--radius) 0;box-shadow:var(--shadow-l);
+    overflow-y:auto;overscroll-behavior:contain;
+    transform:translateX(-104%);visibility:hidden;
+    transition:transform .3s var(--ease),visibility 0s linear .3s;
+  }
+  .filters.is-open{transform:none;visibility:visible;transition:transform .3s var(--ease);}
+  .filters__head{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    position:sticky;top:0;z-index:2;margin:0 -20px 20px;padding:12px 12px 12px 20px;
+    background:#fff;border-bottom:1px solid var(--line);
+  }
+  .filters__heading{margin:0;font-family:var(--font-head);font-size:1.5rem;font-weight:700;text-transform:uppercase;color:var(--ink);}
+  .filters__close{display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;border-radius:10px;background:var(--bg-soft);color:var(--ink);cursor:pointer;}
+  .filters__close svg{width:20px;height:20px;}
+  .filters__foot{
+    position:sticky;bottom:0;z-index:2;display:grid;grid-template-columns:auto 1fr;gap:10px;
+    margin:24px -20px 0;padding:14px 20px calc(14px + env(safe-area-inset-bottom,0px));
+    background:#fff;border-top:1px solid var(--line);
+  }
+  .filters__foot .filters__reset{width:auto;}
+  .filters__apply{display:inline-flex;white-space:nowrap;}
+  .filters-backdrop{display:block;position:fixed;inset:0;z-index:125;background:rgba(20,20,24,.5);opacity:0;transition:opacity .3s var(--ease);}
+  .filters-backdrop.is-open{opacity:1;}
+  .filters-backdrop[hidden]{display:none;}
+  .catalog__bar{gap:10px 12px;}
+  .catalog__sort{flex:1;min-width:0;}
+  .catalog__sort .select{flex:1;min-width:0;}
+  .catalog__count{order:3;flex-basis:100%;}
+  .catalog__active{order:4;}
+}
+@media (max-width:720px){
+  .catalog-head__pdf{width:100%;}
+  .catalog__group{font-size:1.3rem;margin-top:14px;}
+  .filters .check{padding:9px 0;}
+}
+@media (max-width:560px){
+  /* na telefonu se popisek nevejde vedle tlačítka Filtry — zůstane jen pro čtečky */
+  .catalog__sort-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+}
+.filters .search .input::-webkit-search-cancel-button{
+  -webkit-appearance:none;width:16px;height:16px;cursor:pointer;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B6E75' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6 6 18'/%3E%3C/svg%3E") center / 16px no-repeat;
+}
 
 /* ---------- 11. Detail produktu ---------- */
 .breadcrumb{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:.83rem;color:var(--muted);padding:18px 0;}
+.breadcrumb a{transition:color .2s var(--ease);}
 .breadcrumb a:hover{color:var(--accent-700);}
+.breadcrumb > span{color:var(--ink-soft);font-weight:500;}
 .breadcrumb svg{width:13px;height:13px;opacity:.5;}
 .detail{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(28px,4vw,50px);align-items:start;}
 /* široká tabulka variant se posouvá uvnitř, sloupec neroztáhne */
 .detail > *{min-width:0;}
 .detail__gallery{position:sticky;top:calc(var(--header-h) + 24px);}
+/* spodní část detailu: parametry a varianty vlevo, popis a uchycení vpravo */
+.detail__info{grid-column:1 / -1;display:grid;grid-template-columns:minmax(0,1fr);gap:0 clamp(28px,4vw,50px);align-items:start;padding-top:8px;border-top:1px solid var(--line);}
+.detail__col{min-width:0;}
 .detail__stage{
   background:#fff;border:1px solid var(--line);border-radius:var(--radius-l);
-  position:relative;aspect-ratio:4/3;overflow:hidden;
+  position:relative;aspect-ratio:4/3;overflow:hidden;cursor:zoom-in;
 }
+.detail__stage--empty{cursor:default;}
+.detail .detail__stage--empty img{top:0;left:0;width:100%;height:100%;}
 .detail__stage img{
-  position:absolute;top:22px;left:22px;
-  width:calc(100% - 44px);height:calc(100% - 44px);
-  object-fit:contain;
+  position:absolute;top:14px;left:14px;
+  width:calc(100% - 28px);height:calc(100% - 28px);
+  object-fit:contain;transition:opacity .2s var(--ease);
 }
-.detail h1{font-size:clamp(1.9rem,3.6vw,2.9rem);margin-bottom:10px;}
-.detail__code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86rem;color:var(--muted);margin-bottom:18px;}
-.detail__flags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;}
+.detail__stage img.is-swap{opacity:.25;}
+.detail__nav,.detail__zoom{
+  position:absolute;z-index:2;display:grid;place-items:center;width:44px;height:44px;padding:0;
+  border:1px solid var(--line);border-radius:50%;background:rgba(255,255,255,.92);color:var(--ink);
+  box-shadow:var(--shadow-s);cursor:pointer;transition:background .15s var(--ease),color .15s var(--ease),border-color .15s var(--ease);
+}
+.detail__nav svg,.detail__zoom svg{width:20px;height:20px;}
+.detail__nav{top:50%;margin-top:-22px;}
+.detail__nav--prev{left:12px;}
+.detail__nav--next{right:12px;}
+.detail__zoom{top:12px;right:12px;width:40px;height:40px;}
+.detail__nav:hover,.detail__zoom:hover{background:var(--bg-dark);color:#fff;border-color:var(--bg-dark);}
+.detail__count{position:absolute;left:12px;bottom:12px;z-index:2;padding:4px 10px;border-radius:100px;background:rgba(31,32,35,.78);color:#fff;font-size:.76rem;font-variant-numeric:tabular-nums;}
+.detail__count b{font-weight:700;}
+@media (hover:hover) and (min-width:721px){
+  .detail__nav{opacity:0;}
+  .detail__stage:hover .detail__nav,.detail__nav:focus-visible{opacity:1;}
+}
+.detail h1{font-size:clamp(1.9rem,3.6vw,2.9rem);margin-bottom:12px;}
+.detail__meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin-bottom:18px;}
+.detail__code{margin:0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.84rem;color:var(--muted);}
+.detail__code span{color:var(--ink);font-weight:600;}
+.detail__flags{display:flex;flex-wrap:wrap;gap:8px;}
+.detail__perex{font-size:1.02rem;line-height:1.6;}
 .detail__price{
   display:flex;flex-wrap:wrap;align-items:baseline;gap:12px;
   padding:20px 22px;background:var(--accent-50);border:1px solid var(--accent-100);
   border-radius:var(--radius);margin:22px 0;
 }
-.detail__price b{font-family:var(--font-head);font-size:2.3rem;color:var(--accent-700);line-height:1;}
+.detail__price b{font-family:var(--font-head);font-size:2.3rem;color:var(--accent-700);line-height:1;font-variant-numeric:tabular-nums;}
 .detail__price span{font-size:.86rem;color:var(--muted);}
 .detail__actions{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:26px;}
 .spec-table{width:100%;border-collapse:collapse;font-size:.93rem;}
 .spec-table th,.spec-table td{padding:12px 2px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;}
 .spec-table th{font-weight:500;color:var(--muted);width:46%;}
 .spec-table td{color:var(--ink);font-weight:500;}
-.detail__thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px;}
+.detail .spec-table th{font-weight:500;}
+.detail .spec-table tr:last-child th,.detail .spec-table tr:last-child td{border-bottom:0;}
+.detail .spec-table__empty{color:var(--muted);}
+.detail__thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px;margin-top:12px;}
 .detail__thumb{
-  aspect-ratio:1;padding:6px;cursor:pointer;overflow:hidden;
+  aspect-ratio:4/3;padding:4px;cursor:pointer;overflow:hidden;
   background:#fff;border:1.5px solid var(--line);border-radius:10px;
   transition:border-color .2s var(--ease),transform .2s var(--ease);
 }
 .detail__thumb img{width:100%;height:100%;object-fit:contain;}
 .detail__thumb:hover{border-color:var(--line-strong);transform:translateY(-2px);}
-.detail__thumb.is-active{border-color:var(--accent);}
+.detail__thumb.is-active{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);}
 
 .desc-list{display:grid;gap:7px;}
 .desc-list li{
   position:relative;padding-left:16px;font-size:.94rem;color:var(--ink-soft);
   font-variant-numeric:tabular-nums;overflow-wrap:anywhere;
 }
-.desc-list li::before{content:"";position:absolute;left:0;top:.62em;width:6px;height:6px;border-radius:50%;background:var(--accent-100);}
+.desc-list li::before{content:"";position:absolute;left:0;top:.62em;width:6px;height:6px;border-radius:50%;background:var(--accent);}
+/* dlouhé odstavce (texty od výrobce) jako souvislý text, ne odrážky */
+.desc-list--prose{gap:12px;}
+.desc-list--prose li{padding-left:0;line-height:1.65;max-width:68ch;}
+.desc-list--prose li::before{content:none;}
 
 .tag-row{display:flex;flex-wrap:wrap;gap:8px;}
 a.chip{transition:.2s var(--ease);}
@@ -513,7 +731,8 @@ a.chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
 .feature-list li{display:flex;gap:11px;font-size:.94rem;}
 .feature-list svg{width:19px;height:19px;color:var(--accent);flex:none;margin-top:2px;}
 .detail__block{margin-top:32px;}
-.detail__block h3{margin-bottom:14px;}
+.detail__block h3,.detail__block > h2{margin-bottom:14px;}
+.detail__block > h2{font-size:clamp(1.25rem,2.2vw,1.55rem);text-transform:none;}
 
 /* konfigurátor: šířka, uchycení, výbava, počet kusů */
 .config{
@@ -522,10 +741,14 @@ a.chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
 }
 .config__group + .config__group{margin-top:20px;}
 .config__label{display:block;font-size:.76rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);margin-bottom:10px;}
-.config__opts{display:flex;flex-wrap:wrap;gap:8px;}
+.config{container-type:inline-size;}
+.config__hint{margin-left:6px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--muted);font-size:.78rem;}
+/* počet sloupců nastaví JS podle počtu variant — řady vyjdou pravidelně */
+.config__opts{display:grid;grid-template-columns:repeat(var(--cols,4),minmax(0,1fr));gap:8px;}
+@container (max-width:470px){ .config__opts{grid-template-columns:repeat(var(--cols-m,3),minmax(0,1fr));} }
 .opt{
-  display:flex;flex-direction:column;align-items:center;gap:3px;min-width:86px;
-  padding:10px 14px;border:1.5px solid var(--line-strong);border-radius:10px;background:#fff;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:0;
+  padding:10px 6px;border:1.5px solid var(--line-strong);border-radius:10px;background:#fff;text-align:center;
   cursor:pointer;transition:border-color .15s var(--ease),background .15s var(--ease),transform .15s var(--ease);
 }
 .opt b{font-family:var(--font-head);font-size:1.15rem;font-weight:700;color:var(--ink);line-height:1.1;}
@@ -533,19 +756,27 @@ a.chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
 .opt:hover{border-color:var(--accent);transform:translateY(-1px);}
 .opt[aria-checked="true"]{border-color:var(--accent);background:var(--accent-50);box-shadow:inset 0 0 0 1px var(--accent);}
 .opt[aria-checked="true"] b{color:var(--accent-700);}
+.opt:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+.opt--long b{font-size:1.05rem;}
+.opt .opt__code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.68rem;color:var(--ink-soft);}
+.config__extras{display:grid;gap:2px;}
 .config__extra{align-items:flex-start;}
 .config__extra input{margin-top:2px;}
 .config__extra small{display:block;font-size:.78rem;color:var(--muted);line-height:1.4;}
 .config__extra .count{white-space:nowrap;font-weight:600;color:var(--ink-soft);}
 .config__sum{margin-top:22px;padding-top:20px;border-top:1px solid var(--line);}
 .config__sum .detail__price{margin:0 0 14px;}
-.config__fixed{margin:0;padding:11px 14px;border:1px solid var(--line);border-radius:var(--radius-s);background:var(--bg-soft);font-size:.95rem;color:var(--ink-soft);}
+.config__fixed{margin:0;padding:11px 14px;border:1px solid var(--line);border-radius:var(--radius-s);background:var(--bg-soft);font-size:.95rem;color:var(--ink-soft);display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px;}
 .config__fixed b{color:var(--ink);}
-.product__mount{margin:-2px 0 8px;font-size:.8rem;color:var(--muted);}
+.config__fixed-more{font-size:.8rem;color:var(--muted);text-decoration:underline;text-underline-offset:3px;}
+.config__fixed-more:hover{color:var(--accent-700);}
+.product__mount{margin:0 0 10px;font-size:.8rem;line-height:1.4;color:var(--muted);}
 .product__mount b{color:var(--ink-soft);font-weight:600;}
 .config__buy{display:flex;flex-wrap:wrap;gap:12px;align-items:center;}
 .config__buy .btn{flex:1 1 220px;}
-.config__tel{display:inline-block;margin-top:8px;padding:6px 0;font-size:.88rem;color:var(--muted);}
+.config__buy .btn.is-added{background:#1E7A2A;border-color:#1E7A2A;}
+.config__note{margin:12px 0 0;font-size:.84rem;line-height:1.5;color:var(--muted);}
+.config__tel{display:inline-block;padding:4px 0;font-size:inherit;color:var(--ink-soft);font-weight:600;text-decoration:underline;text-underline-offset:3px;}
 .config__tel:hover{color:var(--accent-700);}
 .qty{display:inline-flex;align-items:center;height:48px;border:1.5px solid var(--line-strong);border-radius:100px;background:#fff;overflow:hidden;flex:none;}
 .qty button{width:42px;height:100%;border:0;background:none;cursor:pointer;display:grid;place-items:center;color:var(--ink);}
@@ -566,6 +797,33 @@ a.chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
 .var-table td b{color:var(--ink);}
 .var-table tr.is-active td{background:var(--accent-50);}
 .var-table tr.is-active td:first-child{box-shadow:inset 3px 0 0 var(--accent);}
+.var-table tbody tr[data-row]{cursor:pointer;}
+.var-table tbody tr[data-row]:hover td{background:var(--bg-soft);}
+.var-table tbody tr.is-active:hover td{background:var(--accent-50);}
+.var-table th.var-table__price,.var-table td.var-table__price{text-align:right;}
+.var-table tr.is-active .var-table__price b{color:var(--accent-700);}
+.var-table tr.is-picked td{animation:var-pick .9s var(--ease);}
+@keyframes var-pick{0%{background:var(--accent-100);}100%{background:var(--accent-50);}}
+.var-table__note{margin:8px 0 0;font-size:.78rem;color:var(--muted);}
+/* mobil: místo tabulky, která by se posouvala do strany, karta pro každou variantu */
+@media (max-width:560px){
+  .var-table__wrap{overflow:visible;border:0;border-radius:0;}
+  .var-table,.var-table tbody{display:block;white-space:normal;}
+  .var-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
+  .var-table tbody tr{
+    display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;margin-bottom:8px;padding:11px 14px;
+    border:1.5px solid var(--line);border-radius:10px;background:#fff;
+  }
+  .var-table tbody tr::after{content:"";order:-1;flex-basis:100%;height:0;}
+  .var-table td{padding:0;border:0;font-size:.82rem;color:var(--ink-soft);}
+  .var-table tbody tr td,.var-table tbody tr.is-active td,.var-table tbody tr.is-active td:first-child,.var-table tbody tr[data-row]:hover td{background:none;box-shadow:none;animation:none;}
+  .var-table td::before{content:attr(data-label) " ";color:var(--muted);font-size:.74rem;}
+  .var-table td.var-table__key{order:-2;flex:1 1 auto;font-family:var(--font-head);font-size:1.25rem;font-weight:700;color:var(--ink);line-height:1.1;}
+  .var-table td.var-table__price{order:-1;font-size:.95rem;}
+  .var-table td.var-table__key::before,.var-table td.var-table__price::before{content:none;}
+  .var-table tbody tr.is-active{border-color:var(--accent);background:var(--accent-50);box-shadow:inset 0 0 0 1px var(--accent);}
+  .var-table tbody tr.is-active td.var-table__key{color:var(--accent-700);}
+}
 
 /* uchycení dole u každého produktu */
 .mount-box{padding:22px;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg-soft);scroll-margin-top:calc(var(--header-h) + 16px);}
@@ -575,15 +833,48 @@ a.chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
 .mount-box p{font-size:.93rem;color:var(--ink-soft);margin:0;}
 .mount-box p b{color:var(--ink);}
 .mount-box .mount-box__help{margin-top:12px;font-size:.84rem;color:var(--muted);}
+.mount-box .mount-box__lead{font-size:1rem;}
+.mount-box__img img{width:100%;height:auto;}
+.mount-box .mount-box__links{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:12px;font-size:.88rem;}
+.mount-box__links a{display:inline-block;padding:4px 0;font-weight:600;color:var(--ink);text-decoration:underline;text-decoration-color:var(--accent-100);text-underline-offset:4px;}
+.mount-box__links a:hover{color:var(--accent-700);text-decoration-color:currentColor;}
 @media (min-width:560px){ .mount-box__inner:has(.mount-box__img){grid-template-columns:200px 1fr;} }
 
-.drawings{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;}
-.drawing{display:block;border:1px solid var(--line);border-radius:10px;background:#fff;padding:8px;transition:border-color .2s var(--ease);}
+.drawings{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;}
+.drawings--one{grid-template-columns:minmax(0,1fr);}
+.drawing{position:relative;display:block;border:1px solid var(--line);border-radius:10px;background:#fff;padding:10px;cursor:zoom-in;transition:border-color .2s var(--ease);}
+.drawing img{width:100%;height:auto;max-height:460px;object-fit:contain;margin:0 auto;}
 .drawing:hover{border-color:var(--accent);}
+.drawing__zoom{position:absolute;right:8px;bottom:8px;display:inline-flex;align-items:center;gap:5px;padding:4px 10px 4px 8px;border-radius:100px;background:rgba(31,32,35,.78);color:#fff;font-size:.74rem;font-weight:600;}
+.drawing__zoom svg{width:14px;height:14px;}
+
+/* zvětšená fotka / nákres */
+.detail__lightbox{
+  width:100vw;height:100vh;max-width:none;max-height:none;margin:0;padding:clamp(56px,6vw,72px) clamp(12px,6vw,84px);
+  border:0;background:rgba(18,18,22,.94);color:#fff;
+}
+.detail__lightbox::backdrop{background:rgba(18,18,22,.6);}
+.detail__lightbox[open]{display:grid;place-items:center;}
+html.detail-lb-open{overflow:hidden;}
+.detail__lb-fig{margin:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;}
+.detail__lb-fig img{max-width:100%;max-height:calc(100% - 36px);object-fit:contain;background:#fff;border-radius:10px;}
+.detail__lb-fig figcaption{font-size:.86rem;color:rgba(255,255,255,.75);text-align:center;}
+.detail__lb-btn{position:fixed;display:grid;place-items:center;width:46px;height:46px;padding:0;border:1px solid rgba(255,255,255,.25);border-radius:50%;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;}
+.detail__lb-btn:hover{background:#fff;color:var(--ink);}
+.detail__lb-btn svg{width:22px;height:22px;}
+.detail__lb-close{top:12px;right:12px;}
+.detail__lb-prev{left:12px;top:50%;margin-top:-23px;}
+.detail__lb-next{right:12px;top:50%;margin-top:-23px;}
+.detail__lb-btn[hidden]{display:none;}
+@media (max-width:720px){
+  .detail__lb-prev,.detail__lb-next{top:auto;bottom:14px;margin-top:0;}
+  .detail__lb-prev{left:calc(50% - 56px);}
+  .detail__lb-next{right:calc(50% - 56px);}
+}
 
 /* ---------- 11b. Poptávkový košík ---------- */
 .toast{
-  position:fixed;left:50%;bottom:20px;z-index:120;
+  position:fixed;left:50%;bottom:max(20px,env(safe-area-inset-bottom));z-index:120;
   width:min(580px,calc(100% - 24px));
   display:flex;align-items:center;gap:14px;padding:12px 10px 12px 14px;
   background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-l);
@@ -625,8 +916,24 @@ a.chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
 .cart-sum .btn--ghost{--btn-fg:#fff;--btn-bd:rgba(255,255,255,.3);justify-self:start;}
 .cart-sum .btn--ghost:hover{--btn-bg:rgba(255,255,255,.1);--btn-fg:#fff;--btn-bd:#fff;}
 .cart-hint{padding:12px 14px;border-radius:10px;background:var(--accent-50);border:1px solid var(--accent-100);font-size:.9rem;margin:0 0 22px;color:var(--ink-soft);}
-.cart-hint a{font-weight:600;color:var(--accent-700);display:inline-flex;gap:6px;align-items:center;}
-.cart-hint svg{width:15px;height:15px;}
+.cart-hint a{font-weight:600;color:var(--accent-700);text-decoration:underline;text-underline-offset:2px;}
+.cart-hint svg{display:inline-block;width:15px;height:15px;margin-left:4px;vertical-align:-2px;}
+/* poptávka: nadpis seznamu, prázdný stav, akce v souhrnu */
+.cart-layout.is-empty{grid-template-columns:minmax(0,1fr);}
+.cart-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 12px;font-size:clamp(1.5rem,2.6vw,2rem);margin-bottom:16px;}
+.cart-head span{font-family:var(--font-body);font-size:.88rem;font-weight:500;letter-spacing:0;text-transform:none;color:var(--muted);}
+.cart-empty{padding:clamp(40px,6vw,72px) 20px;}
+.cart-empty__title{font-size:clamp(1.5rem,2.6vw,2rem);margin-bottom:10px;}
+.cart-empty__title:focus{outline:none;}
+.cart-empty__text{max-width:58ch;margin:0 auto;color:var(--muted);}
+.cart-empty__actions{margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.cart-empty__tel{margin-top:18px;font-size:.9rem;color:var(--muted);}
+.cart-empty__tel a{color:var(--accent-700);font-weight:600;white-space:nowrap;}
+.cart-item .qty button:disabled{opacity:.3;cursor:not-allowed;background:none;}
+.cart-item .qty:focus-within{border-color:var(--accent);}
+.cart-item__name{overflow-wrap:anywhere;}
+.cart-sum__actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px;}
+.cart-sum .cart-sum__ask{display:block;margin-top:4px;color:rgba(255,255,255,.88);}
 
 /* katalog ke stažení */
 .catalog-dl{display:grid;gap:clamp(24px,4vw,56px);align-items:center;}
@@ -634,6 +941,16 @@ a.chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
 .catalog-dl__cover img{position:relative;border-radius:6px;box-shadow:var(--shadow-l);transform:rotate(-3deg);}
 .catalog-dl__cover::before{content:"";position:absolute;inset:4% -4% -4% 4%;border-radius:6px;background:var(--accent);transform:rotate(4deg);}
 .catalog-dl__actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px;}
+.catalog-dl__facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;}
+.catalog-dl__facts li{
+  display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:100px;
+  background:#fff;border:1px solid var(--line);font-size:.84rem;color:var(--muted);
+}
+.catalog-dl__facts b{font-family:var(--font-head);font-size:1.12rem;color:var(--ink);line-height:1;}
+@media (max-width:720px){
+  .catalog-dl__cover{width:min(250px,70%);margin-bottom:8px;}
+  .catalog-dl__actions .btn{flex:1 1 auto;}
+}
 
 /* ---------- 12. Výhody / postup / čísla ---------- */
 .features{grid-template-columns:repeat(auto-fit,minmax(238px,1fr));}
@@ -668,6 +985,74 @@ a.chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
 .stat b{display:block;font-family:var(--font-head);font-size:clamp(2.2rem,4vw,3rem);color:var(--accent);line-height:1;margin-bottom:8px;}
 .stat span{font-size:.86rem;color:var(--muted);}
 
+/* ---------- 12b. Úvodní stránka — sekce pod hero ---------- */
+/* hlavička sekce: nadpis vlevo, perex vpravo (na desktopu), vše zarovnané vlevo jako hero */
+@media (min-width:900px){
+  .home-head{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:24px 56px;align-items:end;}
+  .home-head h2{margin-bottom:0;}
+  .home-head .lead{margin:0 0 4px;justify-self:end;}
+}
+.home-head .eyebrow{margin-bottom:12px;}
+/* tlačítka pod výběrem produktů */
+.home-more{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:clamp(28px,3.5vw,40px);}
+.home-more .btn > span{display:inline;}
+/* na mobilu stačí 4 karty, zbytek je o tlačítko níž v katalogu */
+@media (max-width:720px){
+  .products--home > :nth-child(n+5){display:none;}
+  .home-more .btn{flex:1 1 100%;}
+}
+
+/* výhody: na mobilu kompaktně — ikona vedle nadpisu */
+.features--home .feature{position:relative;overflow:hidden;}
+.features--home .feature::before{
+  content:"";position:absolute;left:0;top:0;width:100%;height:3px;background:var(--accent);
+  transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease);
+}
+.features--home .feature:hover::before{transform:scaleX(1);}
+@media (max-width:720px){
+  .features--home{gap:12px;}
+  .features--home .feature{display:grid;grid-template-columns:44px minmax(0,1fr);gap:4px 16px;padding:20px 18px;}
+  .features--home .feature__icon{grid-row:span 2;width:44px;height:44px;border-radius:12px;margin:0;}
+  .features--home .feature h3{margin:0;align-self:center;}
+}
+
+/* čísla: tmavý pás s červenou šikmou hranou — stejný motiv jako hero */
+.home-stats{position:relative;overflow:hidden;background:var(--bg-dark);color:#fff;}
+/* šikmá hrana leží až za pravým okrajem obsahu, aby nepřeškrtla čísla */
+.home-stats::before{
+  content:"";position:absolute;top:0;bottom:0;right:-80px;
+  left:calc(50% + var(--wrap) / 2 + 18px);
+  background:linear-gradient(180deg,#2C2D31,#242528);
+  transform:skewX(-12deg);transform-origin:bottom left;
+  box-shadow:-10px 0 0 0 var(--accent);pointer-events:none;
+}
+@media (max-width:1299px){ .home-stats::before{content:none;} }
+/* úzký červený pruh nahoře — návaznost na hranu v hero i bez šikmého pole */
+.home-stats{border-top:4px solid var(--accent);}
+.home-stats .wrap{position:relative;z-index:1;}
+.home-stats .stats{grid-template-columns:repeat(4,minmax(0,1fr));gap:0;background:none;border:0;border-radius:0;overflow:visible;}
+.home-stats .stat{background:none;padding:6px clamp(14px,2.4vw,32px);text-align:left;border-left:1px solid rgba(255,255,255,.14);}
+.home-stats .stat b{font-size:clamp(2.4rem,4.6vw,3.6rem);color:#fff;margin-bottom:6px;}
+.home-stats .stat:first-child b{color:var(--accent-light);}
+.home-stats .stat span{font-size:.74rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.62);}
+@media (max-width:720px){
+  .home-stats .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 0;}
+  .home-stats .stat:nth-child(odd){border-left:0;padding-left:0;}
+}
+
+/* postup: čísla kroků na lince, aktivní červený úsek */
+.steps--home{gap:28px;}
+.steps--home .step{padding-top:22px;border-top:2px solid var(--line);}
+.steps--home .step::after{content:"";position:absolute;left:0;top:-2px;width:48px;height:2px;background:var(--accent);}
+.steps--home .step::before{font-size:2.6rem;color:var(--accent);margin-bottom:14px;}
+.steps--home .step h3{font-size:1.24rem;}
+@media (max-width:720px){
+  .steps--home{gap:22px;}
+  .steps--home .step{display:grid;grid-template-columns:56px minmax(0,1fr);gap:2px 8px;padding-top:18px;}
+  .steps--home .step::before{grid-row:span 2;font-size:2.2rem;margin:0;}
+  .steps--home .step h3{margin:0 0 2px;}
+}
+
 /* ---------- 13. CTA pás ---------- */
 .cta-band{
   position:relative;overflow:hidden;
@@ -700,8 +1085,25 @@ a.chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
   display:none;margin-top:16px;padding:14px 16px;border-radius:10px;
   font-size:.9rem;font-weight:500;
 }
-.form-status.is-ok{display:block;background:var(--accent-50);color:var(--accent-700);border:1px solid var(--accent-100);}
+.form-status.is-ok{display:block;background:#EEF7F0;color:#1E5631;border:1px solid #CFE6D6;}
 .form-status.is-err{display:block;background:#FDECEC;color:#9B2226;border:1px solid #F6D2D2;}
+.form-status b{display:block;margin-bottom:2px;}
+.form-status__more{display:block;margin-top:8px;font-weight:400;color:var(--ink-soft);}
+.form-status__more a{color:var(--accent-700);font-weight:600;text-decoration:underline;white-space:nowrap;}
+.form-status__actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;}
+.form-card__title{font-size:clamp(1.5rem,2.6vw,2rem);margin-bottom:6px;}
+.form-card__lead{color:var(--muted);font-size:.94rem;margin-bottom:24px;}
+/* povinné / nepovinné, nápověda a chyba u pole */
+.field__req{color:var(--accent);font-weight:700;}
+.field__hint{display:block;margin-top:6px;font-size:.78rem;line-height:1.45;color:var(--muted);}
+.field__error{display:flex;align-items:flex-start;gap:7px;margin-top:7px;font-size:.8rem;font-weight:600;line-height:1.4;color:#B3261E;}
+.field__error::before{content:"!";flex:none;display:grid;place-items:center;width:16px;height:16px;margin-top:1px;border-radius:50%;background:#B3261E;color:#fff;font-size:.68rem;font-weight:700;line-height:1;}
+.field--error .input,.field--error .select,.field--error .textarea{border-color:#B3261E;background-color:#FFF9F9;}
+.field--error .input:focus,.field--error .select:focus,.field--error .textarea:focus{border-color:#B3261E;box-shadow:0 0 0 4px rgba(179,38,30,.15);}
+.check--gdpr{display:grid;grid-template-columns:20px minmax(0,1fr);column-gap:10px;}
+.check--gdpr .field__error{grid-column:2;margin:6px 0 0;}
+.check--error input{border-color:#B3261E;box-shadow:0 0 0 3px rgba(179,38,30,.15);}
+.check--gdpr input:focus-visible{outline:3px solid var(--accent);outline-offset:2px;}
 
 .contact-list{display:grid;gap:4px;}
 .contact-item{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--line);}
@@ -711,11 +1113,16 @@ a.chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
   background:var(--accent-50);color:var(--accent);
 }
 .contact-item__icon svg{width:20px;height:20px;}
-.contact-item h4{margin:0 0 3px;font-family:var(--font-body);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;}
+.contact-item h3,.contact-item h4{margin:0 0 3px;font-family:var(--font-body);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;}
 .contact-item p{margin:0;font-size:1.02rem;font-weight:600;color:var(--ink);}
 .contact-item p small{display:block;font-size:.84rem;font-weight:400;color:var(--muted);margin-top:3px;}
 .map{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);aspect-ratio:16/10;background:var(--bg-soft);}
 .map iframe{width:100%;height:100%;border:0;display:block;}
+.contact-title{font-size:clamp(1.5rem,2.6vw,2rem);margin-bottom:6px;}
+.contact-item p a:hover{color:var(--accent-700);}
+.contact-map{margin-top:26px;}
+.contact-map-note{margin-top:10px;font-size:.82rem;color:var(--muted);}
+.contact-map-note a{color:var(--accent-700);text-decoration:underline;}
 
 /* ---------- 15. O nás ---------- */
 .page-head{
@@ -739,6 +1146,89 @@ a.chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
 .timeline h4{margin:0 0 5px;}
 .timeline p{font-size:.92rem;color:var(--muted);margin:0;}
 
+/* úvodní pás O nás / Na míru: produkt na světlém studiovém poli s červenou
+   šikmou hranou — stejný motiv jako hero úvodu, jen nižší a na světlém podkladu.
+   Fotky mají bílé pozadí; multiply je do pole „zapustí" bez bílého obdélníku. */
+.page-head--visual{position:relative;overflow:hidden;padding-bottom:0;}
+/* bez z-indexu: vlastní stacking context by multiply izoloval od pole v ::before */
+.page-head__grid{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;align-items:center;position:relative;}
+.page-head__grid > *{min-width:0;}
+.page-head__text{padding-bottom:clamp(8px,2vw,20px);}
+.page-head__text .lead{margin-bottom:0;}
+.page-head__actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px;}
+@media (max-width:720px){ .page-head__actions .btn,.split__actions .btn{flex:1 1 auto;} }
+.page-head__visual{position:relative;display:grid;place-items:center;padding:40px 0 22px;}
+.page-head__visual::before{
+  content:"";position:absolute;inset:14% -60px -200px;
+  transform:skewY(-6deg);
+  background:radial-gradient(ellipse 60% 34% at 50% 26%,#FFFFFF 0%,#EEEFF1 45%,#C9CCD1 100%);
+  box-shadow:0 -10px 0 0 var(--accent);
+  pointer-events:none;
+}
+.page-head__visual::after{
+  content:"";position:absolute;left:14%;right:14%;bottom:10%;height:10%;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(20,20,24,.26),rgba(20,20,24,0));
+  pointer-events:none;
+}
+.page-head__visual img{position:relative;z-index:1;width:min(100%,520px);max-height:300px;object-fit:contain;mix-blend-mode:multiply;}
+@media (min-width:900px){
+  .page-head--visual .page-head__grid{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(32px,4vw,56px);}
+  .page-head__text{padding-bottom:clamp(40px,5vw,64px);}
+  .page-head__visual{padding:0 0 24px;align-self:stretch;}
+  .page-head__visual::before{content:none;}
+  .page-head--visual::before{
+    content:"";position:absolute;top:0;bottom:0;left:calc(50% + 30px);right:-40%;
+    transform:skewX(-12deg);transform-origin:bottom left;
+    background:radial-gradient(ellipse 46% 62% at 34% 58%,#FFFFFF 0%,#EEEFF1 40%,#CDD0D5 80%,#BABDC3 100%);
+    box-shadow:-16px 0 0 0 var(--accent);
+    pointer-events:none;
+  }
+  /* výška zastropovaná, aby čtvercová fotka nenafoukla pás; contain nechá okraje průhledné */
+  .page-head__visual img{width:min(112%,600px);max-width:none;max-height:420px;object-fit:contain;}
+}
+
+/* fotka z provozu přes celou kartu (bez bílého rámu kolem) */
+.split__media--photo{padding:0;aspect-ratio:4/3;}
+.split__media--photo img{width:100%;height:100%;object-fit:cover;}
+.split__actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px;}
+.split + .wrap > .stats{margin-top:clamp(44px,6vw,80px);}
+
+/* značky v nabídce — karta s fotkou typického výrobku */
+.brands{display:grid;gap:18px;grid-template-columns:minmax(0,1fr);}
+.brand-card{
+  display:grid;grid-template-columns:112px minmax(0,1fr);align-items:center;
+  background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;
+  transition:border-color .26s var(--ease),box-shadow .26s var(--ease);
+}
+.brand-card:hover{border-color:var(--accent-100);box-shadow:var(--shadow-s);}
+.brand-card__img{height:100%;min-height:104px;background:#fff;}
+.brand-card__img img{width:100%;height:100%;object-fit:cover;}
+.brand-card__body{padding:16px 18px;}
+.brand-card h3{font-size:1.24rem;margin-bottom:4px;}
+.brand-card p{font-size:.9rem;color:var(--muted);margin:0;}
+.brands-more{margin-top:34px;}
+@media (min-width:640px){ .brands{grid-template-columns:repeat(2,minmax(0,1fr));} }
+@media (min-width:980px){
+  .brands{grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;}
+  .brand-card{grid-template-columns:minmax(0,1fr);grid-template-rows:auto 1fr;align-items:stretch;}
+  .brand-card__img{aspect-ratio:4/3;height:auto;border-bottom:1px solid var(--line);}
+  .brand-card__body{padding:20px 22px 22px;}
+}
+
+/* postup jako karty — číslo v červené, aby na šedém pozadí nezaniklo */
+.steps--cards{gap:18px;}
+.steps--cards .step{
+  background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+  padding:24px 24px 26px;
+}
+.steps--cards .step::before{color:var(--accent);font-size:2.6rem;margin-bottom:16px;}
+/* na mobilu číslo vlevo vedle textu — čtyři karty pod sebou jinak zaberou dvě obrazovky */
+@media (max-width:640px){
+  .steps--cards{gap:12px;}
+  .steps--cards .step{display:grid;grid-template-columns:48px minmax(0,1fr);column-gap:14px;padding:18px 18px 20px;}
+  .steps--cards .step::before{grid-row:span 2;margin:0;font-size:2.2rem;line-height:1;}
+}
+
 .faq{max-width:820px;margin-inline:auto;display:grid;gap:12px;}
 .faq__item{border:1px solid var(--line);border-radius:var(--radius);background:#fff;overflow:hidden;}
 .faq__q{
@@ -754,14 +1244,15 @@ a.chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
 /* ---------- 16. Patička ---------- */
 .footer{background:var(--bg-dark);color:rgba(255,255,255,.62);padding:clamp(48px,6vw,76px) 0 0;font-size:.92rem;}
 .footer__grid{display:grid;gap:34px;padding-bottom:44px;}
-.footer .logo__img{height:52px;}
+.footer .logo__img{height:64px;}
 .footer__about{max-width:34ch;margin-top:16px;}
 .footer h4{color:#fff;font-family:var(--font-body);font-size:.78rem;letter-spacing:.13em;text-transform:uppercase;margin-bottom:16px;}
 .footer__links li{margin-bottom:9px;}
-.footer__links a{transition:color .2s var(--ease);}
+.footer__links a,.footer__contact a{transition:color .2s var(--ease);}
 .footer__links a:hover{color:#fff;}
 .footer__contact li{display:flex;gap:11px;margin-bottom:12px;}
-.footer__contact svg{width:17px;height:17px;color:var(--accent);flex:none;margin-top:3px;}
+.footer__contact svg{width:17px;height:17px;color:var(--accent-light);flex:none;margin-top:3px;}
+.footer__contact a{color:rgba(255,255,255,.86);font-weight:500;}
 .footer__contact a:hover{color:#fff;}
 .socials{display:flex;gap:10px;margin-top:20px;}
 .socials a{
@@ -774,13 +1265,16 @@ a.chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
 .footer__bottom{
   border-top:1px solid rgba(255,255,255,.1);padding:20px 0;
   display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-between;
-  font-size:.84rem;color:rgba(255,255,255,.45);
+  font-size:.84rem;color:rgba(255,255,255,.5);
+  /* plovoucí tlačítko nahoru (vpravo dole, 66 px od okraje) nesmí překrýt text:
+     kde je okraj vedle obsahu užší, odsadí se pravý sloupec o chybějící kus */
+  padding-right:max(0px,calc(78px - (100vw - 100%) / 2));
 }
 .footer__bottom a:hover{color:#fff;}
 
 /* ---------- 17. Zpět nahoru ---------- */
 .to-top{
-  position:fixed;right:20px;bottom:20px;z-index:90;
+  position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:90;
   width:46px;height:46px;border-radius:50%;display:grid;place-items:center;
   background:var(--accent);color:#fff;border:0;cursor:pointer;
   box-shadow:0 8px 20px rgba(200,25,31,.32);
@@ -789,6 +1283,7 @@ a.chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
 }
 .to-top.is-visible{opacity:1;visibility:visible;transform:none;}
 .to-top:hover{background:var(--accent-600);}
+.to-top:focus-visible{outline-offset:4px;}
 .to-top svg{width:20px;height:20px;}
 
 /* ---------- 18. Animace ---------- */
@@ -816,6 +1311,7 @@ a.chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
   .cart-layout{grid-template-columns:minmax(0,1.3fr) minmax(0,.9fr);}
   .catalog-dl{grid-template-columns:.8fr 1.2fr;}
   .detail{grid-template-columns:minmax(0,1fr) minmax(0,1fr);}
+  .detail__info{grid-template-columns:minmax(0,1fr) minmax(0,1fr);}
   .split{grid-template-columns:1fr 1fr;}
   .split--reverse .split__media{order:2;}
   .contact-grid{grid-template-columns:1.15fr .85fr;}
@@ -824,14 +1320,6 @@ a.chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
 @media (min-width:1000px){
   .catalog{grid-template-columns:270px 1fr;}
 }
-@media (max-width:999px){
-  .filters{
-    position:static;display:none;margin-bottom:6px;
-    max-height:none;overflow-y:visible;
-  }
-  .filters.is-open{display:block;}
-  .filters-toggle{display:inline-flex;}
-}
 @media (max-width:1079px){
   /* mezi 960 a 1080 px se menu vejde, jen bez telefonního čísla */
   .header__tel{display:none;}
@@ -839,6 +1327,14 @@ a.chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
 @media (max-width:959px){
   .nav{display:none;}
   .burger{display:flex;}
+  .header__cart,.burger{height:44px;}
+}
+/* mobilní menu patří jen k hamburgeru; po otočení tabletu na šířku nesmí zůstat viset */
+@media (min-width:960px){ .mobile-nav{display:none;} }
+/* tablet: firma přes celou šířku, pod ní tři stejné sloupce (jinak Kontakt spadne osamocený pod logo) */
+@media (min-width:700px) and (max-width:899px){
+  .footer__grid{grid-template-columns:repeat(3,minmax(0,1fr));}
+  .footer__grid > :first-child{grid-column:1 / -1;}
 }
 @media (max-width:600px){
   /* na úzkých displejích se do hlavičky vejde jen logo, poptávka a hamburger */
@@ -846,7 +1342,11 @@ a.chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
   .header__inner{gap:12px;}
   .header__cart{padding:0;width:44px;height:44px;justify-content:center;}
   .header__cart-text{display:none;}
-  .header__cart-count{position:absolute;top:-4px;right:-4px;}
+  .header__cart-count{position:absolute;top:-4px;right:-4px;box-shadow:0 0 0 2px var(--accent);}
+}
+/* 320 px: na logo + poptávku + hamburger zbývá jen 288 px, mezery stačí užší */
+@media (max-width:359px){
+  .header__inner,.header__cta{gap:8px;}
 }
 @media (max-width:720px){
   :root{--header-h:66px;}
@@ -858,31 +1358,42 @@ a.chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
   .footer__contact a{display:inline-block;padding:4px 0;}
   .breadcrumb a{display:inline-block;padding:4px 0;}
   .wrap{width:min(100% - 32px,var(--wrap));}
-  .logo__img{height:38px;}
+  .logo__img{height:46px;}
   .hero__badge{left:auto;right:4px;bottom:-6%;padding:12px 15px;}
   .hero__badge b{font-size:1.55rem;}
   .hero__actions .btn{flex:1 1 auto;}
-  .products{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;}
-  .product__body{padding:14px 15px 16px;}
-  .product__name{font-size:1.1rem;}
-  .product__price b{font-size:1.2rem;}
-  .product__foot{flex-direction:column;align-items:stretch;gap:10px;}
-  .product__foot .btn{width:100%;}
   .detail__gallery{position:static;}
-  .catalog__sort{margin-left:0;width:100%;}
-  .catalog__sort .select{flex:1;min-width:0;}
+  .detail__stage{border-radius:var(--radius);}
+  .detail__stage img{top:8px;left:8px;width:calc(100% - 16px);height:calc(100% - 16px);}
+  .detail__nav{width:40px;height:40px;margin-top:-20px;}
+  .detail__nav--prev{left:8px;}
+  .detail__nav--next{right:8px;}
+  .detail__zoom{top:8px;right:8px;}
+  .detail__count{left:8px;bottom:8px;}
+  /* náhledy v jedné řadě, posouvají se prstem */
+  .detail__thumbs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin-top:10px;padding-bottom:2px;}
+  .detail__thumbs::-webkit-scrollbar{display:none;}
+  .detail__thumb{flex:0 0 76px;}
+  .detail__thumb:hover{transform:none;}
+  .detail__meta{margin-bottom:14px;}
+  .detail__price b{font-size:2rem;}
   .cta-band__inner{flex-direction:column;align-items:flex-start;}
   .cta-band__actions{width:100%;}
   .cta-band__actions .btn{flex:1 1 auto;}
-  .footer__bottom{flex-direction:column;}
-  .to-top{right:14px;bottom:14px;}
+  /* pod sebou + volné místo vpravo dole pro tlačítko nahoru (14 + 46 px) */
+  .footer__bottom{flex-direction:column;gap:6px;padding:18px 0 calc(78px + env(safe-area-inset-bottom,0px));}
+  .footer__grid{grid-template-columns:1fr 1fr;gap:30px 20px;padding-bottom:34px;}
+  .footer__grid > :first-child,.footer__grid > :last-child{grid-column:1 / -1;}
+  .footer h4{margin-bottom:10px;}
+  .footer__links li{margin-bottom:2px;}
+  .to-top{right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));}
   .cart-item{grid-template-columns:72px minmax(0,1fr) auto;gap:10px 14px;padding:12px;}
   .cart-item__img img{width:72px;height:54px;}
   .cart-item__img{grid-row:span 2;}
   .cart-item__remove{grid-column:3;grid-row:1;}
   .cart-item .qty{grid-column:2;grid-row:2;justify-self:start;}
   .cart-item__price{grid-column:3;grid-row:2;min-width:0;}
-  .opt{min-width:74px;padding:9px 11px;}
+  .opt{padding:9px 4px;}
   .config{padding:18px 16px;}
   .config__buy .btn{flex-basis:100%;}
   .toast{gap:10px;}
@@ -890,21 +1401,19 @@ a.chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
 }
 /* úzké telefony: fotka + název nahoře, počet kusů a cena pod tím přes celou šířku */
 @media (max-width:480px){
-  .cart-item{grid-template-columns:64px minmax(0,1fr) auto;align-items:start;}
-  .cart-item__img{grid-row:1;}
+  /* fotka + název + koš nahoře, parametry přes celou šířku, pod nimi kusy a cena */
+  .cart-item{grid-template-columns:64px minmax(0,1fr) auto;align-items:start;gap:8px 12px;}
+  .cart-item__body{display:contents;}
+  .cart-item__img{grid-column:1;grid-row:1;}
   .cart-item__img img{width:64px;height:48px;}
-  .cart-item__name{font-size:1.08rem;}
-  .cart-item .qty{grid-column:1 / 3;grid-row:2;align-self:center;}
-  .cart-item__price{grid-column:2 / 4;grid-row:2;justify-self:end;align-self:center;}
-}
-@media (max-width:420px){
-  .products{grid-template-columns:1fr;}
-  .product__specs{display:flex;}
+  .cart-item__name{grid-column:2;grid-row:1;align-self:center;font-size:1.08rem;}
+  .cart-item__meta{grid-column:1 / 4;grid-row:2;margin-top:0;}
+  .cart-item__remove{grid-column:3;grid-row:1;}
+  .cart-item .qty{grid-column:1 / 3;grid-row:3;align-self:center;}
+  .cart-item__price{grid-column:2 / 4;grid-row:3;justify-self:end;align-self:center;}
 }
 @media print{
   .header,.mobile-nav,.footer,.to-top,.cta-band,.filters,.toast,.config__buy{display:none !important;}
 }
 
-@media(max-width:560px){.var-table{font-size:.8rem}.var-table th,.var-table td{padding:9px 8px}.var-table th{font-size:.66rem;letter-spacing:.04em}}
-.catalog__more{text-align:center;margin:32px 0 0;}
-.catalog__more:empty{display:none;}
+

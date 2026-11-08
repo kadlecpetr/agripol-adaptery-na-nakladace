@@ -22,7 +22,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="assets/css/style.css?v=202611081637">
+<link rel="stylesheet" href="assets/css/style.css?v=202611081705">
 </head>
 <body>
 <a class="sr-only" href="#main">Přeskočit na obsah</a>
@@ -30,7 +30,7 @@
 <header class="header">
   <div class="wrap header__inner">
     <a class="logo" href="index.html" aria-label="Adaptéry pro nakladače — úvodní stránka">
-      <img class="logo__img" src="assets/img/logo-full.svg?v=5" alt="Adaptéry pro nakladače" width="215" height="44">
+      <img class="logo__img" src="assets/img/logo-full.svg?v=6" alt="Adaptéry pro nakladače" width="135" height="52">
     </a>
 
     <nav class="nav" aria-label="Hlavní navigace">
@@ -65,7 +65,7 @@
     <a class="mobile-nav__link" href="na-miru.html">Na míru <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a>
     <a class="mobile-nav__link" href="o-nas.html">O nás <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a>
     <a class="mobile-nav__link" href="kontakt.html">Kontakt <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a>
-    <a class="mobile-nav__link" href="poptavka.html">Poptávka <b class="header__cart-count" data-cart-count hidden>0</b></a>
+    <a class="mobile-nav__link" href="poptavka.html"><span>Poptávka <b class="header__cart-count" data-cart-count hidden>0</b></span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a>
     <div class="mobile-nav__foot">
       <a class="mobile-nav__contact" href="tel:+420605434314">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1 1 .3 1.9.6 2.8a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.8.6a2 2 0 0 1 1.7 2Z"/></svg>
@@ -73,25 +73,35 @@
       <a class="mobile-nav__contact" href="mailto:info@agripol.cz">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m3 7 9 6 9-6"/></svg>
         info@agripol.cz</a>
-      <a class="btn btn--block" href="kontakt.html" style="margin-top:8px">Nezávazná poptávka</a>
+      <a class="btn btn--block mobile-nav__cta" href="kontakt.html">Nezávazná poptávka</a>
     </div>
   </div>
 </nav>
 
 <main id="main">
-<section class="page-head">
-  <div class="wrap">
-    <p class="eyebrow">O nás</p>
-    <h1>Adaptéry pro nakladače<br>a manipulátory</h1>
-    <p class="lead">Dodáváme lopaty, vidle, drapáky, kleště i redukční rámy pro čelní nakladače,
-      teleskopické manipulátory a traktory. Skladem i na objednávku.</p>
+<section class="page-head page-head--visual">
+  <div class="wrap page-head__grid">
+    <div class="page-head__text">
+      <p class="eyebrow">O nás</p>
+      <h1>Adaptéry pro nakladače<br>a manipulátory</h1>
+      <p class="lead">Dodáváme lopaty, vidle, drapáky, kleště i redukční rámy pro čelní nakladače,
+        teleskopické manipulátory, mininakladače a traktory. Skladem i na objednávku.</p>
+      <div class="page-head__actions">
+        <a class="btn" href="katalog.html">Prohlédnout katalog
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn btn--ghost" href="na-miru.html">Zakázková výroba</a>
+      </div>
+    </div>
+    <div class="page-head__visual">
+      <img src="assets/img/produkty/drapak-it2-hd-1.webp" alt="Drapákové vidle InterTech" width="900" height="600" fetchpriority="high">
+    </div>
   </div>
 </section>
 
 <section class="section">
   <div class="wrap split">
-    <div class="split__media" data-reveal>
-      <img src="assets/img/hero-nakladac.svg" alt="Nakladač s adaptérem" width="720" height="480" loading="lazy">
+    <div class="split__media split__media--photo" data-reveal>
+      <img src="assets/img/produkty/lopata-univerzalni-waw-pol-1.webp" alt="Univerzální lopata Waw-Pol na čelním nakladači traktoru" width="900" height="675" loading="lazy">
     </div>
     <div data-reveal style="--d:80ms">
       <p class="eyebrow">Náš přístup</p>
@@ -99,14 +109,23 @@
       <p>Adaptéry nevyrábíme — dovážíme a prodáváme je od výrobců, které máme odzkoušené
         v reálném provozu. To nám dává volnost doporučit vám model, který na vaši práci
         opravdu sedí, místo abychom tlačili to jediné, co zrovna máme.</p>
-      <p>Když v katalogu nic nesedí, <a href="na-miru.html" style="color:var(--accent-700);text-decoration:underline">zakázkovou výrobu</a>
+      <p>Když v katalogu nic nesedí, <a href="na-miru.html" style="color:var(--accent-700);text-decoration:underline;text-underline-offset:2px">zakázkovou výrobu</a>
         zajistíme u partnerských výrobců. Vy řeknete rozměry a co má adaptér zvládnout,
         my se postaráme o zbytek.</p>
       <ul class="feature-list" style="margin-top:22px">
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>75 adaptérů v nabídce, 37 z nich skladem</span></li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Nezávislí na jednom výrobci — poradíme podle potřeby</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Skladové kusy k vidění v Telecí</span></li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Zakázková výroba u partnerských výrobců</span></li>
       </ul>
+    </div>
+  </div>
+  <!-- čísla doplňuje main.js z data.js, v HTML jsou jen záložní hodnoty -->
+  <div class="wrap">
+    <div class="stats" data-reveal>
+      <div class="stat"><b data-count-products>199</b><span>adaptérů v nabídce</span></div>
+      <div class="stat"><b data-count-stock>37</b><span>položek skladem</span></div>
+      <div class="stat"><b data-count-cats>10</b><span>kategorií nářadí</span></div>
+      <div class="stat"><b>8</b><span>systémů uchycení</span></div>
     </div>
   </div>
 </section>
@@ -121,32 +140,54 @@
       <p class="lead">Nejsme vázaní na jednoho výrobce. Díky tomu můžeme vybírat podle toho,
         co konkrétní práce potřebuje — a ne podle toho, co zrovna máme na skladě.</p>
     </div>
-    <div class="grid features">
-      <div class="feature" data-reveal>
-        <h3>InterTech</h3>
-        <p>Základ nabídky — lopaty, vidle, drapáky i redukční rámy pro nakladače a manipulátory.</p>
-      </div>
-      <div class="feature" data-reveal style="--d:60ms">
-        <h3>Hydramet</h3>
-        <p>Kleště na balíky a velkoobjemové lopaty do náročnějšího provozu.</p>
-      </div>
-      <div class="feature" data-reveal style="--d:120ms">
-        <h3>Waw-Pol</h3>
-        <p>Univerzální a velkoobjemové lopaty v šířkách od 1,2 do 2 metrů.</p>
-      </div>
-      <div class="feature" data-reveal style="--d:180ms">
-        <h3>Spaw-met</h3>
-        <p>Lesnické kleště na kulatinu s nezávislými přidržovači.</p>
-      </div>
-      <div class="feature" data-reveal style="--d:240ms">
-        <h3>Roll-Steel</h3>
-        <p>Lopaty s hydraulickým přidržovačem na siláž a objemný materiál.</p>
-      </div>
-      <div class="feature" data-reveal style="--d:300ms">
-        <h3>Metalplast &amp; Agribumper</h3>
-        <p>Nakládací plošiny a traktorové nárazníky.</p>
-      </div>
+    <div class="brands">
+      <article class="brand-card" data-reveal>
+        <div class="brand-card__img"><img src="assets/img/nahledy/drapak-hd-1.webp" alt="Drapákové vidle HD pro manipulátory" width="500" height="500" loading="lazy"></div>
+        <div class="brand-card__body">
+          <h3>InterTech</h3>
+          <p>Základ nabídky — lopaty, vidle, drapáky i redukční rámy pro nakladače a manipulátory.</p>
+        </div>
+      </article>
+      <article class="brand-card" data-reveal style="--d:60ms">
+        <div class="brand-card__img"><img src="assets/img/nahledy/lopata-maxi-hydramet-1.webp" alt="Lopata MAXI Hydramet" width="500" height="500" loading="lazy"></div>
+        <div class="brand-card__body">
+          <h3>Hydramet</h3>
+          <p>Kleště na balíky a velkoobjemové lopaty do náročnějšího provozu.</p>
+        </div>
+      </article>
+      <article class="brand-card" data-reveal style="--d:120ms">
+        <div class="brand-card__img"><img src="assets/img/nahledy/lopata-velkoobjemova-waw-pol-1.webp" alt="Velkoobjemová lopata Waw-Pol" width="500" height="375" loading="lazy"></div>
+        <div class="brand-card__body">
+          <h3>Waw-Pol</h3>
+          <p>Univerzální a velkoobjemové lopaty v šířkách od 1,2 do 2,4 metru.</p>
+        </div>
+      </article>
+      <article class="brand-card" data-reveal style="--d:180ms">
+        <div class="brand-card__img"><img src="assets/img/nahledy/kleste-na-klady-spaw-met-1.webp" alt="Kleště na klády Spaw-met" width="500" height="500" loading="lazy"></div>
+        <div class="brand-card__body">
+          <h3>Spaw-met</h3>
+          <p>Lesnické kleště na kulatinu se dvěma nezávislými přidržovači.</p>
+        </div>
+      </article>
+      <article class="brand-card" data-reveal style="--d:240ms">
+        <div class="brand-card__img"><img src="assets/img/nahledy/lopata-s-pridrzovacem-roll-steel-1.webp" alt="Lopata s přidržovačem Roll-Steel" width="500" height="375" loading="lazy"></div>
+        <div class="brand-card__body">
+          <h3>Roll-Steel</h3>
+          <p>Lopaty s hydraulickým přidržovačem na siláž a objemný materiál.</p>
+        </div>
+      </article>
+      <article class="brand-card" data-reveal style="--d:300ms">
+        <div class="brand-card__img"><img src="assets/img/nahledy/nakladaci-plosina-metalplast-1.webp" alt="Manipulační plošina Metalplast" width="500" height="500" loading="lazy"></div>
+        <div class="brand-card__body">
+          <h3>Metalplast &amp; Agribumper</h3>
+          <p>Nakládací plošiny a traktorové nárazníky.</p>
+        </div>
+      </article>
     </div>
+    <p class="center brands-more" data-reveal>
+      <a class="btn btn--ghost" href="katalog.html">Celá nabídka v katalogu
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </p>
   </div>
 </section>
 
@@ -169,7 +210,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
         <div class="faq__a"><p>Ano. Buď se dá vyměnit závěsná deska, nebo dodáme redukční rám mezi dvěma systémy.
           Rám je obvykle levnější a necháte si možnost vrátit se zpět k původnímu stroji.
-          Redukční rámy máme v nabídce na Euro, JCB, Manitou, Merlo i Kramer.</p></div>
+          Redukční rámy máme v nabídce na EURO, JCB, Manitou, Merlo i Kramer.</p></div>
       </div>
       <div class="faq__item">
         <button class="faq__q" type="button" aria-expanded="false">Jaká je záruka a co když se něco stane po ní?
@@ -200,10 +241,12 @@
       <div class="cta-band__inner">
         <div>
           <h2>Přijeďte se podívat</h2>
-          <p>V Telecí u Poličky si adaptéry můžete osahat. Zavolejte dopředu, ať jsme na místě.</p>
+          <p>V Telecí u Poličky si adaptéry můžete osahat — Telecí 106, Po–Pá 7:00–16:00.
+            Zavolejte dopředu, ať jsme na místě.</p>
         </div>
         <div class="cta-band__actions">
           <a class="btn btn--light" href="kontakt.html">Kontakt a mapa</a>
+          <a class="btn btn--outline-light" href="tel:+420605434314">+420 605 434 314</a>
         </div>
       </div>
     </div>
@@ -217,7 +260,7 @@
     <div class="footer__grid">
       <div>
         <a class="logo" href="index.html" aria-label="Adaptéry pro nakladače — úvodní stránka">
-          <img class="logo__img" src="assets/img/logo-full-white.svg?v=5" alt="Adaptéry pro nakladače" width="215" height="44">
+          <img class="logo__img" src="assets/img/logo-full-white.svg?v=6" alt="Adaptéry pro nakladače" width="135" height="52">
         </a>
         <p class="footer__about">Prodáváme adaptéry pro čelní nakladače, teleskopické manipulátory a traktory. Skladem i na objednávku, zakázková výroba po domluvě.</p>
         <div class="socials">
@@ -278,6 +321,6 @@
 </button>
 
 <script src="assets/js/data.js?v=202611081614"></script>
-<script src="assets/js/main.js?v=202611081627"></script>
+<script src="assets/js/main.js?v=202611081705"></script>
 </body>
 </html>
