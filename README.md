@@ -101,6 +101,7 @@ Vše se edituje v `assets/js/data.js`. Produkt vypadá takhle:
   name: "Lopata univerzální Waw-Pol",
   cat: "lopaty", price: 9000, priceFrom: true,   // priceFrom → zobrazí „od 9 000 Kč"
   stock: true, sale: false, avail: "Skladem",    // avail: Skladem / Na objednávku / Na cestě / Akční cena
+  special: true,                                 // volitelné: speciální typ, v kategorii se řadí za obyčejné (v adminu zaškrtávátko)
   machines: ["nakladac","manipulator"],          // id z pole MACHINES (nakladac, manipulator, mininakladac)
   mounts: ["euro"],                              // uchycení, se kterými se dodává (id z MOUNTS)
   mount: "EURO", mountExtra: 6000,               // s jakým uchycením platí cena, příplatek za jiné (null = na dotaz)

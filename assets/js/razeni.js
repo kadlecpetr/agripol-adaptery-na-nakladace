@@ -3,6 +3,7 @@
    Klíč: 1) nejmenší šířka (m) z produktu a jeho variant, při shodě větší šířka,
          2) bez šířky: hmotnost (kg), u rámů a zvedacích zařízení nosnost/zdvih (kg), druhá hodnota je záloha,
          4) bez rozměru: cena, „na dotaz“ poslední. Dál podle názvu.
+   Před tím vším: produkty bez `special` jsou před speciálními (special: true) v téže kategorii.
    ========================================================= */
 const ProductSort = (() => {
   const WIDTH_KEYS = ['Šířka', 'Pracovní záběr', 'Šířka lopaty', 'Rozpětí', 'Rozměr'];
@@ -61,13 +62,13 @@ const ProductSort = (() => {
   // od nejmenší po největší (uvnitř jedné kategorie)
   function compare(a, b) {
     const x = size(a), y = size(b);
-    return (x.tier - y.tier) || (x.min - y.min) || (x.max - y.max) ||
+    return (!!a.special - !!b.special) || (x.tier - y.tier) || (x.min - y.min) || (x.max - y.max) ||
       (num(price(a)) - num(price(b))) || String(a.name).localeCompare(b.name, 'cs');
   }
   // od největší velikosti; produkty bez rozměru zůstávají na konci
   function compareDesc(a, b) {
     const x = size(a), y = size(b);
-    return (x.tier - y.tier) || (y.min - x.min) || (y.max - x.max) ||
+    return (!!a.special - !!b.special) || (x.tier - y.tier) || (y.min - x.min) || (y.max - x.max) ||
       (num(price(a)) - num(price(b))) || String(a.name).localeCompare(b.name, 'cs');
   }
   // po kategoriích (v pořadí CATEGORIES) a v nich podle zvolené funkce (výchozí: od nejmenší velikosti)

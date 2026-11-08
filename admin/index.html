@@ -181,7 +181,7 @@ const CATEGORIES = ${j(D.CATEGORIES)};
 
 /* ---- Produkty — pořadí v poli = pořadí v katalogu ---- */
 const PRODUCTS = [
-${D.PRODUCTS.map(p => '  ' + JSON.stringify(p)).join(',\n')}
+${D.PRODUCTS.map(p => '  ' + JSON.stringify(p.special ? p : Object.assign({}, p, { special: undefined }))).join(',\n')}
 ];
 `;
   }
@@ -380,6 +380,7 @@ ${D.PRODUCTS.map(p => '  ' + JSON.stringify(p)).join(',\n')}
         <label class="chk"><input type="checkbox" data-k="priceFrom"${p.priceFrom ? ' checked' : ''}> Cena „od“</label>
         <label class="chk"><input type="checkbox" data-k="stock"${p.stock ? ' checked' : ''}> Skladem</label>
         <label class="chk"><input type="checkbox" data-k="sale"${p.sale ? ' checked' : ''}> Akce</label>
+        <label class="chk"><input type="checkbox" data-k="special"${p.special ? ' checked' : ''}> Speciální typ (řadí se na konec kategorie)</label>
       </div>
       <h3 class="sub">Fotky</h3>
       <div class="photos" id="photos">${p.imgs.map((f, i) => `<div class="ph${i ? '' : ' is-main'}"><img src="${imgUrl(f)}" alt=""><small>${i ? '' : 'Hlavní fotka'}</small>
