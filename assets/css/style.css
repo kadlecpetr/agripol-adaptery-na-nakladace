@@ -166,11 +166,8 @@ strong{color:var(--ink);font-weight:600;}
 .header--dark .burger.is-open span{background:transparent;}
 .header__inner{display:flex;align-items:center;gap:20px;height:100%;}
 .logo{display:flex;align-items:center;flex:none;}
-/* logo (dráp Agripolu + nápis) — výšku drží obrázek, šířka se dopočítá */
+/* logo Agripol s nápisem — výšku drží obrázek, šířka se dopočítá */
 .logo__img{height:60px;width:auto;}
-/* plastický efekt bílého loga (červená extruze + stín) je přímo v logo-full-white.svg — černý CSS stín na tmavém podkladu nebyl vidět */
-/* bez menu (pod 960 px) odsune logo poptávku a hamburger k pravému okraji */
-@media (max-width:959px){.logo{margin-right:auto;}}
 
 .nav{margin-left:auto;}
 .nav__list{display:flex;align-items:center;gap:4px;}
@@ -253,20 +250,13 @@ body.no-scroll{overflow:hidden;}
   min-height:100vh;
   min-height:100svh;
 }
-/* světlé studiové pole vpravo: černý drapák na grafitu splýval, na světle-šedém
-   podkladu je hlavní dominantou. Šikmá levá hrana s červeným pruhem (motiv
-   z tištěného katalogu) odděluje produkt od bílých textů vlevo.
-   Hrana je navázaná na střed (= hranici sloupců), aby nezajela do textu. */
+/* červený šikmý pruh vpravo dole — stejný motiv jako v tištěném katalogu */
 .hero::before{
-  content:"";position:absolute;top:0;bottom:0;left:calc(50% - 40px);right:-40%;
-  transform:skewX(-12deg);transform-origin:bottom left;
-  background:radial-gradient(ellipse 50% 56% at 36% 54%,#FFFFFF 0%,#EEEFF1 38%,#CDD0D5 78%,#BABDC3 100%);
-  box-shadow:-22px 0 0 0 var(--accent),-22px 0 60px 0 rgba(0,0,0,.5);
+  content:"";position:absolute;right:-8%;bottom:-30%;width:58%;height:80%;
+  background:var(--accent);transform:skewX(-24deg);opacity:.92;
   pointer-events:none;
 }
-/* v jednom sloupci je světlé pole až pod textem — dělá ho .hero__visual::before */
-@media (max-width:899px){ .hero::before{content:none;} }
-.hero__grid{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(32px,4vw,56px);align-items:center;position:relative;z-index:1;}
+.hero__grid{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(32px,4vw,56px);align-items:center;position:relative;}
 /* dlouhý eyebrow nesmí roztáhnout sloupec přes okraj displeje */
 .hero__grid > *{min-width:0;}
 .hero .eyebrow{flex-wrap:wrap;}
@@ -280,45 +270,23 @@ body.no-scroll{overflow:hidden;}
 .hero__usp li{display:flex;align-items:center;gap:8px;font-size:.9rem;font-weight:500;color:rgba(255,255,255,.86);}
 .hero__usp svg{width:17px;height:17px;color:var(--accent-light);flex:none;}
 .hero__visual{position:relative;aspect-ratio:1.18;display:grid;place-items:center;}
-/* mobil: světlé pole pod textem, šikmá horní hrana s červeným pruhem, dole až k okraji hero */
+/* jemné nasvícení za produktem, aby černý drapák nesplýval s grafitem */
 .hero__visual::before{
-  content:"";position:absolute;inset:7% -60px -400px -60px;
-  transform:skewY(-8deg);
-  background:radial-gradient(ellipse 60% 30% at 50% 22%,#FFFFFF 0%,#EEEFF1 45%,#C9CCD1 100%);
-  box-shadow:0 -12px 0 0 var(--accent);
+  content:"";position:absolute;inset:4% 0 0 4%;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(255,255,255,.16),rgba(255,255,255,0));
   pointer-events:none;
 }
-@media (min-width:900px){ .hero__visual::before{content:none;} }
-/* stín pod drapákem na světlém podkladu */
-.hero__visual::after{
-  content:"";position:absolute;left:6%;right:0;bottom:12%;height:12%;border-radius:50%;
-  background:radial-gradient(closest-side,rgba(20,20,24,.38),rgba(20,20,24,0));
-  pointer-events:none;
-}
-/* drapák větší než sloupec, ať je to hlavní dominanta. Natočení −3° je zapečené
-   přímo ve fotce (bez CSS transform → prohlížeč fotku znovu neresampluje a hroty
-   zůstanou ostré); fotka je v nativním rozlišení zdroje 1324 px, bez upscalu. */
 .hero__product{
-  position:relative;z-index:1;width:112%;max-width:none;margin-left:-6%;
-  filter:drop-shadow(0 26px 22px rgba(20,20,26,.32));
+  position:relative;width:100%;
+  filter:drop-shadow(0 22px 22px rgba(0,0,0,.45));
 }
-/* desktop: pravý okraj drapáku přesahuje sloupec do volného místa vedle obsahu
-   (--hero-x, na úzkých 0, na širokých až 130 px), doleva max. 30 px k červené hraně
-   — tak se nikdy neořízne o okraj okna a nezajede do textu */
-@media (min-width:900px){
-  .hero__product{
-    --hero-x:clamp(0px,(100vw - var(--wrap)) / 2 - 40px,130px);
-    justify-self:end;width:calc(100% + 30px + var(--hero-x));margin:0 calc(-1 * var(--hero-x)) 0 0;
-  }
-}
-/* tmavý štítek — na světlém poli kontrastuje, bílý by se ztrácel */
 .hero__badge{
-  position:absolute;z-index:2;left:8%;bottom:2%;
-  background:var(--bg-dark);border-radius:16px;
-  box-shadow:0 14px 30px rgba(0,0,0,.35);padding:14px 18px;display:flex;align-items:center;gap:13px;
+  position:absolute;left:-6px;bottom:6%;
+  background:#fff;border-radius:16px;
+  box-shadow:var(--shadow);padding:14px 18px;display:flex;align-items:center;gap:13px;
 }
-.hero__badge b{font-family:var(--font-head);font-size:1.9rem;color:var(--accent-light);line-height:1;}
-.hero__badge span{font-size:.78rem;color:rgba(255,255,255,.78);line-height:1.35;max-width:11ch;}
+.hero__badge b{font-family:var(--font-head);font-size:1.9rem;color:var(--accent);line-height:1;}
+.hero__badge span{font-size:.78rem;color:var(--muted);line-height:1.35;max-width:11ch;}
 
 /* ---------- 7. Pás uchycení ---------- */
 .mounts{background:var(--accent);color:#fff;padding:clamp(34px,4vw,52px) 0;}
@@ -755,8 +723,7 @@ a.chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
 /* ---------- 16. Patička ---------- */
 .footer{background:var(--bg-dark);color:rgba(255,255,255,.62);padding:clamp(48px,6vw,76px) 0 0;font-size:.92rem;}
 .footer__grid{display:grid;gap:34px;padding-bottom:44px;}
-/* 72 px vysoké, v úzkém sloupci se zmenší šířkou (poměr stran drží width/height v HTML) */
-.footer .logo__img{width:352px;max-width:100%;height:auto;}
+.footer .logo__img{height:72px;}
 .footer__about{max-width:34ch;margin-top:16px;}
 .footer h4{color:#fff;font-family:var(--font-body);font-size:.78rem;letter-spacing:.13em;text-transform:uppercase;margin-bottom:16px;}
 .footer__links li{margin-bottom:9px;}
@@ -860,9 +827,9 @@ a.chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
   .footer__contact a{display:inline-block;padding:4px 0;}
   .breadcrumb a{display:inline-block;padding:4px 0;}
   .wrap{width:min(100% - 32px,var(--wrap));}
-  /* 50 px; pod 390 px šířky se logo zmenší, aby se vedle něj vešla poptávka a hamburger */
-  .logo__img{height:min(50px,calc((100vw - 146px) / 4.9));}
-  .hero__badge{left:auto;right:4px;bottom:-6%;padding:12px 15px;}
+  .logo__img{height:50px;}
+  .hero__badge{left:auto;right:4px;bottom:0;padding:12px 15px;}
+  .hero::before{width:90%;height:46%;bottom:-12%;right:-30%;}
   .hero__badge b{font-size:1.55rem;}
   .hero__actions .btn{flex:1 1 auto;}
   .products{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;}
